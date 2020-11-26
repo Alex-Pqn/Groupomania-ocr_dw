@@ -1,9 +1,7 @@
 <template>
   <div class="connection">
-    <div class="connection__header">
-      <img src="../assets/icon-left-font-monochrome-black.svg" alt="">
-
-    </div>
+    <connectionStyles />
+    <connectionHeader />
     <div class="connection__form">
       <div class="connection__form__header">
         <h3>
@@ -44,17 +42,18 @@
         </p>
       </div>
     </div>
-    <connectionStyles />
   </div>
 </template>
 
 <script>
 import connectionStyles from "@/components/connectionStyles.vue"
+import connectionHeader from "@/components/connectionHeader.vue"
 
 export default {
   name: "Login",
   components: {
-    connectionStyles
+    connectionStyles,
+    connectionHeader
   }
 };
 </script>
