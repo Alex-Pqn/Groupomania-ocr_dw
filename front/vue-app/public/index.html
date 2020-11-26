@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="fr">
+  <head>
+    <meta charset="utf-8">
+    <link rel='alternate' href='http://' hreflang='x-default'>
+    <link rel='alternate' href='http://' hreflang='fr-fr'>
+    <link rel='alternate' href='http://' hreflang='fr-be'>
+    <link rel='alternate' href='http://' hreflang='fr-ca'>
+    <!--URL-->
+    <meta name='identifier-url' content=''>
+    <link rel='canonical' href=''>
+    <meta name='author' content=''>
+    <meta name='publisher' content=''>
+    <!--Global Meta-->
+    <meta name='description' content=''>
+    <meta name='robots' content='index,follow'>
+    <!--Opengraph-->
+    <meta property='og:site_name' content=''>
+    <meta property='og:title' content=''>
+    <meta property='og:description' content=''>
+    <meta property='og:url' content=''>
+    <meta property='og:image' content='image/png'>
+    <meta property='og:image:type' content='image/png'>
+    <!--Twitter cards-->
+    <meta name='twitter:site' content=''>
+    <meta name='twitter:creator' content=''>
+    <meta name='twitter:card' content='summary_large_image'>
+    <meta name='twitter:title' content=''>
+    <meta name='twitter:description' content=''>
+    <meta name='twitter:image:src' content=''>
+    <!--CDN Fonts-->
+    <!--Importations & Responsive-->
+    <meta http-equiv='X-UA-Compatible' content='ie=edge'>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel='stylesheet' type='text/css' href=''>
+    <!--Icon & Style-->
+    <title><%= htmlWebpackPlugin.options.title %></title>
+    <link rel="icon" href="<%= BASE_URL %>favicon.ico">
+    <meta name='theme-color' content='#5DC8A8'>
+  </head>
+  <body>
+    <noscript>
+      <strong>Nous sommes désolés mais <%= htmlWebpackPlugin.options.title %> ne peut fonctionner correctement sans la technologie Javascript d'activée. Merci de la réactiver pour continuer.</strong>
+    </noscript>
+
+    <!--Injected code-->
+    <div id="app"></div>
+  </body>
+</html>
