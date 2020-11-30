@@ -1,22 +1,25 @@
 <template>
-    <div class="comment">
-      <div class="comment__user-icon">
-        <img :src="require(`../assets/` + user_pic_url)" alt="">
+    <!-- user-comment -->
+    <div class="user-comment user-comment--style">
+      <!-- icon -->
+      <div class="user-comment__icon">
+        <img :src="require(`../../assets/` + pic_url)" alt="">
       </div>
-      <div class="comment__content">
-        <div class="comment__content__author">
+      <!-- main -->
+      <div class="user-comment__main">
+        <div class="user-comment__main__author">
           <p>
             <strong>
                 {{ firstname }} {{ lastname }}
             </strong>
           </p>
         </div>
-        <div class="comment__content__text">
+        <div class="user-comment__main__text">
           <p>
             {{ text }}
           </p>
         </div>
-        <div class="comment__content__date">
+        <div class="user-comment__main__date">
           <p>
             {{ published_date }}
           </p>
@@ -27,44 +30,48 @@
 
 <script>
   export default {
-    name: "displayCommentForum",
+    name: "displayUserComment",
     props: {
-        user_pic_url: {
-          type: String,
-          required: true
-        },
-        firstname: {
-          type: String,
-          required: true
-        },
-        lastname: {
-          type: String,
-          required: true
-        },
-        published_date: {
-          type: String,
-          required: true
-        },
-        text: {
-          type: String,
-          required: true
-        },
+      pic_url: {
+        type: String,
+        required: true
+      },
+      firstname: {
+        type: String,
+        required: true
+      },
+      lastname: {
+        type: String,
+        required: true
+      },
+      published_date: {
+        type: String,
+        required: true
+      },
+      text: {
+        type: String,
+        required: true
+      },
     }
   };
 </script>
 
 <style lang="scss">
-.comment {
+// user-comment
+.user-comment {
   display: flex;
   flex-direction: row;
-  font-size: .98em;
   padding: 20px 20px;
-  background-color: rgb(243, 243, 243);
-  border-top: 1px solid rgba(109, 109, 109, 0.2);
-  border-bottom-right-radius: .3em;
-  border-bottom-left-radius: .3em;
+  &--style {
+    font-size: .98em;
+    background-color: rgb(243, 243, 243);
+    border-top: 1px solid rgba(109, 109, 109, 0.2);
+    border-bottom-right-radius: .3em;
+    border-bottom-left-radius: .3em;
+  }
 
-  &__user-icon {
+  // icon
+  &__icon {
     display: flex;
     width: 8.5%;
     height: 10%;
@@ -77,7 +84,8 @@
       border: 2px solid black;
     }
   }
-  &__content {
+  // main
+  &__main {
     display: flex;
     flex-direction: column;
     width: 91%;
