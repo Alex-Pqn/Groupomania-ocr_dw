@@ -1,7 +1,9 @@
 <template>
+<div id="app">
   <div class="profile">
   
   </div>
+</div>
 </template>
 
 <script>

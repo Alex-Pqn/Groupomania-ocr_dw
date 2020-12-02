@@ -3,7 +3,7 @@
     <div class="user-comment user-comment--style">
       <!-- icon -->
       <div class="user-comment__icon">
-        <img :src="require(`../../assets/` + pic_url)" alt="">
+        <img :src="getImgUrl(pic_url)" alt="">
       </div>
       <!-- main -->
       <div class="user-comment__main">
@@ -52,7 +52,14 @@
         type: String,
         required: true
       },
-    }
+    },
+    methods: {
+      getImgUrl(img) {
+        if (img !== "") {
+          return require(`../../assets/`+img)
+        }
+      }
+    },
   };
 </script>
 

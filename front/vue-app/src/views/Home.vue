@@ -1,5 +1,6 @@
 <template>
-  <!-- home -->
+<div id="app">
+    <!-- home -->
   <div class="home">
     <!-- trends -->
     <section class="home__trends-container">
@@ -20,23 +21,23 @@
       </div>
       <!-- list -->
       <div class="forums__list">
+        <createForum />
         <h3>
           Fil de discussion
         </h3>
-        <article>
-          <displayUserForum published_date="20/11/2020" total_comments=45 pic_url="user-icon.png" firstname="Alexandre" lastname="Pqn" text="tUtque proeliorum periti rectores primo catervas densas opponunt et fortes, deinde leves armaturas, post iaculatores ultimasque subsidiales acies, si fors adegerit, iuvaturas, ita praepositis urbanae familiae suspensae digerentibus sollicite, quos insignes faciunt virgae dexteris aptatae velut tessera data castrensi iuxta vehiculi frontem omne textrinum incedit: huic atratum coquinae iungitur ministerium, dein totum promiscue servitium cum otiosis plebe" />
-          <div id="comments-list">
-            <displayUserComment published_date="23/11/2020" pic_url="user-icon.png" firstname="Alexandre" lastname="Pqn" text="tUtque proeliorum periti rectores primo catervas densas opponunt et fortes, deinde leves armaturas, post iaculatores ultimasque subsidiales acies, si fors adegerit, iuvaturas, ita praepositis urbanae familiae suspensae digerentibus sollicite, quos insignes faciunt virgae dexteris aptatae v" />
-            <displayUserComment published_date="23/11/2020" pic_url="user-icon.png" firstname="Alexandre" lastname="Pqn" text="tUtque proeliorum periti rectores primo catervas densas opponunt et fortes, deinde leves armaturas, post iaculatores ultimasque subsidiales acies, si fors adegerit, iuvaturas, ita praepositis urbanae familiae suspensae digerentibus sollicite, quos insignes faciunt virgae dexteris aptatae v" />
-            <displayUserComment published_date="23/11/2020" pic_url="user-icon.png" firstname="Alexandre" lastname="Pqn" text="tUtque proeliorum periti rectores primo catervas densas opponunt et fortes, deinde leves armaturas, post iaculatores ultimasque subsidiales acies, si fors adegerit, iuvaturas, ita praepositis urbanae familiae suspensae digerentibus sollicite, quos insignes faciunt virgae dexteris aptatae v" />
-            <displayUserComment published_date="23/11/2020" pic_url="user-icon.png" firstname="Alexandre" lastname="Pqn" text="tUtque proeliorum periti rectores primo catervas densas opponunt et fortes, deinde leves armaturas, post iaculatores ultimasque subsidiales acies, si fors adegerit, iuvaturas, ita praepositis urbanae familiae suspensae digerentibus sollicite, quos insignes faciunt virgae dexteris aptatae v" />
-            <displayUserComment published_date="23/11/2020" pic_url="user-icon.png" firstname="Alexandre" lastname="Pqn" text="tUtque proeliorum periti rectores primo catervas densas opponunt et fortes, deinde leves armaturas, post iaculatores ultimasque subsidiales acies, si fors adegerit, iuvaturas, ita praepositis urbanae familiae suspensae digerentibus sollicite, quos insignes faciunt virgae dexteris aptatae v" />
-            <displayUserComment published_date="23/11/2020" pic_url="user-icon.png" firstname="Alexandre" lastname="Pqn" text="tUtque proeliorum periti rectores primo catervas densas opponunt et fortes, deinde leves armaturas, post iaculatores ultimasque subsidiales acies, si fors adegerit, iuvaturas, ita praepositis urbanae familiae suspensae digerentibus sollicite, quos insignes faciunt virgae dexteris aptatae v" />
-          </div>
-        </article>
-        <article>
-          <displayUserForum published_date="20/11/2020" total_comments=45 pic_url="user-icon.png" firstname="Alexandre" lastname="Pqn" text="tUtque proeliorum periti rectores primo catervas densas opponunt et fortes, deinde leves armaturas, post iaculatores ultimasque subsidiales acies, si fors adegerit, iuvaturas, ita praepositis urbanae familiae suspensae digerentibus sollicite, quos insignes faciunt virgae dexteris aptatae velut tessera data castrensi iuxta vehiculi frontem omne textrinum incedit: huic atratum coquinae iungitur ministerium, dein totum promiscue servitium cum otiosis plebe" />
-        </article>
+        <div>
+          <!-- forum -->
+          <article v-for="item in forums" :key="item.id">
+            <displayUserForum :id="item.id" :published_date="item.published_date" :pic_url="item.pic_url" :image_url="item.image_url" :firstname="item.firstname" :lastname="item.lastname" :text="item.text" :total_comments="item.total_comments" />
+
+            <!-- comments in forum -->
+            <div class="comments-list">
+              <div v-for="comment in item.comments" :key="comment.id">
+                <displayUserComment :published_date="comment.published_date" :pic_url="comment.pic_url" :firstname="comment.firstname" :lastname="comment.lastname" :text="comment.text" />
+              </div>
+            </div>
+          </article>
+        </div>
       </div>
     </section>
     <!-- nav -->
@@ -46,28 +47,113 @@
       </div>
     </section>
   </div>
+</div>
 </template>
 
 <script>
 import displayUserForum from "@/components/forums/displayUserForum.vue"
 import displayUserComment from "@/components/forums/displayUserComment.vue"
+import createForum from "@/components/forums/createForum.vue"
 
 export default {
   name: "Home",
-  components: {
-    displayUserForum,
-    displayUserComment
-  },
-  mounted: function () {
-    let image_url = "icon-left-font.png"
-
-    if (image_url != undefined) {
-      let imageUserForumContainer = document.getElementById('user-forum_bottom_image')
-      let imageElement = document.createElement('img')
-      imageElement.src = require(`../assets/` + image_url)
-      imageUserForumContainer.appendChild(imageElement)
+  data () {
+    return {
+      forums: [
+        {
+          id:9676554123,
+          published_date:"23/11/2020",
+          pic_url:"user-icon.png",
+          firstname:"Alexandre",
+          lastname:"Pqn",
+          text:"tUtque proeliorum periti rectores primo catervas densas opponunt et fortes, deinde leves armaturas, post iaculatores ultimasque subsidiales acies, si fors adegerit, iuvaturas, ita praepositis urbanae familiae suspensae digerentibus sollicite, quos insignes faciunt virgae dexteris aptatae v",
+          image_url:"icon-left-font.png",
+          total_comments:13,
+          comments: [
+            {
+              id:9265456423,
+              published_date:"23/11/2020",
+              pic_url:"user-icon.png",
+              firstname:"Alexandre",
+              lastname:"Pqn",
+              text:"tUtque proeliorum periti rectores primo catervas densas opponunt et fortes, deinde leves armaturas, post iaculatores ultimasque subsidiales acies, si fors adegerit, iuvaturas, ita praepositis urbanae familiae suspensae digerentibus sollicite, quos insignes faciunt virgae dexteris aptatae v",
+            },
+            {
+              id:95455624123,
+              published_date:"23/11/2020",
+              pic_url:"user-icon.png",
+              firstname:"Alexandre",
+              lastname:"Pqn",
+              text:"tUtque proeliorum periti rectores primo catervas densas opponunt et fortes, deinde leves armaturas, post iaculatores ultimasque subsidiales acies, si fors adegerit, iuvaturas, ita praepositis urbanae familiae suspensae digerentibus sollicite, quos insignes faciunt virgae dexteris aptatae v",
+            },
+            {
+              id:962565412,
+              published_date:"23/11/2020",
+              pic_url:"user-icon.png",
+              firstname:"Alexandre",
+              lastname:"Pqn",
+              text:"tUtque proeliorum periti rectores primo catervas densas opponunt et fortes, deinde leves armaturas, post iaculatores ultimasque subsidiales acies, si fors adegerit, iuvaturas, ita praepositis urbanae familiae suspensae digerentibus sollicite, quos insignes faciunt virgae dexteris aptatae v",
+            },
+            {
+              id:9645554223,
+              published_date:"23/11/2020",
+              pic_url:"user-icon.png",
+              firstname:"Alexandre",
+              lastname:"Pqn",
+              text:"tUtque proeliorum periti rectores primo catervas densas opponunt et fortes, deinde leves armaturas, post iaculatores ultimasque subsidiales acies, si fors adegerit, iuvaturas, ita praepositis urbanae familiae suspensae digerentibus sollicite, quos insignes faciunt virgae dexteris aptatae v",
+            },
+            {
+              id:925456123,
+              published_date:"23/11/2020",
+              pic_url:"user-icon.png",
+              firstname:"Alexandre",
+              lastname:"Pqn",
+              text:"tUtque proeliorum periti rectores primo catervas densas opponunt et fortes, deinde leves armaturas, post iaculatores ultimasque subsidiales acies, si fors adegerit, iuvaturas, ita praepositis urbanae familiae suspensae digerentibus sollicite, quos insignes faciunt virgae dexteris aptatae v",
+            },
+            {
+              id:96452412,
+              published_date:"23/11/2020",
+              pic_url:"user-icon.png",
+              firstname:"Alexandre",
+              lastname:"Pqn",
+              text:"tUtque proeliorum periti rectores primo catervas densas opponunt et fortes, deinde leves armaturas, post iaculatores ultimasque subsidiales acies, si fors adegerit, iuvaturas, ita praepositis urbanae familiae suspensae digerentibus sollicite, quos insignes faciunt virgae dexteris aptatae v",
+            },
+            {
+              id:96255423,
+              published_date:"23/11/2020",
+              pic_url:"user-icon.png",
+              firstname:"Alexandre",
+              lastname:"Pqn",
+              text:"tUtque proeliorum periti rectores primo catervas densas opponunt et fortes, deinde leves armaturas, post iaculatores ultimasque subsidiales acies, si fors adegerit, iuvaturas, ita praepositis urbanae familiae suspensae digerentibus sollicite, quos insignes faciunt virgae dexteris aptatae v",
+            },
+            {
+              id:95416243,
+              published_date:"23/11/2020",
+              pic_url:"user-icon.png",
+              firstname:"Alexandre",
+              lastname:"Pqn",
+              text:"tUtque proeliorum periti rectores primo catervas densas opponunt et fortes, deinde leves armaturas, post iaculatores ultimasque subsidiales acies, si fors adegerit, iuvaturas, ita praepositis urbanae familiae suspensae digerentibus sollicite, quos insignes faciunt virgae dexteris aptatae v",
+            },
+            {
+              id:96745412,
+              published_date:"23/11/2020",
+              pic_url:"user-icon.png",
+              firstname:"Alexandre",
+              lastname:"Pqn",
+              text:"tUtque proeliorum periti rectores primo catervas densas opponunt et fortes, deinde leves armaturas, post iaculatores ultimasque subsidiales acies, si fors adegerit, iuvaturas, ita praepositis urbanae familiae suspensae digerentibus sollicite, quos insignes faciunt virgae dexteris aptatae v",
+            },
+          ]
+        }, 
+    ],
     }
   },
+  components: {
+    displayUserForum,
+    displayUserComment,
+    createForum
+  },
+  computed: {
+  }
 }
 </script>
 
@@ -117,13 +203,17 @@ export default {
   &__header {
     display: flex;
     align-items: flex-end;
-    position: fixed;
+    position: sticky;
+    top: 0;
     padding-bottom: 10px;
+    padding-top: 10px;
+    margin-top: 15px;
     width: 50%;
     height: 7%;
+    
     &--style {
       border-bottom: 1px solid rgb(189, 189, 189);
-      background-color: rgb(248, 248, 248);
+      background-color:rgb(248, 248, 248);
     }
     & img {
       width: 255px;
@@ -134,14 +224,15 @@ export default {
     display: flex;
     flex-direction: column;
     align-items: center;
-    margin-top: 125px;
+    margin-top: 25px;
     width: 45%;
     & h3 {
-      margin-bottom: 20px;
+      margin: 35px 0 20px;
     }
-    & #comments-list {
+    & .comments-list {
       overflow-y: auto;
-      max-height: 500px;
+      max-height: 650px;
+      border-bottom: 2px solid rgba(0, 0, 0, 0.1);
     }
     & article {
       display: flex;

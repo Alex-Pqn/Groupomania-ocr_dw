@@ -1,5 +1,6 @@
 <template>
-  <!-- connection block -->
+<div id="app">
+    <!-- connection block -->
   <div class="connection">
     <!-- import styles & header -->
     <connectionStyles />
@@ -49,6 +50,7 @@
       </div>
     </div>
   </div>
+</div>
 </template>
 
 <script>
