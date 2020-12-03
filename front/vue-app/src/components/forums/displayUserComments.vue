@@ -1,36 +1,36 @@
 <template>
-    <!-- user-comment -->
-    <div class="user-comment user-comment--style">
-      <!-- icon -->
-      <div class="user-comment__icon">
-        <img :src="getImgUrl(pic_url)" alt="">
+  <!-- user-comments -->
+  <div class="user-comments user-comments--style">
+    <!-- icon -->
+    <div class="user-comments__icon">
+      <img :src="getImgUrl(pic_url)" alt="">
+    </div>
+    <!-- main -->
+    <div class="user-comments__main">
+      <div class="user-comments__main__author">
+        <p>
+          <strong>
+              {{ firstname }} {{ lastname }}
+          </strong>
+        </p>
       </div>
-      <!-- main -->
-      <div class="user-comment__main">
-        <div class="user-comment__main__author">
-          <p>
-            <strong>
-                {{ firstname }} {{ lastname }}
-            </strong>
-          </p>
-        </div>
-        <div class="user-comment__main__text">
-          <p>
-            {{ text }}
-          </p>
-        </div>
-        <div class="user-comment__main__date">
-          <p>
-            {{ published_date }}
-          </p>
-        </div>
+      <div class="user-comments__main__text">
+        <p>
+          {{ text }}
+        </p>
+      </div>
+      <div class="user-comments__main__date">
+        <p>
+          {{ published_date }}
+        </p>
       </div>
     </div>
+  </div>
 </template>
 
 <script>
   export default {
-    name: "displayUserComment",
+    name: "displayUserComments",
     props: {
       pic_url: {
         type: String,
@@ -64,8 +64,8 @@
 </script>
 
 <style lang="scss">
-// user-comment
-.user-comment {
+// user-comments
+.user-comments {
   display: flex;
   flex-direction: row;
   padding: 20px 20px;
@@ -84,11 +84,7 @@
     height: 10%;
     img {
       width: 38px;
-      border-bottom-left-radius: 9999px;
-      border-bottom-right-radius: 9999px;
-      border-top-left-radius: 9999px;
-      border-top-right-radius: 9999px;
-      border: 2px solid black;
+      @include profile-pic;
     }
   }
   // main
@@ -105,7 +101,6 @@
       line-height: 27px;
     }
     &__date {
-      color: black;
       margin-top: 7px;
       text-align: left;
       font-size: .9em;

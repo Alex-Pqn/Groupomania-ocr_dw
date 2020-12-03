@@ -1,22 +1,20 @@
 <template>
-<div id="app">
   <!-- connection block -->
   <div class="connection">
     <!-- import styles & header -->
-    <connectionStyles />
-    <connectionHeader />
+    <connection />
 
     <!-- authentication -->
-    <div class="auth">
+    <section class="auth auth--style">
       <!-- header -->
-      <div class="auth__header">
+      <header class="auth__header">
         <h3>
           Enregistrez-vous
         </h3>
         <p>
           Rejoignez dès maintenant les plus de 600 collaborateurs rattachés à Groupomania au travers d'un réseau social interne.
         </p>
-      </div>
+      </header>
       <!-- form -->
       <form class="auth__form auth__form--register" action="" method="POST">
         <div>
@@ -60,7 +58,7 @@
         <input type="submit" value="S'enregistrer">
       </form>
       <!-- no-account -->
-      <div class="auth__no-account">
+      <article class="auth__no-account">
         <hr>
         <p>
           Vous possédez déjà un compte ?
@@ -71,21 +69,18 @@
             Se connecter
           </router-link>
         </p>
-      </div>
-    </div>
+      </article>
+    </section>
   </div>
-</div>
 </template>
 
 <script>
-import connectionStyles from "@/components/connection/connectionStyles.vue"
-import connectionHeader from "@/components/connection/connectionHeader.vue"
+import connection from "@/components/connection/connection.vue"
 
 export default {
   name: "Register",
   components: {
-    connectionStyles,
-    connectionHeader
+    connection,
   }
 };
 </script>

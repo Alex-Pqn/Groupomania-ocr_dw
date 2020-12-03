@@ -1,3 +1,16 @@
+<template>
+  <!-- connection header -->
+  <div class="connection__header">
+    <img src="../../assets/icon-left-font-monochrome-black.svg" alt="">  
+  </div>
+</template>
+
+<script>
+  export default {
+    name: "connection",
+  };
+</script>
+
 <style lang="scss">
 //connection
 .connection {
@@ -28,13 +41,14 @@
   align-items: center;
   width: 330px;
   padding: 15px 25px 20px 25px;
-  border-radius: 1em .4em 1.2em 0;
-  background-color: rgb(247, 247, 247);
-  border: 1px solid rgb(211, 211, 211);
+  &--style {
+    border-radius: 1em .4em 1.2em 0;
+    background-color: rgb(247, 247, 247);
+    border: 1px solid rgb(211, 211, 211);
+  }
 
   //authentication header
   &__header {
-    color: black;
     margin: 10px 0 13px 0;
     h3 {
       font-size: 1.83em;
@@ -68,7 +82,6 @@
           background-color: rgb(243, 242, 242);
           margin-bottom: 11px;
           &:hover {
-            background-color: rgb(248, 248, 248);
             border: 1px solid rgb(131, 131, 131);
           }
           &:focus {
@@ -117,7 +130,7 @@
       hr {
         width: 50%;
         margin-bottom: 15px;
-        border-top: 1px solid rgba(0, 0, 0, 0.5);
+        border-top: 1px solid $medium_black-border;
       }
       p {
         font-size: 1.08em;
@@ -129,9 +142,3 @@
     }
 }
 </style>
-
-<script>
-  export default {
-    name: "connectionStyles",
-  };
-</script>

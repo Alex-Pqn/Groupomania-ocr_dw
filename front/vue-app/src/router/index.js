@@ -5,6 +5,8 @@ import Login from "../views/Login.vue";
 import Register from "../views/Register.vue";
 import Home from "../views/Home.vue";
 import Profile from "../views/Profile.vue"; 
+import Parameters from "../views/Parameters.vue"; 
+import pageNotFound from "../components/pageNotFound.vue"
 
 Vue.use(VueRouter);
 
@@ -14,23 +16,29 @@ const routes = [
     name: "Home",
     component: Home
   },
-
   {
     path: "/register",
     name: "Register",
     component: Register
   },
-
   {
     path: "/login",
     name: "Login",
     component: Login
   },
-
   {
     path: "/profile",
     name: "Profile",
     component: Profile
+  },
+  {
+    path: "/parameters",
+    name: "Parameters",
+    component: Parameters
+  },
+  {
+    path: "/:pathMatch(.*)",
+    component: pageNotFound
   }
 ];
 
@@ -42,7 +50,7 @@ const routes = [
 
 const router = new VueRouter({
   routes,
-  // mode: 'history'
+  mode: 'history'
 });
 
 export default router;

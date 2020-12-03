@@ -1,22 +1,20 @@
 <template>
-<div id="app">
-    <!-- connection block -->
+  <!-- connection block -->
   <div class="connection">
     <!-- import styles & header -->
-    <connectionStyles />
-    <connectionHeader />
+    <connection />
 
     <!-- authentication -->
-    <div class="auth">
+    <section class="auth auth--style">
       <!-- header -->
-      <div class="auth__header">
+      <header class="auth__header">
         <h3>
           Connectez-vous
         </h3>
         <p>
           Accédez à votre compte Groupomania en entrant vos identifiants ci-dessous.
         </p>
-      </div>
+      </header>
       <!-- form -->
       <form class="auth__form" action="" method="POST">
         <div>
@@ -36,7 +34,7 @@
         <input type="submit" value="Se connecter">
       </form>
       <!-- no-account -->
-      <div class="auth__no-account">
+      <article class="auth__no-account">
         <hr>
         <p>
           Vous ne possédez pas de compte ?
@@ -47,21 +45,18 @@
             Créer un compte
           </router-link>
         </p>
-      </div>
-    </div>
+      </article>
+    </section>
   </div>
-</div>
 </template>
 
 <script>
-import connectionStyles from "@/components/connection/connectionStyles.vue"
-import connectionHeader from "@/components/connection/connectionHeader.vue"
+import connection from "@/components/connection/connection.vue"
 
 export default {
   name: "Login",
   components: {
-    connectionStyles,
-    connectionHeader
+    connection,
   }
 };
 </script>
