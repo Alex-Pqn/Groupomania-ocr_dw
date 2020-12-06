@@ -29,38 +29,36 @@
 </template>
 
 <script>
-  export default {
-    name: "displayUserComments",
-    props: {
-      pic_url: {
-        type: String,
-        required: true
-      },
-      firstname: {
-        type: String,
-        required: true
-      },
-      lastname: {
-        type: String,
-        required: true
-      },
-      published_date: {
-        type: String,
-        required: true
-      },
-      text: {
-        type: String,
-        required: true
-      },
+import { getImgUrl } from '@/utils/scripts';
+
+export default {
+  name: "displayUserComments",
+  props: {
+    pic_url: {
+      type: String,
+      required: true
     },
-    methods: {
-      getImgUrl(img) {
-        if (img !== "") {
-          return require(`../../assets/`+img)
-        }
-      }
+    firstname: {
+      type: String,
+      required: true
     },
-  };
+    lastname: {
+      type: String,
+      required: true
+    },
+    published_date: {
+      type: String,
+      required: true
+    },
+    text: {
+      type: String,
+      required: true
+    },
+  },
+  methods: {
+    getImgUrl
+  },
+};
 </script>
 
 <style lang="scss">

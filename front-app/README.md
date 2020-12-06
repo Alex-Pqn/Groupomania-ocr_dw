@@ -1,5 +1,4 @@
-# project7ocr - Groupomania (front)
-This is the front end part of OpenClassrooms project 7.
+# front vue.js app
 
 ## Project setup
 ```

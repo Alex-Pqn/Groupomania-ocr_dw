@@ -70,6 +70,8 @@
 </template>
 
 <script>
+import { getImgUrl } from '@/utils/scripts';
+
 export default {
   name: "displayUserForums",
   props: {
@@ -106,11 +108,7 @@ export default {
     }
   },
   methods: {
-    getImgUrl(img) {
-      if (img !== "") {
-        return require(`../../assets/`+img)
-      }
-    },
+    getImgUrl,
     createForumComment(id) {
       let displayCommentContainer = document.getElementById(id)
 

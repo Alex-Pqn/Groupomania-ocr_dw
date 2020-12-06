@@ -10,6 +10,8 @@
 </template>
 
 <script>
+import { getImgUrl } from '@/utils/scripts';
+
 export default {
   name: "userProfileParametersHeader",
   props: {
@@ -27,11 +29,7 @@ export default {
     },
   },
   methods: {
-    getImgUrl(img) {
-      if (img !== "") {
-        return require(`../assets/`+img)
-      }
-    },
+    getImgUrl
   }
 }
 </script>
@@ -53,12 +51,12 @@ export default {
     background-color: $default_background;
   }
   img {
-    width: 60px;
+    width: 50px;
     @include profile-pic;
   }
   h3 {
     margin-top: 9px;
-    font-size: 1.4em;
+    font-size: 1.22em;
   }
 }
 </style>

@@ -36,6 +36,8 @@
 </template>
 
 <script>
+import { getImgUrl } from '@/utils/scripts';
+
 export default {
   name: "displayUserTrends",
   props: {
@@ -64,11 +66,7 @@ export default {
     }
   },
   methods: {
-    getImgUrl(img) {
-      if (img !== "") {
-        return require(`../../assets/`+img)
-      }
-    },
+    getImgUrl
   },
 };
 </script>

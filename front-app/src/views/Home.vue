@@ -129,6 +129,7 @@ export default {
     margin-top: 15px;
     width: 50%;
     height: 7%;
+    z-index: 999;
     &--style {
       border-bottom: 1px solid $default_smooth-border;
       background-color: $default_background;

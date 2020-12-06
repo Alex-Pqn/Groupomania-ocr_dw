@@ -35,16 +35,16 @@
                       Nouveau mot de passe :
                   </label>
                   <label for="re-password">
-                      Nouveau mot de passe :
+                      Confirmation mot de passe :
                   </label>
                 </div>
                 <div class="user-parameters-form__inputs">
-                  <input id="firstname" :value="user.firstname" type="text" maxlength="30" required>
-                  <input id="lastname" :value="user.lastname" type="text" maxlength="30" required>
-                  <input id="email" :value="user.email" type="email" maxlength="55" required>
-                  <input id="description" :value="user.description" type="text" maxlength="255">
-                  <input type="password" id="password" maxlength="100">
-                  <input type="password" id="re-password" maxlength="100">
+                  <input id="firstname" :value="user.firstname" type="text" maxlength="30" placeholder="Entrez votre prénom" required>
+                  <input id="lastname" :value="user.lastname" type="text" maxlength="30" placeholder="Entrez votre nom" required>
+                  <input id="email" :value="user.email" type="email" maxlength="55" placeholder="Entrez votre e-mail" required>
+                  <input id="description" :value="user.description" type="text" maxlength="255" placeholder="Entrez une description">
+                  <input type="password" id="password" maxlength="100" placeholder="Nouveau mot de passe">
+                  <input type="password" id="re-password" maxlength="100" placeholder="Confirmation mot de passe">
                 </div>
             </article>
             <h4>
