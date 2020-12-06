@@ -1,4 +1,5 @@
 # front vue.js app
+This is the front end part of OpenClassrooms project 7.
 
 ## Project setup
 ```
