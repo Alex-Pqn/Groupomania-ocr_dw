@@ -1,7 +1,7 @@
 <template>
   <!-- connection header -->
   <div class="connection__header">
-    <img src="../../assets/icon-left-font-monochrome-black.svg" alt="">  
+    <img src="@/assets/icon-left-font-monochrome-black.svg" alt="">  
   </div>
 </template>
 

@@ -4,7 +4,7 @@
     <div class="main-nav__content main-nav__content--style">
       <article class="main-nav__content__top">
         <router-link to="/">
-          <img src="../../assets/icon.png" alt="">
+          <img src="@/assets/icon.png" alt="">
         </router-link>
       </article>
       <article class="main-nav__content__bottom">

@@ -9,7 +9,7 @@
       <!-- header -->
       <header class="forums__header forums__header--style">
         <a href="#top">
-          <img src="../assets/icon-left-font-monochrome-black.svg" alt="">
+          <img src="@/assets/icon-left-font-monochrome-black.svg" alt="">
         </a>
       </header>
       <!-- main -->

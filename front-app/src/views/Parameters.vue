@@ -13,67 +13,73 @@
         <h3>
             Mes paramètres
         </h3>
+
+        <!-- form -->
         <form v-on:submit="userParametersFormSend">
-            <h4>
-                Global
-            </h4>
-            <article class="user-parameters-form">
-                <div class="user-parameters-form__labels">
-                  <label for="firstname">
-                      Prénom :
-                  </label>
-                  <label for="lastname">
-                      Nom :
-                  </label>
-                  <label for="email">
-                      E-mail :
-                  </label>
-                  <label for="description">
-                      Description :
-                  </label>
-                  <label for="password">
-                      Nouveau mot de passe :
-                  </label>
-                  <label for="re-password">
-                      Confirmation mot de passe :
-                  </label>
-                </div>
-                <div class="user-parameters-form__inputs">
-                  <input id="firstname" :value="user.firstname" type="text" maxlength="30" placeholder="Entrez votre prénom" required>
-                  <input id="lastname" :value="user.lastname" type="text" maxlength="30" placeholder="Entrez votre nom" required>
-                  <input id="email" :value="user.email" type="email" maxlength="55" placeholder="Entrez votre e-mail" required>
-                  <input id="description" :value="user.description" type="text" maxlength="255" placeholder="Entrez une description">
-                  <input type="password" id="password" maxlength="100" placeholder="Nouveau mot de passe">
-                  <input type="password" id="re-password" maxlength="100" placeholder="Confirmation mot de passe">
-                </div>
-            </article>
+          <h4>
+              Global
+          </h4>
+          <article class="user-parameters-form">
+            <div class="user-parameters-form__labels">
+              <label for="firstname">
+                Prénom :
+              </label>
+              <label for="lastname">
+                Nom :
+              </label>
+              <label for="email">
+                E-mail :
+              </label>
+              <label for="description">
+                Description :
+              </label>
+              <label for="password">
+                Nouveau mot de passe :
+              </label>
+              <label for="re-password">
+                Nouveau mot de passe :
+              </label>
+            </div>
+            <div class="user-parameters-form__inputs">
+              <input id="firstname" :value="user.firstname" type="text" maxlength="30" placeholder="Entrez votre prénom" required>
+              <input id="lastname" :value="user.lastname" type="text" maxlength="30" placeholder="Entrez votre nom" required>
+              <input id="email" :value="user.email" type="email" maxlength="55" placeholder="Entrez votre e-mail" required>
+              <input id="description" :value="user.description" type="text" maxlength="255" placeholder="Entrez une description">
+              <input type="password" id="password" maxlength="100" placeholder="Nouveau mot de passe">
+              <input type="password" id="re-password" maxlength="100" placeholder="Confirmation mot de passe">
+            </div>
+          </article>
+
+          <!-- newsletters -->
+          <article class="user-parameters-newsletters">
             <h4>
                 Notifications
             </h4>
-            <article class="user-parameters-newsletters">
-              <label for="newsletters">
-                  Newsletters :
-              </label>
-              <input id="newsletters" type="checkbox">
-            </article>
+            <label for="newsletters">
+                Newsletters :
+            </label>
+            <input id="newsletters" type="checkbox">
+          </article>
+
+          <!-- pic -->
+          <article class="user-parameters-pic">
             <h4>
                 Photo de profil
             </h4>
-            <article class="user-parameters-pic">
-                <div class="user-parameters-pic__content">
-                <label for="user-parameters-pic_upload-img">
-                    <img src="../assets/cloud-upload-alt-solid.svg" alt="">
-                </label>
-                <input @change="userParamatersImgChange($event)" id="user-parameters-pic_upload-img" type="file" accept="image/*">
-                </div>
-                <div id="user-parameters-pic_img" class="user-parameters-pic__img-output">
-                    <img id="user-parameters-pic_img-output" src="" alt="">
-                    <div>
-                        <img v-on:click="userParamatersImgClose" src="../assets/times-solid.svg" alt="">
-                    </div>
-                </div>
-            </article>
-            <input type="submit" value="Sauvegarder">
+            <div class="user-parameters-pic__content">
+              <label for="user-parameters-pic_upload-img">
+                  <img src="@/assets/cloud-upload-alt-solid.svg" alt="">
+              </label>
+              <input @change="userParamatersImgChange($event)" id="user-parameters-pic_upload-img" type="file" accept="image/*">
+            </div>
+            <div id="user-parameters-pic_img" class="user-parameters-pic__img-output">
+              <img id="user-parameters-pic_img-output" src="" alt="">
+              <div>
+                  <img v-on:click="userParamatersImgClose" src="@/assets/times-solid.svg" alt="">
+              </div>
+            </div>
+          </article>
+          <input type="submit" value="Sauvegarder">
         </form>
       </div>
     </section>
@@ -156,6 +162,7 @@ export default {
   }
 }
 
+// form
 .user-parameters-form {
   display: flex;
   align-items: center;
@@ -189,10 +196,12 @@ export default {
   }
 }
 
+// newsletters
 .user-parameters-newsletters {
 
 }
 
+// pic
 .user-parameters-pic {
   &__content {
     display: flex;

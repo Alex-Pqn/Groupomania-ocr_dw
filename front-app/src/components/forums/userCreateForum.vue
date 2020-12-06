@@ -4,17 +4,17 @@
     <div class="create-forum__content">
       <textarea maxlength="320" placeholder="Quoi de neuf aujourd'hui ?" id="create-forum_text"></textarea>
       <label for="create-forum_upload-img">
-        <img src="../../assets/cloud-upload-alt-solid.svg" alt="">
+        <img src="@/assets/cloud-upload-alt-solid.svg" alt="">
       </label>
       <input @change="forumCreateImgChange($event)" id="create-forum_upload-img" type="file" accept="image/*">
       <button v-on:click="forumCreateSend">
-        <img src="../../assets/paper-plane-solid.svg" alt="">
+        <img src="@/assets/paper-plane-solid.svg" alt="">
       </button>
     </div>
     <div id="create-forum_img" class="create-forum__img-output">
       <img id="create-forum_img-output" src="" alt="">
       <div>
-        <img v-on:click="forumCreateImgClose" src="../../assets/times-solid.svg" alt="">
+        <img v-on:click="forumCreateImgClose" src="@/assets/times-solid.svg" alt="">
       </div>
     </div>
 </article>

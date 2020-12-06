@@ -61,7 +61,7 @@
       </div>
       <div class="create-comment__send">
         <button>
-          <img src="../../assets/paper-plane-solid.svg" alt="">
+          <img src="@/assets/paper-plane-solid.svg" alt="">
         </button>
       </div>
     </div>
