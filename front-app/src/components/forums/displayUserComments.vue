@@ -74,14 +74,12 @@ export default {
     border-bottom-right-radius: .3em;
     border-bottom-left-radius: .3em;
   }
-
   // icon
   &__icon {
-    display: flex;
-    width: 8.5%;
-    height: 10%;
+    width: 9%;
+    text-align: left;
     img {
-      width: 38px;
+      width: 75%;
       @include profile-pic;
     }
   }
@@ -103,6 +101,51 @@ export default {
       text-align: left;
       font-size: .9em;
       opacity: .92;
+    }
+  }
+}
+@media screen and (min-width: 1024px) and (max-width: 1600px) {
+  .user-comments {
+    &__icon {
+      width: 10%;
+      img {
+        width: 75%;
+        min-width: 30px;
+      }
+    }
+    &__main {
+      width: 90%;
+    }
+  }
+}
+@media screen and (min-width: 480px) and (max-width: 739px) {
+  .user-comments {
+    &--style {
+      font-size: 1.05em;
+    }
+    &__icon {
+      width: 11.5%;
+      img {
+        width: 75%;
+      }
+    }
+    &__main {
+      width: 87.5%;
+    }
+  }
+}
+@media screen and (max-width: 479px) {
+  .user-comments {
+    &__icon {
+      width: 15%;
+      img {
+        width: 75%;
+        min-width: 25px;
+      }
+    }
+    &__main {
+      width: 85%;
+      font-size: 1.1em;
     }
   }
 }

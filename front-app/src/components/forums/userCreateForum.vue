@@ -1,22 +1,24 @@
 <template>
 <!-- create forum -->
 <article class="create-forum">
-    <div class="create-forum__content">
-      <textarea maxlength="320" placeholder="Quoi de neuf aujourd'hui ?" id="create-forum_text"></textarea>
-      <label for="create-forum_upload-img">
-        <img src="@/assets/cloud-upload-alt-solid.svg" alt="">
-      </label>
-      <input @change="forumCreateImgChange($event)" id="create-forum_upload-img" type="file" accept="image/*">
-      <button v-on:click="forumCreateSend">
-        <img src="@/assets/paper-plane-solid.svg" alt="">
-      </button>
+  <!-- content -->
+  <div class="create-forum__content">
+    <textarea maxlength="320" placeholder="Quoi de neuf aujourd'hui ?" id="create-forum_text"></textarea>
+    <label for="create-forum_upload-img">
+      <img src="@/assets/cloud-upload-alt-solid.svg" alt="">
+    </label>
+    <input @change="forumCreateImgChange($event)" id="create-forum_upload-img" type="file" accept="image/*">
+    <button v-on:click="forumCreateSend">
+      <img src="@/assets/paper-plane-solid.svg" alt="">
+    </button>
+  </div>
+  <!-- img output -->
+  <div id="create-forum_img" class="create-forum__img-output">
+    <img id="create-forum_img-output" src="" alt="">
+    <div>
+      <img v-on:click="forumCreateImgClose" src="@/assets/times-solid.svg" alt="">
     </div>
-    <div id="create-forum_img" class="create-forum__img-output">
-      <img id="create-forum_img-output" src="" alt="">
-      <div>
-        <img v-on:click="forumCreateImgClose" src="@/assets/times-solid.svg" alt="">
-      </div>
-    </div>
+  </div>
 </article>
 </template>
 
@@ -48,8 +50,10 @@ export default {
 </script>
 
 <style lang="scss">
+// createforum
 .create-forum {
   width: 100%;
+  // content
   &__content {
     display: flex;
     textarea {
@@ -95,6 +99,7 @@ export default {
       position: absolute;
     }
   }
+  // img output
   &__img-output {
     display: none;
     text-align: left;
@@ -102,8 +107,8 @@ export default {
       display: flex;
       align-items: flex-start;
       padding: 1px 1.5px;
-      margin-top: 7px;
-      margin-left: -24px;
+      margin-top: 7.5px;
+      margin-left: -26px;
       img {
         cursor: pointer;
         width: 10px;
@@ -122,6 +127,143 @@ export default {
       margin-top: 3px;
       padding: 1px;
       border: 1px solid $default_smooth-border;
+    }
+  }
+}
+
+@media screen and (min-width: 1024px) and (max-width: 1600px) {
+  .create-forum {
+    &__content {
+      textarea {
+        font-size: 1.15em;
+      }
+      button {
+        width: 14%;
+        img {
+          width: 24px;
+        }
+      }
+      label {
+        width: 12%;
+        img {
+          width: 25px;
+        }
+      }
+    }
+    &__img-output {
+      div {
+        margin-top: 9px;
+        margin-left: -26px;
+      }
+    }
+  }
+}
+@media screen and (min-width: 1600px) and (max-width: 1919px) {
+  .create-forum {
+    &__img-output {
+      #create-forum_img-output {
+        max-width: 500px;
+        max-height: 500px;
+      }
+    }
+  }
+}
+@media screen and (min-width: 1400px) and (max-width: 1600px) {
+  .create-forum {
+    &__img-output {
+      #create-forum_img-output {
+        max-width: 550px;
+        max-height: 550px;
+      }
+    }
+  }
+}
+@media screen and (min-width: 1200px) and (max-width: 1400px) {
+  .create-forum {
+    &__img-output {
+      #create-forum_img-output {
+        max-width: 470px;
+        max-height: 350px;
+      }
+    }
+  }
+}
+@media screen and (min-width: 1024px) and (max-width: 1200px) {
+  .create-forum {
+    &__content {
+      textarea {
+        font-size: 1.25em;
+      }
+    }
+    &__img-output {
+      #create-forum_img-output {
+        max-width: 370px;
+        max-height: 370px;
+      }
+    }
+  }
+}
+@media screen and (min-width: 480px) and (max-width: 739px) {
+  .create-forum {
+    &__content {
+      textarea {
+        font-size: 1.1em;
+      }
+      button {
+        width: 14%;
+        img {
+          width: 24px;
+        }
+      }
+      label {
+        width: 12%;
+        img {
+          width: 25px;
+        }
+      }
+    }
+    &__img-output {
+      div {
+        margin-top: 9px;
+        margin-left: -26px;
+      }
+      #create-forum_img-output {
+        max-width: 381px;
+        max-height: 381px;
+        margin-top: 4px;
+      }
+    }
+  }
+}
+@media screen and (max-width: 479px) {
+  .create-forum {
+    &__content {
+      textarea {
+        font-size: 1.2em;
+      }
+      button {
+        width: 18%;
+        img {
+          width: 25px;
+        }
+      }
+      label {
+        width: 16%;
+        img {
+          width: 27px;
+        }
+      }
+    }
+    &__img-output {
+      div {
+        margin-top: 13px;
+        margin-left: -27px;
+      }
+      #create-forum_img-output {
+        max-width: 290px;
+        max-height: 290px;
+        margin-top: 6px;
+      }
     }
   }
 }

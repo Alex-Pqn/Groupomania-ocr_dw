@@ -53,12 +53,15 @@
       </p>
     </div>
   </div>
-  <!-- create-comment -->
+  <!-- create-comment container -->
   <div class="create-comment-display" :id="id">
+     <!-- create-comment -->
     <div class="create-comment create-comment--style">
+      <!-- text -->
       <div class="create-comment__text">
         <textarea maxlength="255" placeholder="Écrivez votre réponse ici..." id="create-comment_text"></textarea>
       </div>
+      <!-- send -->
       <div class="create-comment__send">
         <button>
           <img src="@/assets/paper-plane-solid.svg" alt="">
@@ -133,14 +136,12 @@ export default {
     background-color: rgb(250, 250, 250);
     border-top-left-radius: .3em;
   }
-
   // icon
   &__icon {
-    display: flex;
-    width: 11%;
-    height: 10%;
+    width: 10%;
+    text-align: left;
     img {
-      width: 50px;
+      width: 47px;
       @include profile-pic;
     }
   }
@@ -173,11 +174,86 @@ export default {
     &__bottom {
       text-align: left;
       display: table;
-      & img {
+      img {
         display: table-row;
         max-width: 350px;
         max-height: 350px;
         border: 1px solid $small_black-border;
+      }
+    }
+  }
+}
+@media screen and (min-width: 1024px) and (max-width: 1600px) {
+  .user-forums {
+    &__icon {
+      width: 12%;
+      img {
+        width: 75%;
+        min-width: 40px;
+      }
+    }
+    &__main {
+      width: 88%;
+    }
+  }
+}
+@media screen and (min-width: 740px) and (max-width: 1023px) {
+  .user-forums {
+    &__icon {
+      width: 10%;
+      text-align: center;
+      img {
+        width: 75%;
+        min-width: 45px;
+      }
+    }
+    &__main {
+      padding-left: 12px;
+    }
+  }
+}
+@media screen and (min-width: 480px) and (max-width: 739px) {
+  .user-forums {
+    &__icon {
+      width: 12%;
+      text-align: center;
+      img {
+        width: 75%;
+        min-width: 45px;
+      }
+    }
+    &__main {
+      width: 88%;
+      padding-left: 12px;
+      font-size: 1.1em;
+      &__bottom {
+        img {
+          max-width: 340px;
+          max-height: 340px;
+        }
+      }
+    }
+  }
+}
+@media screen and (max-width: 479px) {
+  .user-forums {
+    &__icon {
+      width: 13%;
+      text-align: center;
+      img {
+        width: 75%;
+        min-width: 35px;
+      }
+    }
+    &__main {
+      width: 87%;
+      padding-left: 12px;
+      font-size: 1.1em;
+      &__bottom {
+        img {
+          max-width: 220px;
+          max-height: 220px;
+        }
       }
     }
   }
@@ -218,17 +294,68 @@ export default {
     }
   }
 }
+@media screen and (min-width: 1024px) and (max-width: 1600px) {
+  .user-interacts {
+    padding: 9px;
+    &__left {
+      button {
+        font-size: .93em;
+        margin-left: 7px;
+      }
+    }
+    &__right {
+      p {
+        font-size: .93em;
+        margin-right: 10px;
+      }
+    }
+  }
+}
+@media screen and (min-width: 480px) and (max-width: 739px) {
+  .user-interacts {
+    &__left {
+      button {
+        font-size: .94em;
+        margin-left: 3px;
+      }
+    }
+    &__right {
+      p {
+        font-size: 1em;
+        margin-right: 5px;
+      }
+    }
+  }
+}
+@media screen and (max-width: 479px) {
+  .user-interacts {
+    &__left {
+      button {
+        font-size: 1.05em;
+        margin-left: 0px;
+      }
+    }
+    &__right {
+      p {
+        font-size: 1.05em;
+        margin-right: 0px;
+      }
+    }
+  }
+}
 
-// create-comment
+// create-comment container
 .create-comment-display {
   display: none;
 }
+// create-comment
 .create-comment {
   padding: 15px;
   display: flex;
   &--style {
     border-bottom: 1px solid rgba(109, 109, 109, 0.2);
   }
+  // text
   &__text {
     display: flex;
     width: 90%;
@@ -241,6 +368,7 @@ export default {
       border: 1px solid $smooth_black-border;
     }
   }
+  // send
   &__send {
     display: flex;
     width: 10%;
@@ -255,6 +383,48 @@ export default {
       &:hover {
         background-color:rgb(235, 235, 235);
       }
+    }
+  }
+}
+@media screen and (min-width: 1024px) and (max-width: 1600px) {
+  .create-comment {
+    padding: 13px;
+    &__text {
+      textarea {
+        padding: 6px;
+        height: 60px;
+        font-size: 1.1em;
+      }
+    }
+    &__send {
+      width: 13%;
+    }
+  }
+}
+@media screen and (min-width: 480px) and (max-width: 739px) {
+  .create-comment {
+    padding: 10px 0;
+    &__text {
+      textarea {
+        height: 55px;
+      }
+    }
+    &__send {
+      width: 13%;
+    }
+  }
+}
+@media screen and (max-width: 479px) {
+  .create-comment {
+    padding: 10px 0;
+    &__text {
+      textarea {
+        height: 70px;
+        font-size: 1.1em;
+      }
+    }
+    &__send {
+      width: 17%;
     }
   }
 }

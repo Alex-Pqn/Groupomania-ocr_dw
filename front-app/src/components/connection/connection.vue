@@ -12,7 +12,7 @@
 </script>
 
 <style lang="scss">
-//connection
+//connection styles
 .connection {
   display: flex;
   align-items: center;
@@ -23,7 +23,7 @@
     outline: none;
   }
   
-  //connection header
+  //connection header styles
   &__header {
     display: flex;
     margin-top: -80px;
@@ -34,7 +34,7 @@
   }
 }
 
-//authentication
+//authentication styles
 .auth {
   display: flex;
   flex-direction: column;
@@ -47,7 +47,7 @@
     border: 1px solid rgb(211, 211, 211);
   }
 
-  //authentication header
+  //authentication header styles
   &__header {
     margin: 10px 0 13px 0;
     h3 {
@@ -64,7 +64,7 @@
     }
   }
 
-  //authentication form
+  //authentication form styles
   &__form {
       display: flex;
       flex-direction: column;
@@ -121,7 +121,7 @@
       }
     }
 
-    //authentication no-account
+    //authentication no-account styles
     &__no-account {
       display: flex;
       flex-direction: column;

@@ -1,74 +1,67 @@
 <template>
   <!-- main-nav -->
   <section class="main-nav">
+    <!-- content -->
     <div class="main-nav__content main-nav__content--style">
+      <!-- top -->
       <article class="main-nav__content__top">
         <router-link to="/">
           <img src="@/assets/icon.png" alt="">
         </router-link>
       </article>
+      <!-- bottom -->
       <article class="main-nav__content__bottom">
-        <img v-on:click="popupProfilePic" id="user-icon" :src="getImgUrl(user.pic_url)" alt="">
-        <div id="profile-popup" class="profile-popup profile-popup--style">
-          <div class="profile-popup__user-infos">
-            <img :src="getImgUrl(user.pic_url)" alt="">
-            <h4>
-              {{ user.firstname }} {{ user.lastname }}
-            </h4>
-          </div>
-          <nav class="profile-popup__nav">
-            <ul>
-              <li>
-                <router-link to="/profile">
-                  Voir le profil
-                </router-link>
-              </li>
-              <li>
-                <router-link to="/parameters">
-                  Paramètres
-                </router-link>
-              </li>
-            </ul>
-          </nav>
-        </div>
+        <img v-on:click="displayProfilePopup(`profile-popup_nav`)" id="user-icon" :src="getImgUrl(pic_url)" alt="">
+        <profilePopup id="profile-popup_nav" :pic_url="pic_url" :firstname="firstname" :lastname="lastname" />
       </article>
     </div>
   </section>
 </template>
 
 <script>
-import { getImgUrl } from '@/utils/scripts';
+import { getImgUrl, displayProfilePopup } from '@/utils/scripts';
+import profilePopup from '@/components/nav/profilePopup.vue'
 export default {
-    name: "mainNav",
-    data() {
-      return {
-        user: {
-          pic_url: "user-icon.png",
-          firstname: "Alexandre",
-          lastname: "Pqn" 
-        }
-      }
+  name: "mainNav",
+  props: {
+    pic_url: {
+      type: String,
+      required: true
     },
-    methods: {
-      getImgUrl,
-      popupProfilePic() {
-        const profilePopupContainer = document.getElementById('profile-popup')
-        if(profilePopupContainer.style.display == "flex") {
-          profilePopupContainer.style.display = "none"
-        }else{
-          profilePopupContainer.style.display = "flex"
-        }
-      }
-    } 
+    firstname: {
+      type: String,
+      required: true
+    },
+    lastname: {
+      type: String,
+      required: true
+    }
+  },
+  components: {
+    profilePopup
+  },
+  methods: {
+    getImgUrl,
+    displayProfilePopup
+  }
 }
 </script>
 
 <style lang="scss">
+// profile-popup mobile nav
+#profile-popup_nav {
+  bottom: 70px;
+  right: 50px;
+  border-bottom-right-radius: 0;
+}
+
 // main-nav
 .main-nav {
+  display: flex;
   width: 100px;
   margin-right: 20px;
 
+  // content
   &__content {
     display: flex;
     flex-direction: column;
@@ -81,6 +74,7 @@ export default {
       border-left: 1px solid rgba(0, 0, 0, 0.15);
       border-right: 1px solid rgba(0, 0, 0, 0.15);
     }
+    // top
     &__top {
       height: 50%;
       img {
@@ -88,6 +82,7 @@ export default {
         width: 90px;
       }
     }
+    // bottom
     &__bottom {
       position: relative;
       display: flex;
@@ -95,59 +90,33 @@ export default {
       justify-content: flex-end;
       align-items: center;
       height: 50%;
-      #user-icon {
-        cursor: pointer;
-        width: 50px;
-        margin-bottom: 20px;
-        @include profile-pic;
+    }
+  }
+}
+@media screen and (min-width: 1024px) and (max-width: 1600px) {
+  .main-nav {
+    width: 90px;
+    margin-right: 36px;
+    &__content {
+      width: 90px;
+      &__top {
+        img {
+          margin-top: 2px;
+          width: 80px;
+        }
+      }
+      &__bottom {
+        #user-icon {
+          width: 42px;
+          margin-bottom: 17px;
+        }
       }
     }
   }
 }
-
-//profile-popup
-.profile-popup {
-  display: none;
-  position: absolute;
-  flex-direction: column;
-  align-items: center;
-  width: 175px;
-  padding: 10px 0;
-  bottom: 72px;
-  right: 52px;
-  &--style {
-    border-radius: .5em;
-    border-bottom-right-radius: .2em;
-    background: rgb(238, 238, 238);
-    border: 1px solid $small_black-border;
-  }
-  &__user-infos {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    margin: 10px 0 9px 0;
-    font-size: 1.1em;
-    img {
-      @include profile-pic;
-      width: 45px;
-      margin-bottom: 11px;
-    }
-  }
-  &__nav {
-    display: flex;
-    border-top: 1px solid black;
-    font-size: 1em;
-    padding-top: 7px;
-    a {
-      text-decoration: none;
-      color: rgb(43, 13, 211);
-      &:hover {
-        opacity: .8;
-      }
-    }
-    li {
-      margin-top: 7px;
-    }
+@media screen and (max-width: 1023px) {
+  .main-nav {
+    display: none;
   }
 }
 </style>

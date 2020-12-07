@@ -1,6 +1,7 @@
 <template>
-  <!-- trends -->
+  <!-- trends container -->
   <section class="trends-container">
+    <!-- trends -->
     <div class="trends trends--style">
       <!-- header -->
       <header class="trends__header">
@@ -67,10 +68,11 @@ export default {
 </script>
 
 <style lang="scss">
-// trends
+// trends-container
 .trends-container {
-  width: 350px;
+  min-width: 370px!important;
 }
+// trends
 .trends {
   display: flex;
   flex-direction: column;
@@ -107,6 +109,80 @@ export default {
       article {
         padding-top: 15px;
         border-top: 1px solid $small_black-border;
+      }
+    }
+  }
+}
+@media screen and (min-width: 1024px) and (max-width: 1600px) {
+  .trends-container {
+    min-width: 305px!important;
+  }
+  .trends {
+    width: 290px;
+  }
+}
+@media screen and (min-width: 740px) and (max-width: 1023px) {
+  .trends {
+    &--style {
+      border-radius: 0;
+      background-color: rgb(245, 245, 245);
+    }
+    &__header {
+      h1 {
+        font-size: 1.6em;
+      }
+    }
+    &__main {
+      &__recents {
+        h4 {
+          font-size: 1.2em;
+        }
+      }
+    }
+  }
+}
+@media screen and (max-width: 479px) {
+  .trends {
+    &__header {
+      h1 {
+        font-size: 1.7em;
+      }
+    }
+    &__main {
+      &__recents {
+        h4 {
+          font-size: 1.4em;
+        }
+      }
+    }
+  }
+}
+@media screen and (max-width: 1023px) {
+  .trends-container {
+    min-width: 100%!important;
+    margin-top: 20px;
+    display: flex;
+    justify-content: center;
+  }
+  .trends {
+    width: 92%;
+    height: 100%;
+    position: relative;
+    top: 0;
+    left: 0;
+    &--style {
+      border-radius: 0;
+      background-color: rgb(245, 245, 245);
+    }
+    &__main {
+      &__recents {
+        article {
+          margin-bottom: 10px;
+          padding-top: 23px;
+        }
+        h4 {
+          margin: 15px 0 15px 0;
+        }
       }
     }
   }

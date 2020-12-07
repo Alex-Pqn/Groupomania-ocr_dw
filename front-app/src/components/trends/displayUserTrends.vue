@@ -76,17 +76,16 @@ export default {
 .user-trends {
   display: flex;
   &--style {
-    font-size: .9em;
+    font-size: .95em;
     border-top-left-radius: .3em;
   }
 
   // icon
   &__icon {
-    display: flex;
-    width: 15%;
-    height: 10%;
+    text-align: left;
+    width: 10%;
     img {
-      width: 30px;
+      width: 33px;
       @include profile-pic;
     }
   }
@@ -95,6 +94,7 @@ export default {
     display: flex;
     flex-direction: column;
     width: 90%;
+    padding-left: 15px;
     // top
     &__top {
       display: flex;
@@ -114,6 +114,79 @@ export default {
       text-align: left;
       line-height: 23px;
       margin-bottom: 13px;
+    }
+  }
+}
+@media screen and (min-width: 1024px) and (max-width: 1600px) {
+  .user-trends {
+    &--style {
+      font-size: .9em;
+    }
+    &__icon {
+      img {
+        width: 28px;
+      }
+    }
+    &__main {
+      &__top {
+        margin-bottom: 2px;
+        &__date {
+          font-size: .85em;
+        }
+      }
+      &__bottom {
+        line-height: 22px;
+        margin-bottom: 10px;
+      }
+    }
+  }
+}
+@media screen and (min-width: 740px) and (max-width: 1023px) {
+  .user-trends {
+    &--style {
+      font-size: 1em;
+    }
+    &__icon {
+      img {
+        width: 42px;
+      }
+    }
+  }
+}
+@media screen and (min-width: 480px) and (max-width: 739px) {
+  .user-trends {
+    &--style {
+      font-size: 1.1em;
+    }
+  }
+}
+@media screen and (max-width: 1023px) {
+  .user-trends {
+    &__main {
+      padding-left: 3px;
+      &__top {
+        margin-bottom: 2px;
+        &__date {
+          font-size: .85em;
+        }
+      }
+      &__bottom {
+        line-height: 27px;
+        margin-bottom: 10px;
+      }
+    }
+  }
+}
+@media screen and (max-width: 479px) {
+  .user-trends {
+    &--style {
+      font-size: 1.1em;
+    }
+    &__icon {
+      width: 16%;
+    }
+    &__main {
+      width: 84%;
     }
   }
 }

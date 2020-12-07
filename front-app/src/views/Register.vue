@@ -1,5 +1,5 @@
 <template>
-  <!-- connection block -->
+  <!-- connection -->
   <div class="connection">
     <!-- import styles & header -->
     <connection />
@@ -57,7 +57,7 @@
 
         <input type="submit" value="S'enregistrer">
       </form>
-      <!-- no-account -->
+      <!-- no account -->
       <article class="auth__no-account">
         <hr>
         <p>
@@ -86,10 +86,11 @@ export default {
 </script>
 
 <style lang="scss">
-//authentication
+// authentication
 .auth {
+  // form
   &__form {
-    //authentication register page
+    // register page
     &--register {
       div {
         label[for="firstname"], label[for="lastname"], label[for="re-password"] {
