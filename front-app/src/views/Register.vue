@@ -120,7 +120,26 @@ export default {
           padding-left: 10px;
         }
       }
+    }
   }
+}
+@media screen and (max-width: 600px) {
+  .auth {
+    &__form {
+      &--register {
+        div {
+          input[name="firstname"] {
+            width: 190px;
+          }
+          input[name="lastname"] {
+            width: 212px;
+          }
+          input[name="re-password"] {
+            width: 150px;
+          }
+        }
+      }
+    }
   }
 }
 </style>

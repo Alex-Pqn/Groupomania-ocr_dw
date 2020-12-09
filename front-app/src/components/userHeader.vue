@@ -7,7 +7,7 @@
   </a>
   <!-- mobile display -->
   <div class="user-header__mobile-display">
-    <img v-on:click="displayProfilePopup(`profile-popup_mobile-user`)" src="@/assets/bars-solid.svg" alt="">
+    <img id="mobile_nav-icon" v-on:click="displayProfilePopup(`profile-popup_mobile-user`)" src="@/assets/bars-solid.svg" alt="">
     <profilePopup id="profile-popup_mobile-user" :pic_url="pic_url" :firstname="firstname" :lastname="lastname" />
   </div>
   <!-- infos -->
@@ -89,8 +89,8 @@ export default {
     display: none;
     position: absolute;
     right: 15px;
-    img {
-      width: 24px;
+    #mobile_nav-icon {
+      width: 26px;
     }
     @media screen and (max-width: 1023px) {
       display: flex;

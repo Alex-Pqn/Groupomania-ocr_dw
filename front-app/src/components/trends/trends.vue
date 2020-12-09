@@ -123,6 +123,7 @@ export default {
 }
 @media screen and (min-width: 740px) and (max-width: 1023px) {
   .trends {
+    width: 60%;
     &--style {
       border-radius: 0;
       background-color: rgb(245, 245, 245);
@@ -157,6 +158,11 @@ export default {
     }
   }
 }
+@media screen and (max-width: 740px) {
+  .trends {
+    width: 92%;
+  }
+}
 @media screen and (max-width: 1023px) {
   .trends-container {
     min-width: 100%!important;
@@ -165,7 +171,6 @@ export default {
     justify-content: center;
   }
   .trends {
-    width: 92%;
     height: 100%;
     position: relative;
     top: 0;

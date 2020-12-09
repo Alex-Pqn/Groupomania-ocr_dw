@@ -33,6 +33,17 @@
     }
   }
 }
+@media screen and (max-width: 600px) {
+  .connection {
+    &__header {
+      margin-top: 1px;
+      margin-bottom: 25px;
+      img {
+        width: 280px;
+      }
+    }
+  }
+}
 
 //authentication styles
 .auth {
@@ -66,79 +77,109 @@
 
   //authentication form styles
   &__form {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      input {
-          font-size: 1em;
-          padding: 7px;
-      }
-      div {
-        position: relative;
-        input[type="text"], input[type="email"], input[type="password"] {
-          transition-property: all;
-          transition-duration: 500ms;
-          border: 1px solid rgba(143, 143, 143, 0.5);
-          background-color: rgb(243, 242, 242);
-          margin-bottom: 11px;
-          &:hover {
-            border: 1px solid rgb(131, 131, 131);
-          }
-          &:focus {
-            background-color: rgb(247, 247, 247);
-            border: none;
-          }
-        }
-        input[name="email"] {
-          padding-left: 69px;
-          width: 261px;
-        }
-        input[name="password"] {
-          padding-left: 120px;
-          width: 210px;
-        }
-        label[for="password"], label[for="email"] {
-          position: absolute;
-          left: 10px;
-          top: 8px;
-        }
-      }
-      input[type="submit"]{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    input {
+        font-size: 1em;
+        padding: 7px;
+    }
+    div {
+      position: relative;
+      input[type="text"], input[type="email"], input[type="password"] {
         transition-property: all;
         transition-duration: 500ms;
-        border: 1px solid rgba(143, 143, 143, 0.75);
-        background-color: rgb(236, 236, 236);
-        padding: 7px;
-        font-size: 1em;
-        margin-top: 5px;
-        width: 50%;
+        border: 1px solid rgba(143, 143, 143, 0.5);
+        background-color: rgb(243, 242, 242);
+        margin-bottom: 11px;
         &:hover {
-          border-top-left-radius: .6em;
-          border-bottom-right-radius: .4em;
-          background-color: rgb(223, 223, 223);
-          border: 1px solid rgb(128, 128, 128);
+          border: 1px solid rgb(131, 131, 131);
+        }
+        &:focus {
+          background-color: rgb(247, 247, 247);
+          border: none;
         }
       }
+      input[name="email"] {
+        padding-left: 69px;
+        width: 261px;
+      }
+      input[name="password"] {
+        padding-left: 120px;
+        width: 210px;
+      }
+      label[for="password"], label[for="email"] {
+        position: absolute;
+        left: 10px;
+        top: 8px;
+      }
     }
+    input[type="submit"]{
+      transition-property: all;
+      transition-duration: 500ms;
+      border: 1px solid rgba(143, 143, 143, 0.75);
+      background-color: rgb(236, 236, 236);
+      padding: 7px;
+      font-size: 1em;
+      margin-top: 5px;
+      width: 50%;
+      &:hover {
+        border-top-left-radius: .6em;
+        border-bottom-right-radius: .4em;
+        background-color: rgb(223, 223, 223);
+        border: 1px solid rgb(128, 128, 128);
+      }
+    }
+  }
+  //authentication no-account styles
+  &__no-account {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-top: 20px;
+    hr {
+      width: 50%;
+      margin-bottom: 15px;
+      border-top: 1px solid $medium_black-border;
+    }
+    p {
+      font-size: 1.08em;
+      line-height: 27px;
+      a {
+        text-decoration: none;
+      }
+    }
+  }
+}
 
-    //authentication no-account styles
-    &__no-account {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      margin-top: 20px;
-      hr {
-        width: 50%;
-        margin-bottom: 15px;
-        border-top: 1px solid $medium_black-border;
+@media screen and (max-width: 600px) {
+  .auth {
+    width: 250px;
+    &__header {
+      h3 {
+        font-size: 1.6em;
       }
       p {
-        font-size: 1.08em;
-        line-height: 27px;
-        a {
-          text-decoration: none;
+        font-size: 1em;
+        line-height: 28px;
+      }
+    }
+    &__form {
+      input {
+        font-size: 1em;
+      }
+      div {
+        input[type="text"], input[type="email"], input[type="password"] {
+          margin-bottom: 9px;
+        }
+        input[name="email"] {
+          width: 201px;
+        }
+        input[name="password"] {
+          width: 150px;
         }
       }
     }
+  }
 }
 </style>

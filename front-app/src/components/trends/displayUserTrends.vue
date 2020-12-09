@@ -147,9 +147,13 @@ export default {
       font-size: 1em;
     }
     &__icon {
+      width: 12%;
       img {
-        width: 42px;
+        width: 38px;
       }
+    }
+    &__main {
+      width: 88%;
     }
   }
 }
