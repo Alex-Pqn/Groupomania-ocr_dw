@@ -1,22 +1,36 @@
 const express = require('express');
+const mysql = require('mysql')
 const bodyParser = require('body-parser');
-const mongoose = require('mongoose');
 const path = require('path');
 require('dotenv').config();
 
+// let sql = 'CREATE TABLE ......................'
+// db.query(sql, (err, result) => {
+//     if(err) throw err;
+//     console.log(result)
+// })
+
 // routes
-const commentsRoute = require('./routes/comments')
-const forumsRoute = require('./routes/forums')
-const trendsRoute = require('./routes/trends')
-const userRoute = require('./routes/user')
+const commentsRoute = require('./routes/comments');
+const forumsRoute = require('./routes/forums');
+const userRoute = require('./routes/user');
 
 // db
-mongoose.connect(process.env.DB_URL, {
-    useNewUrlParser: true,
-    useUnifiedTopology: true
+const db = mysql.createConnection({
+    host     : process.env.MYSQL_HOST,
+    user     : process.env.MYSQL_USER,
+    password : process.env.MYSQL_USER_PASSWORD,
+    database : process.env.MYSQL_DATABASE
+    
 })
-.then(() => console.log('MySQL data base connected with success!'))
-.catch(() => console.log('MySQL data base connection failed.'))
+db.connect(
+    db.on('error', (err) => {
+        console.error("MySQL database error: " + err)
+    }),
+    db.on('drain', () => {
+        console.log('Mysql database connected...')
+    })
+);
 
 // initialize express in app
 const app = express();
@@ -37,6 +51,5 @@ app.use('/images', express.static(path.join(__dirname, 'images')));
 app.use('/api/user', userRoute);
 app.use('/api/forums', forumsRoute);
 app.use('/api/comments', commentsRoute);
-app.use('/api/trends', trendsRoute);
 
 module.exports = app;
