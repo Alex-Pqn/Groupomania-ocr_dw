@@ -43,7 +43,43 @@ export default {
       document.getElementById('create-forum_img-output').src = ""
     },
     forumCreateSend () {
+      let cookie = document.cookie.split(';')
+      let cookieUserId = cookie[0].replace('user_id=', '')
+      let cookieUserToken = cookie[1].replace('auth_token=', '')
+      
+      let userParams = {
+        userId: cookieUserId,
+      }
 
+      let forumParams = {
+      }
+    
+      let xhr = new XMLHttpRequest();
+      
+      xhr.open('POST', 'http://localhost:3000/api/forums/create', true) ;
+      xhr.setRequestHeader('Content-type', 'application/json');
+      xhr.setRequestHeader('Authorization', 'Basic ' + cookieUserToken)
+      xhr.send(JSON.stringify(userParams, forumParams));
+      // request error
+      xhr.onerror = () => {
+        // displaySubmitInfoError("Une erreur est survenue lors de la création de votre compte. Vérifiez l'état de vote connexion internet et réessayez.")
+      }
+      xhr.onreadystatechange = function() {
+        let response = JSON.parse(this.response)
+        
+        // success
+        if (this.readyState === 4 && this.status === 200) {
+          
+          
+        // error handler
+        } else if (this.status === 401 || this.status === 500) {
+          // displaySubmitInfoError(response.sub_error)
+          console.error(`Return /register API | Error: ${response.sub_error}, HTTP Status: ${this.status}, ReadyState Status: ${this.readyState}`)
+          if(response.err) {
+            console.error(`Error: ${response.err.sqlMessage}, Code: ${response.err.code} fatal?${response.err.fatal}, SQLState: ${response.err.sqlState}`)
+          }
+        }
+      }
     }
   }
 };
