@@ -2,23 +2,24 @@ const jwt = require('jsonwebtoken');
 
 module.exports = (req, res, next) => {
   try {
-    //store token in variable
-    const token = req.headers.authorization.split(' ')[1];
-
-    //compare tokens
-    const decodedToken = jwt.verify(token, process.env.KEY_TOKEN_AUTH);
+    //get bearer auth token in headers
+    const JWTAuthToken = req.headers.authorization.split(' ')[2];
+    
+    //compare token with key
+    const decodedToken = jwt.verify(JWTAuthToken, process.env.KEY_TOKEN_AUTH);
 
     const { userId } = decodedToken;
 
-    //invalid token or user id not available
-    if (req.body.userId && req.body.userId !== userId) {
+    //invalid JWT token
+    if (req.body.userId && req.body.userId != userId) {
       throw 'User ID not available';
     }
     //valid token, call the next module 
     else {
       next();
     }
-  } catch (error) {
-    res.status(401).json({ error: error | 'Request not authentified' });
+  } catch (err) {
+    console.log(err)
+    res.status(401).json({ sub_error:"Le token d'authentification est incorrect ou a expiré." || err });
   }
 };
