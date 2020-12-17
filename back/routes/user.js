@@ -5,6 +5,8 @@ const router = express.Router();
 const userController = require('../controllers/user');
 const auth = require('../middlewares/auth');
 
+router.post('/page/auth', auth, userController.pageAuth),
+
 router.post('/login', userController.login);
 router.post('/register', userController.register);
 
