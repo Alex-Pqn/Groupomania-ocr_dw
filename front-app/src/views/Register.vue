@@ -21,46 +21,46 @@
           <label for="firstname">
             Prénom :
           </label>
-          <input type="text" name="firstname" minlength="3" maxlength="30" required value="test">
-          <p id="register_firstname-error"></p>
+          <input type="text" id="firstname" name="firstname" minlength="3" maxlength="30" required value="test">
+          <p id="firstname-error"></p>
         </div>
         <div>
           <label for="lastname">
             Nom :
           </label>
-          <input type="text" name="lastname" minlength="3" maxlength="30" required value="test">
-          <p id="register_lastname-error"></p>
+          <input type="text" id="lastname" name="lastname" minlength="3" maxlength="30" required value="test">
+          <p id="lastname-error"></p>
         </div>
         <div>
           <label for="email">
             E-mail :
           </label>
-          <input type="email" name="email" minlength="5" maxlength="55" required value="test@gmail.com">
-          <p id="register_email-error"></p>
+          <input type="email" id="email" name="email" minlength="5" maxlength="55" required value="test@gmail.com">
+          <p id="email-error"></p>
         </div>
         <div>
           <label for="password">
             Mot de passe :
           </label>
-          <input type="password" name="password" minlength="8" maxlength="50" required value="testtest1Aa">
+          <input type="password" id="password" name="password" minlength="8" maxlength="50" required value="testtest1Aa">
         </div>
         <div>
           <label for="repassword">
             Mot de passe :
           </label>
-          <input type="password" name="repassword" minlength="8" maxlength="50" required value="testtest1Aa">
-          <p id="register_password-error"></p>
+          <input type="password" id="repassword" name="repassword" minlength="8" maxlength="50" required value="testtest1Aa">
+          <p id="password-error"></p>
         </div>
 
         <label id="newsletters-checkbox">
-          <input type="checkbox" id="newsletters-input" checked>
+          <input type="checkbox" id="checkbox" name="newsletters" value="true" checked>
           <p>
             Je souhaite m'abonner par e-mail aux newsletters relatives à Groupomania.
           </p>
         </label>
 
-        <input type="submit" value="S'enregistrer">
-        <p id="register_submit-info"></p>
+        <input id="submit" type="submit" value="S'enregistrer">
+        <p id="submit-info"></p>
       </form>
       <!-- no account -->
       <article class="auth__no-account">
@@ -87,6 +87,16 @@ export default {
   components: {
     connection,
   },
+  mounted() {
+    const newslettersCheckbox = document.getElementById('checkbox')
+    newslettersCheckbox.addEventListener('change', function() {
+      if (this.checked) {
+        newslettersCheckbox.value = true
+      }else{
+        newslettersCheckbox.value = false
+      }
+    })
+  },
   methods: {
     registerSubmit: function (event) {
       event.preventDefault();
@@ -96,6 +106,9 @@ export default {
       let emailInput = document.registerForm.email.value;
       let passwordInput = document.registerForm.password.value;
       let repasswordInput = document.registerForm.repassword.value;
+      let newslettersInput = document.registerForm.newsletters.value;
+      const submitButton = document.getElementById('submit');
+      const submitInfo = document.getElementById('submit-info')
       
       const formData = [
         {
@@ -103,7 +116,7 @@ export default {
           name: "prénom",
           value: firstnameInput,
           stepValidation: false,
-          errorIdContainer: "register_firstname-error",
+          errorIdContainer: "firstname-error",
           //eslint-disable-next-line
           regex: /[^0-9\.\,\"\?\!\;\:\#\$\%\&\(\)\*\+\-\/\<\>\=\@\[\]\\\^\_\{\}\|\~]+/,
           minLength: 3,
@@ -114,7 +127,7 @@ export default {
           name: "nom",
           value: lastnameInput,
           stepValidation: false,
-          errorIdContainer: "register_lastname-error",
+          errorIdContainer: "lastname-error",
           //eslint-disable-next-line
           regex: /[^0-9\.\,\"\?\!\;\:\#\$\%\&\(\)\*\+\-\/\<\>\=\@\[\]\\\^\_\{\}\|\~]+/,
           minLength: 3,
@@ -122,9 +135,10 @@ export default {
         },
         {
           id: 3,
+          name: "e-mail",
           value: emailInput,
           stepValidation: false,
-          errorIdContainer: "register_email-error",
+          errorIdContainer: "email-error",
           //eslint-disable-next-line
           regex: /[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?/g,
           minLength: 5,
@@ -132,9 +146,10 @@ export default {
         },
         {
           id: 4,
+          name: "mot de passe",
           value: passwordInput,
           stepValidation: false,
-          errorIdContainer: "register_password-error",
+          errorIdContainer: "password-error",
           //eslint-disable-next-line
           regex: /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[a-zA-Z]).{8,}$/gm,
           minLength: 8,
@@ -142,85 +157,113 @@ export default {
         },
       ]
       
+      // error's & info's handler
       function displayFormError (errorIdContainer, errorValue) {
         document.getElementById(errorIdContainer).innerHTML = errorValue
         document.getElementById(errorIdContainer).style.display = "flex"
       }
-      function displaySubmitInfo (infoValue, infoColor) {
-        const registerSubmitInfo = document.getElementById('register_submit-info')
-        registerSubmitInfo.style.display = "flex"
-        registerSubmitInfo.style.color = infoColor
-        registerSubmitInfo.innerHTML = infoValue
+      function displaySubmitInfoError (infoValue) {
+        submitInfo.style.display = "none"
+        setTimeout(() => {
+          submitInfo.style.display = "flex"
+          submitInfo.style.color = "rgba(197, 0, 0, 0.85)"
+          submitInfo.innerHTML = infoValue
+        }, 150);
+      }
+      function displaySubmitInfoSuccess (infoValue) {
+        submitInfo.style.display = "flex"
+        submitInfo.style.color = "green"
+        submitInfo.innerHTML = infoValue
       }
       
+      // inputs validator
       formData.forEach(data => {
         document.getElementById(data.errorIdContainer).style.display = "none"
-        
+        // length validation
+        if(data.value.length < data.minLength) {
+          return displayFormError(data.errorIdContainer, `Votre ${data.name} doit être composé de ${data.minLength} caractères au minimum.`)
+        }else if(data.value.length > data.maxLength) {
+          return displayFormError(data.errorIdContainer, `Votre ${data.name} ne peut être composé que de ${data.maxLength} caractères au maximum.`)
+        }
         // regex validation
         if(data.regex.test(data.value) === false) {
           if(data.id === 1 || data.id === 2) {
-            displayFormError(data.errorIdContainer, `Le ${data.name} contient des caractères spéciaux interdits.`)
-            return;
+            return displayFormError(data.errorIdContainer, `Votre ${data.name} est composé de caractères spéciaux prohibés.`)
           }else if(data.id === 3) {
-            displayFormError(data.errorIdContainer, "L'e-mail entré est invalide.")
-            return;
+            return displayFormError(data.errorIdContainer, "L'e-mail que vous avez entré est invalide.")
           }else {
-            displayFormError(data.errorIdContainer, "Le mot de passe entré doit contenir au minimum une lettre majuscule, une lettre minuscule et un nombre.")
-            return;
+            return displayFormError(data.errorIdContainer, "Votre mot de passe doit contenir au minimum une lettre majuscule, une lettre minuscule et un chiffre.")
           }
         }
-        
-        // length validation
-        if(data.value.length < data.minLength) {
-          displayFormError(data.errorIdContainer, `Cette case doit contenir au minimum ${data.minLength} caractères.`)
-          return;
-        }else if(data.value.length > data.maxLength) {
-          displayFormError(data.errorIdContainer, `Cette case ne peut contenir qu'au maximum ${data.maxLength} caractères.`)
-          return;
-        }
-      
         // passwords corresponds validation
         if(data.id === 4) {
           if(repasswordInput !== data.value) {
-            displayFormError(data.errorIdContainer, "Les deux mots de passe entrés doivent correspondre.")
-            return;
+          return displayFormError(data.errorIdContainer, "Les deux mots de passe entrés doivent correspondre.")
           }
         }
-        
+        // if all inputs are valids, call api with inputs
         data.stepValidation = true
         if (formData[0].stepValidation === true && 
             formData[1].stepValidation === true && 
             formData[2].stepValidation === true && 
             formData[3].stepValidation === true) {
-              registerRequest()
+              sendRegisterRequest()
             }
       })
       
-      function registerRequest () {
+      // send register request to api
+      function sendRegisterRequest () {
         let xhr = new XMLHttpRequest();
-        let params = {
-          test:'test'
+        let userParams = {
+          firstname:firstnameInput,
+          lastname:lastnameInput,
+          email:emailInput,
+          password:passwordInput,
+          newsletters:newslettersInput
         }
         xhr.open('POST', 'http://localhost:3000/api/user/register', true) ;
         xhr.setRequestHeader('Content-type', 'application/json');
-        xhr.send(JSON.stringify(params));
+        xhr.send(JSON.stringify(userParams));
+        // request error
         xhr.onerror = () => {
-          displaySubmitInfo("Une erreur est survenue lors de la création de votre compte. Vérifiez l'état de vote connexion internet et réessayez.", "rgba(197, 0, 0, 0.85)")
-          console.error(`Error on register submit. HTML Status: ${this.status}, ReadyState Status: ${this.readyState}`)
+          displaySubmitInfoError("Une erreur est survenue lors de la création de votre compte. Vérifiez l'état de vote connexion internet et réessayez.")
+          submitButton.disabled = false
         }
         xhr.onreadystatechange = function() {
+          let response = JSON.parse(this.response)
+          
+          // success
           if (this.readyState === 4 && this.status === 200) {
+            submitButton.disabled = true
+            
+            // set http cookie with userId & auth token
+            let actualDate = new Date();
+            const dateMultiplicator = actualDate.setMonth(actualDate.getMonth() + 1)
+            let cookieExpireDate = new Date(dateMultiplicator).toUTCString()
+            
+            document.cookie = `user_id=${response.userId};expires=${cookieExpireDate};path=/`
+            document.cookie = `auth_token=${response.token};expires=${cookieExpireDate};path=/`
+            
+            // redirect to home 
             let redirectionTime = 6
             let redirectionInterval = setInterval(() => {
               if(redirectionTime === 0) {
                 clearInterval(redirectionInterval)
-                window.location.replace('/login')
+                window.location.replace('/')
               }else{
                 redirectionTime--
-                displaySubmitInfo(`Compte créé avec succès ! Redirection vers la page de connexion dans ${redirectionTime} secondes...`, "green") 
+                displaySubmitInfoSuccess(`${response.message} Redirection vers l'accueil dans ${redirectionTime} secondes...`) 
               }
             }, 1000);
-          };
+            
+          // error handler
+          } else if (this.status === 401 || this.status === 500) {
+            displaySubmitInfoError(response.sub_error)
+            console.error(`Return /register API | Error: ${response.sub_error}, HTTP Status: ${this.status}, ReadyState Status: ${this.readyState}`)
+            if(response.err) {
+              console.error(`Error: ${response.err.sqlMessage}, Code: ${response.err.code} fatal?${response.err.fatal}, SQLState: ${response.err.sqlState}`)
+            }
+          }
         }
       }
     }
@@ -228,7 +271,7 @@ export default {
 };
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
 // authentication
 .auth {
   // form
@@ -262,11 +305,6 @@ export default {
         p {
           padding-left: 10px;
         }
-      }
-      #register_submit-info {
-        display: flex;
-        text-align: left;
-        margin-top: 12px;
       }
     }
   }
