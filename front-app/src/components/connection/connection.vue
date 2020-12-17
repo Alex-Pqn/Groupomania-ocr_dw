@@ -113,6 +113,15 @@
         left: 10px;
         top: 8px;
       }
+      p {
+        display: none;
+        text-align: left;
+        margin-top: -6px;
+        margin-bottom: 12px;
+        font-size: .955em;
+        color: rgba(202, 0, 0, 0.78);
+        padding-left: 2px;
+      }
     }
     input[type="submit"]{
       transition-property: all;
@@ -129,6 +138,11 @@
         background-color: rgb(223, 223, 223);
         border: 1px solid rgb(128, 128, 128);
       }
+    }
+    #submit-info {
+      display: none;
+      text-align: center;
+      margin-top: 12px;
     }
   }
   //authentication no-account styles
