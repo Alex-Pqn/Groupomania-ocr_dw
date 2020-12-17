@@ -7,6 +7,11 @@ const bcryptSaltRounds = 10
 const dbConfig = require('../db_config')
 const db = mysql.createPool(dbConfig.params)
 
+// page requires auth : return status 200 after validation token by auth middleware
+exports.pageAuth = (req, res, next) => {
+  res.status(200)
+}
+
 //register
 exports.register = (req, res, next) => {
   // hash password with bcrypt
