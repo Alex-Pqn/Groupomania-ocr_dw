@@ -43,40 +43,49 @@ export default {
       document.getElementById('create-forum_img-output').src = ""
     },
     forumCreateSend () {
-      let cookie = document.cookie.split(';')
-      let cookieUserId = cookie[0].replace('user_id=', '')
-      let cookieUserToken = cookie[1].replace('auth_token=', '')
+      sendForumCreateRequest ()
       
-      let userParams = {
-        userId: cookieUserId,
-      }
-
-      let forumParams = {
-      }
-    
-      let xhr = new XMLHttpRequest();
-      
-      xhr.open('POST', 'http://localhost:3000/api/forums/create', true) ;
-      xhr.setRequestHeader('Content-type', 'application/json');
-      xhr.setRequestHeader('Authorization', 'Basic ' + cookieUserToken)
-      xhr.send(JSON.stringify(userParams, forumParams));
-      // request error
-      xhr.onerror = () => {
-        // displaySubmitInfoError("Une erreur est survenue lors de la création de votre compte. Vérifiez l'état de vote connexion internet et réessayez.")
-      }
-      xhr.onreadystatechange = function() {
-        let response = JSON.parse(this.response)
+      function sendForumCreateRequest () {
+        const DONE = 4
+        const OK = 200
+        const UNAUTHORIZED = 401
+        const INTERNAL_SERVER_ERROR = 401
         
-        // success
-        if (this.readyState === 4 && this.status === 200) {
+        let cookie = document.cookie.split(';')
+        let cookieUserId = cookie[0].replace('user_id=', '')
+        let cookieUserToken = cookie[1].replace('auth_token=', '')
+        
+        let userParams = {
+          userId: cookieUserId,
+        }
+        let forumParams = {
+        }
+        
+        // xhr request
+        let xhr = new XMLHttpRequest();
+        xhr.open('POST', 'http://localhost:3000/api/forums/create', true) ;
+        xhr.setRequestHeader('Content-type', 'application/json');
+        xhr.setRequestHeader('Authorization', 'Bearer ' + cookieUserToken)
+        xhr.send(JSON.stringify(userParams, forumParams));
+        
+        xhr.onerror = () => {
+          // displaySubmitInfoError("Une erreur est survenue lors de la création de votre compte. Vérifiez l'état de vote connexion internet et réessayez.")
+        }
+        
+        xhr.onreadystatechange = function() {
+          let response = JSON.parse(this.response)
           
-          
-        // error handler
-        } else if (this.status === 401 || this.status === 500) {
-          // displaySubmitInfoError(response.sub_error)
-          console.error(`Return /register API | Error: ${response.sub_error}, HTTP Status: ${this.status}, ReadyState Status: ${this.readyState}`)
-          if(response.err) {
-            console.error(`Error: ${response.err.sqlMessage}, Code: ${response.err.code} fatal?${response.err.fatal}, SQLState: ${response.err.sqlState}`)
+          // DONE & OK
+          if (this.readyState === DONE && this.status === OK) { 
+            
+          // ERRORS HANDLER
+          } else if (this.status === UNAUTHORIZED || this.status === INTERNAL_SERVER_ERROR) {
+            // displaySubmitInfoError(response.sub_error)
+            if(response.err) {
+              console.error(`HTTP Status: ${this.status} ; ReadyState Status: ${this.readyState} | Error: ${response.err.sqlMessage} ; Code: ${response.err.code} : ${response.err.errno} ; fatal?${response.err.fatal} ; SQLState: ${response.err.sqlState}`)
+            }else{
+              console.error(`HTTP Status: ${this.status} ; ReadyState Status: ${this.readyState}`)
+            }
           }
         }
       }
