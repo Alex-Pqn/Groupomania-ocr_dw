@@ -12,14 +12,13 @@ module.exports = (req, res, next) => {
 
     //invalid JWT token
     if (req.body.userId && req.body.userId != userId) {
-      throw 'User ID not available';
+      throw "Le token d'authentification est incorrect ou a expiré.";
     }
     //valid token, call the next module 
     else {
       next();
     }
   } catch (err) {
-    console.log(err)
-    res.status(401).json({ sub_error:"Le token d'authentification est incorrect ou a expiré." || err });
+    res.status(401).json({ sub_error:"Le token d'authentification est incorrect ou a expiré.", err });
   }
 };
