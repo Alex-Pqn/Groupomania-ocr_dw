@@ -21,6 +21,11 @@
           Paramètres
         </router-link>
       </li>
+      <li v-on:click="sessionDisconnect">
+        <router-link to="/login">
+          Se déconnecter
+        </router-link>
+      </li>
     </ul>
   </nav>
 </div>
@@ -45,8 +50,12 @@ export default {
       }
     },
     methods: {
-      getImgUrl
-    } 
+      getImgUrl,
+      sessionDisconnect: () => {
+        document.cookie = `user_id=;expires=/;path=/`
+        document.cookie = `auth_token=;expires=/;path=/`
+      }
+    }
 }
 </script>
 
