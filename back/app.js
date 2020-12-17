@@ -4,33 +4,10 @@ const bodyParser = require('body-parser');
 const path = require('path');
 require('dotenv').config();
 
-// let sql = 'CREATE TABLE ......................'
-// db.query(sql, (err, result) => {
-//     if(err) throw err;
-//     console.log(result)
-// })
-
 // routes
 const commentsRoute = require('./routes/comments');
 const forumsRoute = require('./routes/forums');
 const userRoute = require('./routes/user');
-
-// db
-const db = mysql.createConnection({
-    host     : process.env.MYSQL_HOST,
-    user     : process.env.MYSQL_USER,
-    password : process.env.MYSQL_USER_PASSWORD,
-    database : process.env.MYSQL_DATABASE
-    
-})
-db.connect(
-    db.on('error', (err) => {
-        console.error("MySQL database error: " + err)
-    }),
-    db.on('drain', () => {
-        console.log('Mysql database connected...')
-    })
-);
 
 // initialize express in app
 const app = express();
