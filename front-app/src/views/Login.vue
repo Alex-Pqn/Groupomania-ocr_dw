@@ -174,8 +174,8 @@ export default {
             const dateMultiplicator = actualDate.setMonth(actualDate.getMonth() + 1)
             let cookieExpireDate = new Date(dateMultiplicator).toUTCString()
             
-            document.cookie = `user_id=${this.response.userId};expires=${cookieExpireDate};path=/`
-            document.cookie = `auth_token=${this.response.token};expires=${cookieExpireDate};path=/`
+            document.cookie = `user_id=${response.userId};expires=${cookieExpireDate};path=/`
+            document.cookie = `auth_token=${response.token};expires=${cookieExpireDate};path=/`
             
             // redirect to home
             displaySubmitInfoSuccess(`${response.message}`)
