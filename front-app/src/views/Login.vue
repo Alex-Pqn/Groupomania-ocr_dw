@@ -21,7 +21,7 @@
           <label for="email">
             E-mail :
           </label>
-          <input type="email" name="email" id="email" minlength="5" maxlength="55" required value="test3@gmail.com">
+          <input type="email" name="email" id="email" minlength="5" maxlength="55" required value="test@gmail.com">
           <p id="email-error"></p>
         </div>
 
@@ -29,7 +29,7 @@
           <label for="password">
             Mot de passe :
           </label>
-          <input type="password" name="password" id="password" minlength="8" maxlength="50" required value="abcdefgH1">
+          <input type="password" name="password" id="password" minlength="8" maxlength="50" required value="testtest1Aa">
           <p id="password-error"></p>
         </div>
 
@@ -59,7 +59,7 @@ import connection from "@/components/connection/connection.vue"
 export default {
   name: "Login",
   components: {
-    connection,
+    connection
   },
   methods: {
     loginSubmit: function (event) {
@@ -67,6 +67,7 @@ export default {
       
       let emailInput = document.loginForm.email.value;
       let passwordInput = document.loginForm.password.value;
+      
       const submitButton = document.getElementById('submit');
       const submitInfo = document.getElementById('submit-info')
       
@@ -95,23 +96,10 @@ export default {
         },
       ]
       
-      // error's & info's handler
-      function displayFormError (errorIdContainer, errorValue) {
+      // personnalized input form error
+      function displayFormInputError (errorIdContainer, errorValue) {
         document.getElementById(errorIdContainer).innerHTML = errorValue
         document.getElementById(errorIdContainer).style.display = "flex"
-      }
-      function displaySubmitInfoError (infoValue) {
-        submitInfo.style.display = "none"
-        setTimeout(() => {
-          submitInfo.style.display = "flex"
-          submitInfo.style.color = "rgba(197, 0, 0, 0.85)"
-          submitInfo.innerHTML = infoValue
-        }, 150);
-      }
-      function displaySubmitInfoSuccess (infoValue) {
-        submitInfo.style.display = "flex"
-        submitInfo.style.color = "green"
-        submitInfo.innerHTML = infoValue
       }
       
       // inputs validator
@@ -119,19 +107,19 @@ export default {
         document.getElementById(data.errorIdContainer).style.display = "none"
         // length validation
         if(data.value.length < data.minLength) {
-          return displayFormError(data.errorIdContainer, `Votre ${data.name} doit être composé de ${data.minLength} caractères au minimum.`)
+          return displayFormInputError(data.errorIdContainer, `Votre ${data.name} doit être composé de ${data.minLength} caractères au minimum.`)
         }else if(data.value.length > data.maxLength) {
-          return displayFormError(data.errorIdContainer, `Votre ${data.name} ne peut être composé que de ${data.maxLength} caractères au maximum.`)
+          return displayFormInputError(data.errorIdContainer, `Votre ${data.name} ne peut être composé que de ${data.maxLength} caractères au maximum.`)
         }
         // regex validation
         if(data.regex.test(data.value) === false) {
           if(data.id === 1) {
-            return displayFormError(data.errorIdContainer, "L'e-mail que vous avez entré est invalide.")
+            return displayFormInputError(data.errorIdContainer, "L'e-mail que vous avez entré est invalide.")
           }else {
-            return displayFormError(data.errorIdContainer, "Votre mot de passe doit contenir au minimum une lettre majuscule, une lettre minuscule et un chiffre.")
+            return displayFormInputError(data.errorIdContainer, "Votre mot de passe doit contenir au minimum une lettre majuscule, une lettre minuscule et un chiffre.")
           }
         }
-        // if all inputs are valids, call api with inputs
+        // if all inputs are valids, call api
         data.stepValidation = true
         if (formData[0].stepValidation === true && 
             formData[1].stepValidation === true) {
@@ -139,25 +127,46 @@ export default {
             }
       })
       
-      // send login request to api
+      // API REQUEST
       function sendLoginRequest () {
-        let xhr = new XMLHttpRequest();
+        const status = require('../components/status_config')
+        
         let userParams = {
           email:emailInput,
           password:passwordInput
         }
+        
+        // error's & info's handler
+        function displaySubmitInfoError (errorValue) {
+          submitInfo.style.display = "none"
+          setTimeout(() => {
+            submitInfo.style.display = "flex"
+            submitInfo.style.color = "rgba(197, 0, 0, 0.85)"
+            submitInfo.innerHTML = errorValue
+          }, 150);
+        }
+        function displaySubmitInfoSuccess (infoValue) {
+          submitInfo.style.display = "flex"
+          submitInfo.style.color = "green"
+          submitInfo.innerHTML = infoValue
+        }
+        
+        // xhr request
+        let xhr = new XMLHttpRequest();
         xhr.open('POST', 'http://localhost:3000/api/user/login', true) ;
         xhr.setRequestHeader('Content-type', 'application/json');
         xhr.send(JSON.stringify(userParams));
+        
         xhr.onerror = () => {
           displaySubmitInfoError("Une erreur est survenue lors de la connexion à votre compte. Vérifiez l'état de vote connexion internet et réessayez.")
           submitButton.disabled = false
         }
+        
         xhr.onreadystatechange = function() {
           let response = JSON.parse(this.response)
           
-          // success
-          if (this.readyState === 4 && this.status === 200) {
+          // DONE & OK
+          if (this.readyState === status.readystate.DONE && this.status === status.http.OK) {
             submitButton.disabled = true
             
             // set http cookie with userId & auth token
@@ -165,8 +174,8 @@ export default {
             const dateMultiplicator = actualDate.setMonth(actualDate.getMonth() + 1)
             let cookieExpireDate = new Date(dateMultiplicator).toUTCString()
             
-            document.cookie = `user_id=${response.userId};expires=${cookieExpireDate};path=/`
-            document.cookie = `auth_token=${response.token};expires=${cookieExpireDate};path=/`
+            document.cookie = `user_id=${this.response.userId};expires=${cookieExpireDate};path=/`
+            document.cookie = `auth_token=${this.response.token};expires=${cookieExpireDate};path=/`
             
             // redirect to home
             displaySubmitInfoSuccess(`${response.message}`)
@@ -174,12 +183,13 @@ export default {
               window.location.replace('/')
             }, 1900);
 
-          // error handler
-          } else if (this.status === 401 || this.status === 500) {
+          // ERRORS HANDLER
+          } else if (this.status === status.http.UNAUTHORIZED || this.status === status.http.INTERNAL_SERVER_ERROR) {
             displaySubmitInfoError(response.sub_error)
-            console.error(`Return /login API | Error: ${response.sub_error}, HTTP Status: ${this.status}, ReadyState Status: ${this.readyState}`)
             if(response.err) {
-              console.error(`Error: ${response.err.sqlMessage}, Code: ${response.err.code} fatal?${response.err.fatal}, SQLState: ${response.err.sqlState}`)
+              console.error(`HTTP Status: ${this.status} ; ReadyState Status: ${this.readyState} | Error: ${response.err.sqlMessage} ; Code: ${response.err.code} : ${response.err.errno} ; fatal?${response.err.fatal} ; SQLState: ${response.err.sqlState}`)
+            }else{
+              console.error(`HTTP Status: ${this.status} ; ReadyState Status: ${this.readyState}`)
             }
           }
         }
