@@ -1,18 +1,29 @@
-// const mongoose = require('mongoose');
+const Joi = require('joi');
 
-// const uniqueValidator = require('mongoose-unique-validator');
+const userSchema = Joi.object({
+    firstname: Joi.string()
+        .min(3)
+        .max(30),
+        
+    lastname: Joi.string()
+        .min(3)
+        .max(30),
+    
+    email: Joi.string().email()
+        .min(5)
+        .max(55)
+        .required(),
+        
+    password: Joi.string()
+        .min(8)
+        .max(50),
+        
+    newsletters: Joi.boolean(),
+    
+    description: Joi.string()
+        .max(255),
+        
+    pic_url: Joi.string()
+})
 
-// const userSchema = mongoose.Schema({
-//     firstname: { type: String },
-//     lastname: { type: String },
-//     email: { type: String, required: true, unique: true },
-//     password: { type: String },
-//     created_at: { type: Date },
-//     updated_at: { type: String },
-//     newsletters: { type: Boolean },
-//     description: { type: String },
-//     pic_url: { type: String }
-// })
-
-// userSchema.plugin(uniqueValidator);
-// module.exports = mongoose.model('User', userSchema)
+module.exports = userSchema
