@@ -1,15 +1,18 @@
-// const mongoose = require('mongoose');
+const Joi = require('joi');
 
-// const uniqueValidator = require('mongoose-unique-validator');
+const forumSchema = Joi.object({
+    user_id: Joi.number()
+        .required(),
+    
+    text: Joi.string()
+        // .min()
+        // .max()
+        .required(),
+        
+    image_url: Joi.string(),
+    
+    created_at: Joi.date()
+        .required(),
+})
 
-// const forumSchema = mongoose.Schema({
-//     user_id: { type: Number, required: true },
-//     text: { type: String, required: true },
-//     image_url: { type: String, required: false },
-//     created_at: { type: Date, required: true },
-//     updated_at: { type: String, required: true },
-//     total_comments: { type: String, required: true }
-// })
-
-// forumSchema.plugin(uniqueValidator);
-// module.exports = mongoose.model('Forum', forumSchema)
+module.exports = forumSchema
