@@ -44,12 +44,12 @@
                 </label>
               </div>
               <div class="user-parameters-global__inputs">
-                <input id="firstname" :value="user.firstname" type="text" maxlength="30" placeholder="Entrez votre prénom" required>
-                <input id="lastname" :value="user.lastname" type="text" maxlength="30" placeholder="Entrez votre nom" required>
-                <input id="email" :value="user.email" type="email" maxlength="55" placeholder="Entrez votre e-mail" required>
+                <input id="firstname" :value="user.firstname" type="text" minlength="3" maxlength="30" placeholder="Entrez votre prénom" required>
+                <input id="lastname" :value="user.lastname" type="text" minlength="3" maxlength="30" placeholder="Entrez votre nom" required>
+                <input id="email" :value="user.email" type="email" minlength="5" maxlength="55" placeholder="Entrez votre e-mail" required>
                 <input id="description" :value="user.description" type="text" maxlength="255" placeholder="Entrez une description">
-                <input type="password" id="password" maxlength="100" placeholder="Nouveau mot de passe">
-                <input type="password" id="re-password" maxlength="100" placeholder="Confirmez le mot de passe">
+                <input type="password" id="password" minlength="8" maxlength="50" placeholder="Nouveau mot de passe">
+                <input type="password" id="re-password" minlength="8" maxlength="50" placeholder="Confirmez le mot de passe">
               </div>
             </article>
             <!-- notifications -->
