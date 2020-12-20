@@ -90,7 +90,7 @@ router.beforeEach((to,from,next) => {
       next('/login');
     }
     xhr.onreadystatechange = function() {
-      const response = JSON.parse(this.response)
+      let response = JSON.parse(this.response)
       
       // DONE & OK
       if (this.readyState === status.readystate.DONE && this.status === status.http.OK) {
