@@ -46,10 +46,7 @@ export default {
       sendForumCreateRequest ()
       
       function sendForumCreateRequest () {
-        const DONE = 4
-        const OK = 200
-        const UNAUTHORIZED = 401
-        const INTERNAL_SERVER_ERROR = 401
+        const status = require('../status_config')
         
         let cookie = document.cookie.split(';')
         let cookieUserId = cookie[0].replace('user_id=', '')
@@ -76,13 +73,13 @@ export default {
           let response = JSON.parse(this.response)
           
           // DONE & OK
-          if (this.readyState === DONE && this.status === OK) { 
+          if (this.readyState === status.readystate.DONE && this.status === status.http.OK) { 
             
           // ERRORS HANDLER
-          } else if (this.status === UNAUTHORIZED || this.status === INTERNAL_SERVER_ERROR) {
+          } else if (this.status === status.http.UNAUTHORIZED || this.status === status.http.INTERNAL_SERVER_ERROR || this.status === status.http.BAD_REQUEST) {
             // displaySubmitInfoError(response.sub_error)
             if(response.err) {
-              console.error(`HTTP Status: ${this.status} ; ReadyState Status: ${this.readyState} | Error: ${response.err.sqlMessage} ; Code: ${response.err.code} : ${response.err.errno} ; fatal?${response.err.fatal} ; SQLState: ${response.err.sqlState}`)
+              console.error(`HTTP Status: ${this.status} ; ReadyState Status: ${this.readyState} | Error: ${response.err.sqlMessage || response.err.message} ; Code: ${response.err.code} : ${response.err.errno} ; fatal?${response.err.fatal} ; SQLState: ${response.err.sqlState}`)
             }else{
               console.error(`HTTP Status: ${this.status} ; ReadyState Status: ${this.readyState}`)
             }
