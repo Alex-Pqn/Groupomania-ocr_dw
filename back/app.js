@@ -1,12 +1,11 @@
 const express = require('express');
-const mysql = require('mysql')
 const bodyParser = require('body-parser');
 const path = require('path');
 require('dotenv').config();
 
 // routes
 const commentsRoute = require('./routes/comments');
-const forumsRoute = require('./routes/forums');
+const forumsRoute = require('./routes/forums')
 const userRoute = require('./routes/user');
 
 // initialize express in app
@@ -24,7 +23,6 @@ app.use((req, res, next) => {
 app.use(bodyParser.json());
 
 // api routes
-app.use('/images', express.static(path.join(__dirname, 'images')));
 app.use('/api/user', userRoute);
 app.use('/api/forums', forumsRoute);
 app.use('/api/comments', commentsRoute);
