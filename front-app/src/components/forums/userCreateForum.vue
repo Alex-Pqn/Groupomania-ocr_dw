@@ -36,6 +36,7 @@ export default {
         document.getElementById('create-forum_img').style.display = "flex"
       }
       reader.readAsDataURL(event.target.files[0])
+      console.log(event.target.files[0])
     },
     forumCreateImgClose () {
       document.getElementById('create-forum_img').style.display = "none"
@@ -43,28 +44,35 @@ export default {
       document.getElementById('create-forum_img-output').src = ""
     },
     forumCreateSend () {
-      sendForumCreateRequest ()
+      const status = require('../status_config')
       
-      function sendForumCreateRequest () {
-        const status = require('../status_config')
-        
-        let cookie = document.cookie.split(';')
-        let cookieUserId = cookie[0].replace('user_id=', '')
-        let cookieUserToken = cookie[1].replace('auth_token=', '')
+      // create formdata and attach image
+      let formData = new FormData()
+      let inputImage = document.querySelector('input[type=file]').files[0]
+      if(inputImage) {
+        formData.append('image', inputImage, inputImage.name)
+      }
+      
+      // auth
+      let cookie = document.cookie.split(';')
+      let cookieUserId
+      let cookieUserToken
+      if (cookie[0] === "" || cookie[1] === "" || cookie.length < 2) {
+        console.error("Le token d'authentification est incorrect ou a expiré.")
+      }else{
+        cookieUserId = cookie[0].replace('user_id=', '')
+        cookieUserToken = cookie[1].replace('auth_token=', '')
         
         let userParams = {
           userId: cookieUserId,
         }
-        let forumParams = {
-        }
         
         // xhr request
         let xhr = new XMLHttpRequest();
-        xhr.open('POST', 'http://localhost:3000/api/forums/create', true) ;
-        xhr.setRequestHeader('Content-type', 'application/json');
+        xhr.open('POST', 'http://localhost:3000/api/forums/create', true);
         xhr.setRequestHeader('Authorization', 'Bearer ' + cookieUserToken)
-        xhr.send(JSON.stringify(userParams, forumParams));
-        
+        xhr.send(formData, JSON.stringify(userParams));
+          
         xhr.onerror = () => {
           // displaySubmitInfoError("Une erreur est survenue lors de la création de votre compte. Vérifiez l'état de vote connexion internet et réessayez.")
         }
@@ -74,6 +82,7 @@ export default {
           
           // DONE & OK
           if (this.readyState === status.readystate.DONE && this.status === status.http.OK) { 
+            console.log(response)
             
           // ERRORS HANDLER
           } else if (this.status === status.http.UNAUTHORIZED || this.status === status.http.INTERNAL_SERVER_ERROR || this.status === status.http.BAD_REQUEST) {
