@@ -1,5 +1,6 @@
 const express = require('express');
 const bodyParser = require('body-parser');
+
 const path = require('path');
 require('dotenv').config();
 
@@ -19,10 +20,14 @@ app.use((req, res, next) => {
     next();
 })
 
-// parser
-app.use(bodyParser.json());
+// for parsing application/json
+app.use(bodyParser.json()); 
+
+// for parsing application/xwww-
+app.use(bodyParser.urlencoded({ extended: true })); 
 
 // api routes
+app.use('/images', express.static(path.join(__dirname, 'images')));
 app.use('/api/user', userRoute);
 app.use('/api/forums', forumsRoute);
 app.use('/api/comments', commentsRoute);
