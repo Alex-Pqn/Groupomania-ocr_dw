@@ -4,9 +4,10 @@ module.exports = (req, res, next) => {
   try {
     let bodyUserId
     
-    // get and parse formdata
+    // formdata format
     if(req.fields) {
       bodyUserId = JSON.parse(req.fields.user).id
+    // json format (for auth) 
     }else{
       bodyUserId = req.body.id
     }
