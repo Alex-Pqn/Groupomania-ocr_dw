@@ -78,9 +78,9 @@ export default {
       
       // callback api request
       setTimeout(() => {
-        let response = apiCallback().response
-        let readyState = apiCallback().readyState
-        let httpStatus = apiCallback().httpStatus
+        let response = apiCallback().apiResponse
+        let readyState = apiCallback().apiReadyState
+        let httpStatus = apiCallback().apiHttpStatus
 
         // DONE & OK
         if (
@@ -111,45 +111,7 @@ export default {
           }
         }
       }, 50);
-    },
-    //eslint-disable-next-line
-    apiOnError (err) {
-      console.log('test error')
-      console.error(err);
-      // displaySubmitInfoError("Une erreur est survenue lors de la création de votre compte. Vérifiez l'état de vote connexion internet et réessayez.")
-    },
-    //eslint-disable-next-line
-    apiOnReadystatechange (response, readyState, httpStatus) {
-      console.log('test readystatechange', response, readyState, httpStatus)
-      // DONE & OK
-      if (
-        readyState === status.readystate.DONE &&
-        httpStatus === status.http.OK
-      ) {
-        console.log(response);
-        // ERRORS HANDLER
-      } else if (
-        httpStatus === status.http.UNAUTHORIZED ||
-        httpStatus === status.http.INTERNAL_SERVER_ERROR ||
-        httpStatus === status.http.BAD_REQUEST
-      ) {
-        // displaySubmitInfoError(response.sub_error)
-        if (response.err) {
-          console.error(
-            `HTTP Status: ${httpStatus} ; ReadyState Status: ${readyState} | Error: ${response
-              .err.sqlMessage || response.err.message} ; Code: ${
-              response.err.code
-            } : ${response.err.errno} ; fatal?${
-              response.err.fatal
-            } ; SQLState: ${response.err.sqlState}`
-          );
-        } else {
-          console.error(
-            `HTTP Status: ${httpStatus} ; ReadyState Status: ${readyState}`
-          );
-        }
-      }
-    },
+    }
   }
 };
 </script>
