@@ -5,14 +5,11 @@ const forumSchema = Joi.object({
         .required(),
     
     text: Joi.string()
-        // .min()
-        // .max()
+        .min(1)
+        .max(320)
         .required(),
         
     image_url: Joi.string(),
-    
-    created_at: Joi.date()
-        .required(),
 })
 
 module.exports = forumSchema
