@@ -1,14 +1,14 @@
 <template>
   <!-- connection header -->
   <div class="connection__header">
-    <img src="@/assets/icon-left-font-monochrome-black.svg" alt="">  
+    <img src="@/assets/icon-left-font-monochrome-black.svg" alt="" />
   </div>
 </template>
 
 <script>
-  export default {
-    name: "connection",
-  };
+export default {
+  name: "connection"
+};
 </script>
 
 <style lang="scss">
@@ -22,7 +22,7 @@
   * {
     outline: none;
   }
-  
+
   //connection header styles
   &__header {
     display: flex;
@@ -53,7 +53,7 @@
   width: 330px;
   padding: 15px 25px 20px 25px;
   &--style {
-    border-radius: 1em .4em 1.2em 0;
+    border-radius: 1em 0.4em 1.2em 0;
     background-color: rgb(247, 247, 247);
     border: 1px solid rgb(211, 211, 211);
   }
@@ -68,7 +68,7 @@
       border-bottom: 1px solid rgba(0, 0, 0, 0.18);
     }
     p {
-      opacity: .85;
+      opacity: 0.85;
       font-size: 1.08em;
       line-height: 30px;
       text-align: left;
@@ -81,12 +81,14 @@
     flex-direction: column;
     align-items: center;
     input {
-        font-size: 1em;
-        padding: 7px;
+      font-size: 1em;
+      padding: 7px;
     }
     div {
       position: relative;
-      input[type="text"], input[type="email"], input[type="password"] {
+      input[type="text"],
+      input[type="email"],
+      input[type="password"] {
         transition-property: all;
         transition-duration: 500ms;
         border: 1px solid rgba(143, 143, 143, 0.5);
@@ -108,7 +110,8 @@
         padding-left: 120px;
         width: 210px;
       }
-      label[for="password"], label[for="email"] {
+      label[for="password"],
+      label[for="email"] {
         position: absolute;
         left: 10px;
         top: 8px;
@@ -118,12 +121,12 @@
         text-align: left;
         margin-top: -6px;
         margin-bottom: 12px;
-        font-size: .955em;
+        font-size: 0.955em;
         color: rgba(202, 0, 0, 0.78);
         padding-left: 2px;
       }
     }
-    input[type="submit"]{
+    input[type="submit"] {
       transition-property: all;
       transition-duration: 500ms;
       border: 1px solid rgba(143, 143, 143, 0.75);
@@ -133,8 +136,8 @@
       margin-top: 5px;
       width: 50%;
       &:hover {
-        border-top-left-radius: .6em;
-        border-bottom-right-radius: .4em;
+        border-top-left-radius: 0.6em;
+        border-bottom-right-radius: 0.4em;
         background-color: rgb(223, 223, 223);
         border: 1px solid rgb(128, 128, 128);
       }
@@ -183,7 +186,9 @@
         font-size: 1em;
       }
       div {
-        input[type="text"], input[type="email"], input[type="password"] {
+        input[type="text"],
+        input[type="email"],
+        input[type="password"] {
           margin-bottom: 9px;
         }
         input[name="email"] {

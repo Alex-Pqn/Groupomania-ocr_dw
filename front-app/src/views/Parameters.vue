@@ -3,14 +3,17 @@
   <div class="parameters">
     <!-- displayed beetween 0px > 1023px -->
     <div class="mobile-container">
-
       <!-- trends -->
       <trends />
 
       <!-- parameters -->
       <section id="top" class="user-parameters">
         <!-- header -->
-        <userHeader :pic_url="user.pic_url" :firstname="user.firstname" :lastname="user.lastname" />
+        <userHeader
+          :pic_url="user.pic_url"
+          :firstname="user.firstname"
+          :lastname="user.lastname"
+        />
         <!-- main -->
         <div class="user-parameters__main">
           <h3>
@@ -44,12 +47,54 @@
                 </label>
               </div>
               <div class="user-parameters-global__inputs">
-                <input id="firstname" :value="user.firstname" type="text" minlength="3" maxlength="30" placeholder="Entrez votre prénom" required>
-                <input id="lastname" :value="user.lastname" type="text" minlength="3" maxlength="30" placeholder="Entrez votre nom" required>
-                <input id="email" :value="user.email" type="email" minlength="5" maxlength="55" placeholder="Entrez votre e-mail" required>
-                <input id="description" :value="user.description" type="text" maxlength="255" placeholder="Entrez une description">
-                <input type="password" id="password" minlength="8" maxlength="50" placeholder="Nouveau mot de passe">
-                <input type="password" id="re-password" minlength="8" maxlength="50" placeholder="Confirmez le mot de passe">
+                <input
+                  id="firstname"
+                  :value="user.firstname"
+                  type="text"
+                  minlength="3"
+                  maxlength="30"
+                  placeholder="Entrez votre prénom"
+                  required
+                />
+                <input
+                  id="lastname"
+                  :value="user.lastname"
+                  type="text"
+                  minlength="3"
+                  maxlength="30"
+                  placeholder="Entrez votre nom"
+                  required
+                />
+                <input
+                  id="email"
+                  :value="user.email"
+                  type="email"
+                  minlength="5"
+                  maxlength="55"
+                  placeholder="Entrez votre e-mail"
+                  required
+                />
+                <input
+                  id="description"
+                  :value="user.description"
+                  type="text"
+                  maxlength="255"
+                  placeholder="Entrez une description"
+                />
+                <input
+                  type="password"
+                  id="password"
+                  minlength="8"
+                  maxlength="50"
+                  placeholder="Nouveau mot de passe"
+                />
+                <input
+                  type="password"
+                  id="re-password"
+                  minlength="8"
+                  maxlength="50"
+                  placeholder="Confirmez le mot de passe"
+                />
               </div>
             </article>
             <!-- notifications -->
@@ -60,7 +105,7 @@
               <label for="newsletters">
                 Newsletters relatives à Groupomania par e-mail :
               </label>
-              <input id="newsletters" type="checkbox">
+              <input id="newsletters" type="checkbox" />
             </article>
             <!-- pic -->
             <h4>
@@ -69,43 +114,63 @@
             <article class="user-parameters-pic">
               <div class="user-parameters-pic__img-input">
                 <label for="user-parameters-pic_upload-img">
-                  <img src="@/assets/cloud-upload-alt-solid.svg" alt="">
+                  <img src="@/assets/cloud-upload-alt-solid.svg" alt="" />
                   <p>
                     Envoyer
                   </p>
                 </label>
-                <input @change="userParamatersImgChange($event)" id="user-parameters-pic_upload-img" type="file" accept="image/*">
+                <input
+                  @change="userParamatersImgChange($event)"
+                  id="user-parameters-pic_upload-img"
+                  type="file"
+                  accept="image/*"
+                />
               </div>
-              <div id="user-parameters-pic_img-container" class="user-parameters-pic__img-output">
-                <img id="user-parameters-pic_img-output" :src="getImgUrl(user.pic_url)" alt="">
+              <div
+                id="user-parameters-pic_img-container"
+                class="user-parameters-pic__img-output"
+              >
+                <img
+                  id="user-parameters-pic_img-output"
+                  :src="getImgUrl(user.pic_url)"
+                  alt=""
+                />
                 <div>
-                  <img v-on:click="userParamatersImgClose" src="@/assets/times-solid.svg" alt="">
+                  <img
+                    v-on:click="userParamatersImgClose"
+                    src="@/assets/times-solid.svg"
+                    alt=""
+                  />
                 </div>
               </div>
             </article>
             <!-- send -->
             <div class="user-parameters-send">
-              <input type="submit" value="Sauvegarder">
+              <input type="submit" value="Sauvegarder" />
             </div>
           </form>
         </div>
       </section>
 
       <!-- main-nav -->
-      <mainNav :pic_url="user.pic_url" :firstname="user.firstname" :lastname="user.lastname" />
+      <mainNav
+        :pic_url="user.pic_url"
+        :firstname="user.firstname"
+        :lastname="user.lastname"
+      />
     </div>
   </div>
 </template>
 
 <script>
-import { getImgUrl } from '@/utils/scripts';
-import trends from "@/components/trends/trends.vue"
-import mainNav from "@/components/nav/mainNav.vue"
-import userHeader from "@/components/userHeader.vue"
+import { getImgUrl } from "@/utils/scripts";
+import trends from "@/components/trends/trends.vue";
+import mainNav from "@/components/nav/mainNav.vue";
+import userHeader from "@/components/userHeader.vue";
 
 export default {
   name: "Parameters",
-  data () {
+  data() {
     return {
       user: {
         pic_url: "user-icon.png",
@@ -113,40 +178,45 @@ export default {
         lastname: "Pqn",
         email: "alex@gmail.com",
         description: "sfdfwcsdfsd",
-        newsletters: false,
-      },
-    }
+        newsletters: false
+      }
+    };
   },
   mounted() {
-    if(this.user.newsletters === true) {
-      document.getElementById('newsletters').checked = true
+    if (this.user.newsletters === true) {
+      document.getElementById("newsletters").checked = true;
     }
   },
   methods: {
     getImgUrl,
-    userParamatersImgChange (event) {
-      let reader = new FileReader()
-      reader.onload = function () {
-        document.getElementById('user-parameters-pic_img-output').src = reader.result
-        document.getElementById('user-parameters-pic_img-container').style.display = "flex"
-      }
-      reader.readAsDataURL(event.target.files[0])
+    userParamatersImgChange(event) {
+      let reader = new FileReader();
+      reader.onload = function() {
+        document.getElementById("user-parameters-pic_img-output").src =
+          reader.result;
+        document.getElementById(
+          "user-parameters-pic_img-container"
+        ).style.display = "flex";
+      };
+      reader.readAsDataURL(event.target.files[0]);
     },
-    userParamatersImgClose () {
-      document.getElementById('user-parameters-pic_img-container').style.display = "none"
-      document.getElementById('user-parameters-pic_upload-img').style.display = "none"
-      document.getElementById('user-parameters-pic_upload-img').value = ""
-      document.getElementById('user-parameters-pic_img-output').src = ""
+    userParamatersImgClose() {
+      document.getElementById(
+        "user-parameters-pic_img-container"
+      ).style.display = "none";
+      document.getElementById("user-parameters-pic_upload-img").style.display =
+        "none";
+      document.getElementById("user-parameters-pic_upload-img").value = "";
+      document.getElementById("user-parameters-pic_img-output").src = "";
     },
-    userParametersFormSend() {
-    }
+    userParametersFormSend() {}
   },
   components: {
     trends,
     mainNav,
     userHeader
-  },
-}
+  }
+};
 </script>
 
 <style lang="scss">
@@ -179,7 +249,7 @@ export default {
 @media screen and (max-width: 479px) {
   .user-parameters {
     &__main {
-      font-size: .8em;
+      font-size: 0.8em;
       h3 {
         font-size: 1.25em;
       }
@@ -193,7 +263,7 @@ export default {
     article {
       margin-bottom: 25px;
     }
-  } 
+  }
 }
 
 // parameters global
@@ -214,7 +284,7 @@ export default {
   &__inputs {
     display: flex;
     flex-direction: column;
-    input{
+    input {
       outline: none;
       transition-property: all;
       transition-duration: 500ms;
@@ -249,18 +319,18 @@ export default {
       align-items: center;
       justify-content: center;
       border: 1px solid $default_smooth-border;
-      background-color:rgb(231, 231, 231);
+      background-color: rgb(231, 231, 231);
       padding: 5px 7px;
       img {
         width: 30px;
         margin-right: 10px;
-        filter: invert(0.3) sepia(5) saturate(10) hue-rotate(175deg)
+        filter: invert(0.3) sepia(5) saturate(10) hue-rotate(175deg);
       }
       p {
-        font-size: .96em;
+        font-size: 0.96em;
       }
       &:hover {
-        background-color:rgb(224, 224, 224);
+        background-color: rgb(224, 224, 224);
       }
     }
     input {
@@ -282,11 +352,11 @@ export default {
         cursor: pointer;
         width: 10px;
         padding: 2.5px 4px;
-        border-radius: .2em;
+        border-radius: 0.2em;
         background-color: rgba(255, 255, 255, 0.8);
         &:hover {
-          transform: scale(.97);
-          opacity: .8;
+          transform: scale(0.97);
+          opacity: 0.8;
         }
       }
     }
@@ -316,7 +386,7 @@ export default {
   margin-bottom: 15px;
   padding-top: 17px;
   input {
-    font-size: .97em;
+    font-size: 0.97em;
     padding: 5px 8px;
   }
 }

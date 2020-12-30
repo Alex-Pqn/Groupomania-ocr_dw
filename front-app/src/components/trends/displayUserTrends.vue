@@ -1,42 +1,39 @@
 <template>
-<main>
-  <!-- user-trends -->
-  <div class="user-trends user-trends--style">
-    <!-- icon -->
-    <div class="user-trends__icon">
-      <img :src="getImgUrl(pic_url)" alt="">
-    </div>
-    <!-- main -->
-    <div class="user-trends__main">
-      <!-- top -->
-      <div class="user-trends__main__top">
-        <div class="user-trends__main__top__author">
-          <p>
-            <strong>
-                {{ firstname }} {{ lastname }}
-            </strong>
-          </p>
-        </div>
-        <div class="user-trends__main__top__date">
-          <p>
-            {{ published_date }}
-          </p>
-        </div>
+  <main>
+    <!-- user-trends -->
+    <div class="user-trends user-trends--style">
+      <!-- icon -->
+      <div class="user-trends__icon">
+        <img :src="getImgUrl(pic_url)" alt="" />
       </div>
-      <!-- bottom -->
-      <div class="user-trends__main__bottom">
-        <p>
+      <!-- main -->
+      <div class="user-trends__main">
+        <!-- top -->
+        <div class="user-trends__main__top">
+          <div class="user-trends__main__top__author">
+            <p>
+              <strong> {{ firstname }} {{ lastname }} </strong>
+            </p>
+          </div>
+          <div class="user-trends__main__top__date">
+            <p>
+              {{ published_date }}
+            </p>
+          </div>
+        </div>
+        <!-- bottom -->
+        <div class="user-trends__main__bottom">
+          <p>
             {{ text }}
-        </p>
+          </p>
+        </div>
       </div>
-
     </div>
-  </div>
-</main>
+  </main>
 </template>
 
 <script>
-import { getImgUrl } from '@/utils/scripts';
+import { getImgUrl } from "@/utils/scripts";
 
 export default {
   name: "displayUserTrends",
@@ -67,7 +64,7 @@ export default {
   },
   methods: {
     getImgUrl
-  },
+  }
 };
 </script>
 
@@ -76,8 +73,8 @@ export default {
 .user-trends {
   display: flex;
   &--style {
-    font-size: .95em;
-    border-top-left-radius: .3em;
+    font-size: 0.95em;
+    border-top-left-radius: 0.3em;
   }
 
   // icon
@@ -106,7 +103,7 @@ export default {
       &__date {
         width: 50%;
         text-align: right;
-        font-size: .88em;
+        font-size: 0.88em;
       }
     }
     // bottom
@@ -120,7 +117,7 @@ export default {
 @media screen and (min-width: 1024px) and (max-width: 1600px) {
   .user-trends {
     &--style {
-      font-size: .9em;
+      font-size: 0.9em;
     }
     &__icon {
       img {
@@ -131,7 +128,7 @@ export default {
       &__top {
         margin-bottom: 2px;
         &__date {
-          font-size: .85em;
+          font-size: 0.85em;
         }
       }
       &__bottom {
@@ -171,7 +168,7 @@ export default {
       &__top {
         margin-bottom: 2px;
         &__date {
-          font-size: .85em;
+          font-size: 0.85em;
         }
       }
       &__bottom {

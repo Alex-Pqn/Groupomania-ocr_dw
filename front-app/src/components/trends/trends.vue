@@ -16,7 +16,14 @@
             Discussion récentes
           </h4>
           <article v-for="item in recentsTrends" :key="item.id">
-            <displayUserTrends :published_date="item.published_date" :pic_url="item.pic_url" :image_url="item.image_url" :firstname="item.firstname" :lastname="item.lastname" :text="item.text" />
+            <displayUserTrends
+              :published_date="item.published_date"
+              :pic_url="item.pic_url"
+              :image_url="item.image_url"
+              :firstname="item.firstname"
+              :lastname="item.lastname"
+              :text="item.text"
+            />
           </article>
         </div>
       </div>
@@ -25,52 +32,55 @@
 </template>
 
 <script>
-import displayUserTrends from "@/components/trends/displayUserTrends.vue"
+import displayUserTrends from "@/components/trends/displayUserTrends.vue";
 
 export default {
-    name: "trends",
-    data() {
-      return {
-        recentsTrends: [
-          {
-            id:8531265,
-            published_date:"23/11/2020",
-            pic_url:"user-icon.png",
-            firstname:"Alexandre",
-            lastname:"Pqn",
-            text:"tUtque proeliorum periti rectores primo catervas densas opponunt et fortes, deinde leves armaturas, post iaculatores ultimasque subsidiales acies, si fors adegerit, iuvaturas, ita praepositis urbanae familiae suspensae digerentibus sollicite, quos insignes faciunt virgae dexteris aptatae v",
-            image_url:"icon-left-font.png"
-          },
-          {
-            id:8456531265,
-            published_date:"23/11/2020",
-            pic_url:"user-icon.png",
-            firstname:"Alexandre",
-            lastname:"Pqn",
-            text:"tUtque proeliorum periti rectores primo catervas densas opponunt et fortes, deinde leves armaturas, post iaculatores ultimasque subsidiales acies, si fors adegerit, iuvaturas, ita praepositis urbanae familiae suspensae digerentibus sollicite, quos insignes faciunt virgae dexteris aptatae v"
-          },
-          {
-            id:85341265,
-            published_date:"23/11/2020",
-            pic_url:"user-icon.png",
-            firstname:"Alexandre",
-            lastname:"Pqn",
-            text:"tUtque proeliorum periti rectores primo catervas densas opponunt et fortes, deinde leves armaturas, post iaculatores ultimasque subsidiales acies, si fors adegerit, iuvaturas, ita praepositis urbanae familiae suspensae digerentibus sollicite, quos insignes faciunt virgae dexteris aptatae v",
-            image_url:"icon-left-font.png"
-          }
-        ]
-      }
-    },
-    components: {
-      displayUserTrends
-    }
-}
+  name: "trends",
+  data() {
+    return {
+      recentsTrends: [
+        {
+          id: 8531265,
+          published_date: "23/11/2020",
+          pic_url: "user-icon.png",
+          firstname: "Alexandre",
+          lastname: "Pqn",
+          text:
+            "tUtque proeliorum periti rectores primo catervas densas opponunt et fortes, deinde leves armaturas, post iaculatores ultimasque subsidiales acies, si fors adegerit, iuvaturas, ita praepositis urbanae familiae suspensae digerentibus sollicite, quos insignes faciunt virgae dexteris aptatae v",
+          image_url: "icon-left-font.png"
+        },
+        {
+          id: 8456531265,
+          published_date: "23/11/2020",
+          pic_url: "user-icon.png",
+          firstname: "Alexandre",
+          lastname: "Pqn",
+          text:
+            "tUtque proeliorum periti rectores primo catervas densas opponunt et fortes, deinde leves armaturas, post iaculatores ultimasque subsidiales acies, si fors adegerit, iuvaturas, ita praepositis urbanae familiae suspensae digerentibus sollicite, quos insignes faciunt virgae dexteris aptatae v"
+        },
+        {
+          id: 85341265,
+          published_date: "23/11/2020",
+          pic_url: "user-icon.png",
+          firstname: "Alexandre",
+          lastname: "Pqn",
+          text:
+            "tUtque proeliorum periti rectores primo catervas densas opponunt et fortes, deinde leves armaturas, post iaculatores ultimasque subsidiales acies, si fors adegerit, iuvaturas, ita praepositis urbanae familiae suspensae digerentibus sollicite, quos insignes faciunt virgae dexteris aptatae v",
+          image_url: "icon-left-font.png"
+        }
+      ]
+    };
+  },
+  components: {
+    displayUserTrends
+  }
+};
 </script>
 
 <style lang="scss">
 // trends-container
 .trends-container {
-  min-width: 370px!important;
+  min-width: 370px !important;
 }
 // trends
 .trends {
@@ -84,7 +94,7 @@ export default {
   &--style {
     background-color: rgb(241, 241, 241);
     border: 1px solid $small_black-border;
-    border-top-left-radius: .7em;
+    border-top-left-radius: 0.7em;
     border-bottom-right-radius: 1em;
   }
   // header
@@ -115,7 +125,7 @@ export default {
 }
 @media screen and (min-width: 1024px) and (max-width: 1600px) {
   .trends-container {
-    min-width: 305px!important;
+    min-width: 305px !important;
   }
   .trends {
     width: 290px;
@@ -165,7 +175,7 @@ export default {
 }
 @media screen and (max-width: 1023px) {
   .trends-container {
-    min-width: 100%!important;
+    min-width: 100% !important;
     margin-top: 20px;
     display: flex;
     justify-content: center;

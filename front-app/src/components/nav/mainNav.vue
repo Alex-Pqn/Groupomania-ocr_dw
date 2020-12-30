@@ -6,21 +6,31 @@
       <!-- top -->
       <article class="main-nav__content__top">
         <router-link to="/">
-          <img src="@/assets/icon.png" alt="">
+          <img src="@/assets/icon.png" alt="" />
         </router-link>
       </article>
       <!-- bottom -->
       <article class="main-nav__content__bottom">
-        <img v-on:click="displayProfilePopup(`profile-popup_nav`)" id="user-icon" :src="getImgUrl(pic_url)" alt="">
-        <profilePopup id="profile-popup_nav" :pic_url="pic_url" :firstname="firstname" :lastname="lastname" />
+        <img
+          v-on:click="displayProfilePopup(`profile-popup_nav`)"
+          id="user-icon"
+          :src="getImgUrl(pic_url)"
+          alt=""
+        />
+        <profilePopup
+          id="profile-popup_nav"
+          :pic_url="pic_url"
+          :firstname="firstname"
+          :lastname="lastname"
+        />
       </article>
     </div>
   </section>
 </template>
 
 <script>
-import { getImgUrl, displayProfilePopup } from '@/utils/scripts';
-import profilePopup from '@/components/nav/profilePopup.vue'
+import { getImgUrl, displayProfilePopup } from "@/utils/scripts";
+import profilePopup from "@/components/nav/profilePopup.vue";
 export default {
   name: "mainNav",
   props: {
@@ -44,7 +54,7 @@ export default {
     getImgUrl,
     displayProfilePopup
   }
-}
+};
 </script>
 
 <style lang="scss">
@@ -70,7 +80,11 @@ export default {
     width: 100px;
     height: 100vh;
     &--style {
-      background: linear-gradient(rgba(238, 238, 238, 0.7), $default_background, white);
+      background: linear-gradient(
+        rgba(238, 238, 238, 0.7),
+        $default_background,
+        white
+      );
       border-left: 1px solid rgba(0, 0, 0, 0.15);
       border-right: 1px solid rgba(0, 0, 0, 0.15);
     }

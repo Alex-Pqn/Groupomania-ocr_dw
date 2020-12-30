@@ -1,28 +1,36 @@
 <template>
-<!-- user-header -->
-<header class="user-header user-header--style">
-  <!-- icon -->
-  <a class="user-header__user-icon" href="#top">
-    <img :src="getImgUrl(pic_url)" alt="">
-  </a>
-  <!-- mobile display -->
-  <div class="user-header__mobile-display">
-    <img id="mobile_nav-icon" v-on:click="displayProfilePopup(`profile-popup_mobile-user`)" src="@/assets/bars-solid.svg" alt="">
-    <profilePopup id="profile-popup_mobile-user" :pic_url="pic_url" :firstname="firstname" :lastname="lastname" />
-  </div>
-  <!-- infos -->
-  <h3>
-    {{ firstname }} {{ lastname }}
-  </h3>
-  <p>
-    {{ description }}
-  </p>
-</header>
+  <!-- user-header -->
+  <header class="user-header user-header--style">
+    <!-- icon -->
+    <a class="user-header__user-icon" href="#top">
+      <img :src="getImgUrl(pic_url)" alt="" />
+    </a>
+    <!-- mobile display -->
+    <div class="user-header__mobile-display">
+      <img
+        id="mobile_nav-icon"
+        v-on:click="displayProfilePopup(`profile-popup_mobile-user`)"
+        src="@/assets/bars-solid.svg"
+        alt=""
+      />
+      <profilePopup
+        id="profile-popup_mobile-user"
+        :pic_url="pic_url"
+        :firstname="firstname"
+        :lastname="lastname"
+      />
+    </div>
+    <!-- infos -->
+    <h3>{{ firstname }} {{ lastname }}</h3>
+    <p>
+      {{ description }}
+    </p>
+  </header>
 </template>
 
 <script>
-import { getImgUrl, displayProfilePopup } from '@/utils/scripts'
-import profilePopup from '@/components/nav/profilePopup.vue'
+import { getImgUrl, displayProfilePopup } from "@/utils/scripts";
+import profilePopup from "@/components/nav/profilePopup.vue";
 
 export default {
   name: "userHeader",
@@ -50,7 +58,7 @@ export default {
   components: {
     profilePopup
   }
-}
+};
 </script>
 
 <style lang="scss">

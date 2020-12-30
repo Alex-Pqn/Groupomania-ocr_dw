@@ -3,15 +3,13 @@
   <div class="user-comments user-comments--style">
     <!-- icon -->
     <div class="user-comments__icon">
-      <img :src="getImgUrl(pic_url)" alt="">
+      <img :src="getImgUrl(pic_url)" alt="" />
     </div>
     <!-- main -->
     <div class="user-comments__main">
       <div class="user-comments__main__author">
         <p>
-          <strong>
-              {{ firstname }} {{ lastname }}
-          </strong>
+          <strong> {{ firstname }} {{ lastname }} </strong>
         </p>
       </div>
       <div class="user-comments__main__text">
@@ -29,7 +27,7 @@
 </template>
 
 <script>
-import { getImgUrl } from '@/utils/scripts';
+import { getImgUrl } from "@/utils/scripts";
 
 export default {
   name: "displayUserComments",
@@ -53,11 +51,11 @@ export default {
     text: {
       type: String,
       required: true
-    },
+    }
   },
   methods: {
     getImgUrl
-  },
+  }
 };
 </script>
 
@@ -68,11 +66,11 @@ export default {
   flex-direction: row;
   padding: 20px 20px;
   &--style {
-    font-size: .98em;
+    font-size: 0.98em;
     background-color: rgb(243, 243, 243);
     border-top: 1px solid rgba(109, 109, 109, 0.2);
-    border-bottom-right-radius: .3em;
-    border-bottom-left-radius: .3em;
+    border-bottom-right-radius: 0.3em;
+    border-bottom-left-radius: 0.3em;
   }
   // icon
   &__icon {
@@ -99,8 +97,8 @@ export default {
     &__date {
       margin-top: 7px;
       text-align: left;
-      font-size: .9em;
-      opacity: .92;
+      font-size: 0.9em;
+      opacity: 0.92;
     }
   }
 }

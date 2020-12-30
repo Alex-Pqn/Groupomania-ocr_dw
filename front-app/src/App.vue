@@ -9,19 +9,20 @@ body {
   margin: 0;
   background-color: $default_background;
   * {
-  padding: 0;
-  margin: 0;
+    padding: 0;
+    margin: 0;
   }
-  textarea, button {
+  textarea,
+  button {
     outline: none;
   }
   textarea {
     &:hover {
-      border: 1px solid $medium_black-border!important;
+      border: 1px solid $medium_black-border !important;
     }
     &:focus {
-      border: 1px solid $medium_black-border!important;
-      border-bottom-left-radius: .3em;
+      border: 1px solid $medium_black-border !important;
+      border-bottom-left-radius: 0.3em;
     }
   }
   ul {
@@ -64,6 +65,4 @@ body {
 }
 </style>
 
-<script>
-
-</script>
+<script></script>

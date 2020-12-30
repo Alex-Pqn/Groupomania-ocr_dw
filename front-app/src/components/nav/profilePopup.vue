@@ -1,62 +1,60 @@
 <template>
-<!-- profile-popup -->
-<div class="profile-popup profile-popup--style">
-  <!-- user infos -->
-  <div class="profile-popup__user-infos">
-    <img :src="getImgUrl(pic_url)" alt="">
-    <h4>
-      {{ firstname }} {{ lastname }}
-    </h4>
+  <!-- profile-popup -->
+  <div class="profile-popup profile-popup--style">
+    <!-- user infos -->
+    <div class="profile-popup__user-infos">
+      <img :src="getImgUrl(pic_url)" alt="" />
+      <h4>{{ firstname }} {{ lastname }}</h4>
+    </div>
+    <!-- nav -->
+    <nav class="profile-popup__nav">
+      <ul>
+        <li>
+          <router-link to="/profile">
+            Voir le profil
+          </router-link>
+        </li>
+        <li>
+          <router-link to="/parameters">
+            Paramètres
+          </router-link>
+        </li>
+        <li v-on:click="sessionDisconnect">
+          <router-link to="/login">
+            Se déconnecter
+          </router-link>
+        </li>
+      </ul>
+    </nav>
   </div>
-  <!-- nav -->
-  <nav class="profile-popup__nav">
-    <ul>
-      <li>
-        <router-link to="/profile">
-          Voir le profil
-        </router-link>
-      </li>
-      <li>
-        <router-link to="/parameters">
-          Paramètres
-        </router-link>
-      </li>
-      <li v-on:click="sessionDisconnect">
-        <router-link to="/login">
-          Se déconnecter
-        </router-link>
-      </li>
-    </ul>
-  </nav>
-</div>
 </template>
 
 <script>
-import { getImgUrl } from '@/utils/scripts';
+import { getImgUrl } from "@/utils/scripts";
 export default {
-    name: "profilePopup",
-    props: {
-      pic_url: {
-        type: String,
-        required: true
-      },
-      firstname: {
-        type: String,
-        required: true
-      },
-      lastname: {
-        type: String,
-        required: true
-      }
+  name: "profilePopup",
+  props: {
+    pic_url: {
+      type: String,
+      required: true
     },
-    methods: {
-      getImgUrl,
-      sessionDisconnect: () => {
-        document.cookie = `user_id=;expires=/;path=/`
-        document.cookie = `auth_token=;expires=/;path=/`
-      }
+    firstname: {
+      type: String,
+      required: true
+    },
+    lastname: {
+      type: String,
+      required: true
     }
-}
+  },
+  methods: {
+    getImgUrl,
+    sessionDisconnect: () => {
+      document.cookie = `user_id=;expires=/;path=/`;
+      document.cookie = `auth_token=;expires=/;path=/`;
+    }
+  }
+};
 </script>
 
 <style lang="scss">
@@ -70,7 +68,7 @@ export default {
   padding: 10px 0;
   z-index: 9999;
   &--style {
-    border-radius: .5em;
+    border-radius: 0.5em;
     background: rgb(238, 238, 238);
     border: 1px solid $small_black-border;
   }
@@ -97,7 +95,7 @@ export default {
       text-decoration: none;
       color: rgb(43, 13, 211);
       &:hover {
-        opacity: .8;
+        opacity: 0.8;
       }
     }
     li {

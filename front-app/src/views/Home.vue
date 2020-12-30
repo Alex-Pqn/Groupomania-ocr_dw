@@ -1,122 +1,158 @@
 <template>
-<main>
-  <!-- home -->
-  <div class="home">
-    <!-- displayed beetween 0px > 1023px -->
-    <div class="mobile-container">
+  <main>
+    <!-- home -->
+    <div class="home">
+      <!-- displayed beetween 0px > 1023px -->
+      <div class="mobile-container">
+        <!-- trends -->
+        <trends />
 
-      <!-- trends -->
-      <trends />
-
-      <!-- forums -->
-      <section id="top" class="forums">
-        <!-- header -->
-        <header class="forums__header forums__header--style">
-          <div class="forums__header__left">
-            <a href="#top">
-              <img src="@/assets/icon-left-font-monochrome-black.svg" alt="">
-            </a>
-          </div>
-          <div class="forums__header__right">
-            <img v-on:click="displayProfilePopup(`profile-popup_mobile-home`)" id="user-icon" :src="getImgUrl(user.pic_url)" alt="">
-            <profilePopup id="profile-popup_mobile-home" :pic_url="user.pic_url" :firstname="user.firstname" :lastname="user.lastname" />
-          </div>
-        </header>
-        <!-- main -->
-        <div class="forums__main">
-          <userCreateForum />
-          <h3>
-            Fil de discussion
-          </h3>
-          <!-- forums list -->
-          <article v-for="item in forums" :key="item.id">
-            <displayUserForums :id="item.id" :published_date="item.published_date" :pic_url="item.pic_url" :image_url="item.image_url" :firstname="item.firstname" :lastname="item.lastname" :text="item.text" :total_comments="item.total_comments" />
-            <!-- comments list in forum -->
-            <div class="comments-list">
-              <div v-for="comment in item.comments" :key="comment.id">
-                <displayUserComments :published_date="comment.published_date" :pic_url="comment.pic_url" :firstname="comment.firstname" :lastname="comment.lastname" :text="comment.text" />
-              </div>
+        <!-- forums -->
+        <section id="top" class="forums">
+          <!-- header -->
+          <header class="forums__header forums__header--style">
+            <div class="forums__header__left">
+              <a href="#top">
+                <img
+                  src="@/assets/icon-left-font-monochrome-black.svg"
+                  alt=""
+                />
+              </a>
             </div>
-          </article>
-        </div>
-      </section>
+            <div class="forums__header__right">
+              <img
+                v-on:click="displayProfilePopup(`profile-popup_mobile-home`)"
+                id="user-icon"
+                :src="getImgUrl(user.pic_url)"
+                alt=""
+              />
+              <profilePopup
+                id="profile-popup_mobile-home"
+                :pic_url="user.pic_url"
+                :firstname="user.firstname"
+                :lastname="user.lastname"
+              />
+            </div>
+          </header>
+          <!-- main -->
+          <div class="forums__main">
+            <userCreateForum />
+            <h3>
+              Fil de discussion
+            </h3>
+            <!-- forums list -->
+            <article v-for="item in forums" :key="item.id">
+              <displayUserForums
+                :id="item.id"
+                :published_date="item.published_date"
+                :pic_url="item.pic_url"
+                :image_url="item.image_url"
+                :firstname="item.firstname"
+                :lastname="item.lastname"
+                :text="item.text"
+                :total_comments="item.total_comments"
+              />
+              <!-- comments list in forum -->
+              <div class="comments-list">
+                <div v-for="comment in item.comments" :key="comment.id">
+                  <displayUserComments
+                    :published_date="comment.published_date"
+                    :pic_url="comment.pic_url"
+                    :firstname="comment.firstname"
+                    :lastname="comment.lastname"
+                    :text="comment.text"
+                  />
+                </div>
+              </div>
+            </article>
+          </div>
+        </section>
 
-      <!-- main nav -->
-      <mainNav :pic_url="user.pic_url" :firstname="user.firstname" :lastname="user.lastname" />
+        <!-- main nav -->
+        <mainNav
+          :pic_url="user.pic_url"
+          :firstname="user.firstname"
+          :lastname="user.lastname"
+        />
+      </div>
     </div>
-  </div>
-</main>
+  </main>
 </template>
 
 <script>
-import displayUserForums from "@/components/forums/displayUserForums.vue"
-import displayUserComments from "@/components/forums/displayUserComments.vue"
-import userCreateForum from "@/components/forums/userCreateForum.vue"
-import trends from "@/components/trends/trends.vue"
-import mainNav from "@/components/nav/mainNav.vue"
-import profilePopup from '@/components/nav/profilePopup.vue'
-import { getImgUrl, displayProfilePopup } from '@/utils/scripts';
+import displayUserForums from "@/components/forums/displayUserForums.vue";
+import displayUserComments from "@/components/forums/displayUserComments.vue";
+import userCreateForum from "@/components/forums/userCreateForum.vue";
+import trends from "@/components/trends/trends.vue";
+import mainNav from "@/components/nav/mainNav.vue";
+import profilePopup from "@/components/nav/profilePopup.vue";
+import { getImgUrl, displayProfilePopup } from "@/utils/scripts";
 
 export default {
   name: "Home",
-  data () {
+  data() {
     return {
       user: {
         pic_url: "user-icon.png",
         firstname: "Alexandre",
-        lastname: "Pqn" 
+        lastname: "Pqn"
       },
       forums: [
         {
-          id:96764556126554123,
-          published_date:"23/11/2020",
-          pic_url:"user-icon.png",
-          firstname:"Alexandre",
-          lastname:"Pqn",
-          text:"tUtque proeliorum periti rectores primo catervas densas opponunt et fortes, deinde leves armaturas, post iaculatores ultimasque subsidiales acies, si fors adegerit, iuvaturas, ita praepositis urbanae familiae suspensae digerentibus sollicite, quos insignes faciunt virgae dexteris aptatae v",
-          image_url:"icon-left-font.png",
-          total_comments:13,
+          id: 96764556126554123,
+          published_date: "23/11/2020",
+          pic_url: "user-icon.png",
+          firstname: "Alexandre",
+          lastname: "Pqn",
+          text:
+            "tUtque proeliorum periti rectores primo catervas densas opponunt et fortes, deinde leves armaturas, post iaculatores ultimasque subsidiales acies, si fors adegerit, iuvaturas, ita praepositis urbanae familiae suspensae digerentibus sollicite, quos insignes faciunt virgae dexteris aptatae v",
+          image_url: "icon-left-font.png",
+          total_comments: 13,
           comments: [
             {
-              id:9265456456423,
-              published_date:"23/11/2020",
-              pic_url:"user-icon.png",
-              firstname:"Alexandre",
-              lastname:"Pqn",
-              text:"tUtque proeliorum periti rectores primo catervas densas opponunt et fortes, deinde leves armaturas, post iaculatores ultimasque subsidiales acies, si fors adegerit, iuvaturas, ita praepositis urbanae familiae suspensae digerentibus sollicite, quos insignes faciunt virgae dexteris aptatae v",
+              id: 9265456456423,
+              published_date: "23/11/2020",
+              pic_url: "user-icon.png",
+              firstname: "Alexandre",
+              lastname: "Pqn",
+              text:
+                "tUtque proeliorum periti rectores primo catervas densas opponunt et fortes, deinde leves armaturas, post iaculatores ultimasque subsidiales acies, si fors adegerit, iuvaturas, ita praepositis urbanae familiae suspensae digerentibus sollicite, quos insignes faciunt virgae dexteris aptatae v"
             },
             {
-              id:9265456464556423,
-              published_date:"23/11/2020",
-              pic_url:"user-icon.png",
-              firstname:"Alexandre",
-              lastname:"Pqn",
-              text:"tUtque proeliorum periti rectores primo catervas densas opponunt et fortes, deinde leves armaturas, post iaculatores ultimasque subsidiales acies, si fors adegerit, iuvaturas, ita praepositis urbanae familiae suspensae digerentibus sollicite, quos insignes faciunt virgae dexteris aptatae v",
+              id: 9265456464556423,
+              published_date: "23/11/2020",
+              pic_url: "user-icon.png",
+              firstname: "Alexandre",
+              lastname: "Pqn",
+              text:
+                "tUtque proeliorum periti rectores primo catervas densas opponunt et fortes, deinde leves armaturas, post iaculatores ultimasque subsidiales acies, si fors adegerit, iuvaturas, ita praepositis urbanae familiae suspensae digerentibus sollicite, quos insignes faciunt virgae dexteris aptatae v"
             }
           ]
-        }, 
+        },
         {
-          id:9676456578654123,
-          published_date:"23/11/2020",
-          pic_url:"user-icon.png",
-          firstname:"Alexandre",
-          lastname:"Pqn",
-          text:"tUtque proeliorum periti rectores primo catervas densas opponunt et fortes, deinde leves armaturas, post iaculatores ultimasque subsidiales acies, si fors adegerit, iuvaturas, ita praepositis urbanae familiae suspensae digerentibus sollicite, quos insignes faciunt virgae dexteris aptatae v",
-          image_url:"icon-left-font.png",
-          total_comments:13,
+          id: 9676456578654123,
+          published_date: "23/11/2020",
+          pic_url: "user-icon.png",
+          firstname: "Alexandre",
+          lastname: "Pqn",
+          text:
+            "tUtque proeliorum periti rectores primo catervas densas opponunt et fortes, deinde leves armaturas, post iaculatores ultimasque subsidiales acies, si fors adegerit, iuvaturas, ita praepositis urbanae familiae suspensae digerentibus sollicite, quos insignes faciunt virgae dexteris aptatae v",
+          image_url: "icon-left-font.png",
+          total_comments: 13,
           comments: [
             {
-              id:9265464565456423,
-              published_date:"23/11/2020",
-              pic_url:"user-icon.png",
-              firstname:"Alexandre",
-              lastname:"Pqn",
-              text:"tUtque proeliorum periti rectores primo catervas densas opponunt et fortes, deinde leves armaturas, post iaculatores ultimasque subsidiales acies, si fors adegerit, iuvaturas, ita praepositis urbanae familiae suspensae digerentibus sollicite, quos insignes faciunt virgae dexteris aptatae v",
+              id: 9265464565456423,
+              published_date: "23/11/2020",
+              pic_url: "user-icon.png",
+              firstname: "Alexandre",
+              lastname: "Pqn",
+              text:
+                "tUtque proeliorum periti rectores primo catervas densas opponunt et fortes, deinde leves armaturas, post iaculatores ultimasque subsidiales acies, si fors adegerit, iuvaturas, ita praepositis urbanae familiae suspensae digerentibus sollicite, quos insignes faciunt virgae dexteris aptatae v"
             }
           ]
-        }, 
-      ],
-    }
+        }
+      ]
+    };
   },
   methods: {
     getImgUrl,
@@ -129,8 +165,8 @@ export default {
     trends,
     mainNav,
     profilePopup
-  },
-}
+  }
+};
 </script>
 
 <style lang="scss">
@@ -209,7 +245,7 @@ export default {
     article {
       display: flex;
       flex-direction: column;
-      border-radius: .3em;
+      border-radius: 0.3em;
       margin-bottom: 35px;
     }
   }
@@ -267,7 +303,7 @@ export default {
         }
       }
       &__right {
-        margin-right : 15px;
+        margin-right: 15px;
       }
     }
     &__main {
@@ -286,7 +322,7 @@ export default {
         }
       }
       &__right {
-        margin-right : 10px;
+        margin-right: 10px;
         #user-icon {
           width: 55px;
         }
