@@ -76,6 +76,7 @@
 
 <script>
 import connection from "@/components/connection/connection.vue";
+import { errorHandler } from "@/utils/scripts";
 
 export default {
   name: "Login",
@@ -164,7 +165,7 @@ export default {
 
       // API REQUEST
       function sendLoginRequest() {
-        const status = require("../utils/status_config");
+        const status = require("@/utils/status_config");
 
         let userParams = {
           email: emailInput,
@@ -231,23 +232,8 @@ export default {
             this.status === status.http.INTERNAL_SERVER_ERROR ||
             this.status === status.http.BAD_REQUEST
           ) {
-            displaySubmitInfoError(response.sub_error);
-            if (response.err) {
-              console.error(
-                `HTTP Status: ${this.status} ; ReadyState Status: ${
-                  this.readyState
-                } | Error: ${response.err.sqlMessage ||
-                  response.err.message} ; Code: ${response.err.code} : ${
-                  response.err.errno
-                } ; fatal?${response.err.fatal} ; SQLState: ${
-                  response.err.sqlState
-                }`
-              );
-            } else {
-              console.error(
-                `HTTP Status: ${this.status} ; ReadyState Status: ${this.readyState}`
-              );
-            }
+            displaySubmitInfoError(response.sub_err);
+            errorHandler(response.err, response.sub_err, this.readyState, this.status)
           }
         };
       }
