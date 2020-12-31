@@ -29,7 +29,7 @@ exports.register = (req, res, next) => {
         message: dataValidation.error.details[0].message,
         code: dataValidation.error.details[0].type
       }
-      return res.status(400).json({ sub_error: "Validation de donnée: Il semblerait que l'un des champs requis est incorrect.", err: dataValidationError })
+      return res.status(400).json({ sub_err: "Validation de donnée: Il semblerait que l'un des champs requis est incorrect.", err: dataValidationError })
     }
     // data validation success
     else{
@@ -46,11 +46,11 @@ exports.register = (req, res, next) => {
             if(err) {
               // duplicated entry code (account with this e-mail already exist)
               if (err.errno === 1062) {
-                return res.status(401).json({ sub_error: "Il semblerait qu'un compte possédant cet e-mail est déjà existant.", err })
+                return res.status(400).json({ sub_err: "Il semblerait qu'un compte possédant cet e-mail est déjà existant.", err })
               }
               // other
               else {
-                return res.status(401).json({ sub_error: "La création de votre compte a échoué, veuillez réessayer dans quelques instants.", err })
+                return res.status(400).json({ sub_err: "La création de votre compte a échoué, veuillez réessayer dans quelques instants.", err })
               }
             }
             // account created
@@ -66,12 +66,12 @@ exports.register = (req, res, next) => {
           })
         })
         // bcrypt.compare() failed
-        .catch((err) => res.status(500).json({ sub_error: "La création de votre compte a échoué, veuillez réessayer dans quelques instants.", err })) 
+        .catch((err) => res.status(500).json({ sub_err: "La création de votre compte a échoué, veuillez réessayer dans quelques instants.", err })) 
     }
   }
   // fields missing
   else{
-    return res.status(400).json({ sub_error: "Validation de donnée: Il semblerait que l'un des champs requis est manquant." })
+    return res.status(400).json({ sub_err: "Validation de donnée: Il semblerait que l'un des champs requis est manquant." })
   }
 }
  
@@ -89,7 +89,7 @@ exports.login = (req, res, next) => {
         message: dataValidation.error.details[0].message,
         code: dataValidation.error.details[0].type
       }
-      return res.status(400).json({ sub_error: "Validation de donnée: Il semblerait que l'un des champs requis est manquant ou incorrect.", err: dataValidationError })
+      return res.status(400).json({ sub_err: "Validation de donnée: Il semblerait que l'un des champs requis est manquant ou incorrect.", err: dataValidationError })
     }
     // validation success
     else{
@@ -101,11 +101,11 @@ exports.login = (req, res, next) => {
         
         // error handler
         if(err) {
-          return res.status(401).json({ sub_error: "La tentative d'authentification a échoué, veuillez réessayer dans quelques instants.", err })
+          return res.status(400).json({ sub_err: "La tentative d'authentification a échoué, veuillez réessayer dans quelques instants.", err })
         }
         // no one account finded
         if(result.length === 0) {
-          return res.status(401).json({ sub_error: "L'e-mail et le mot de passe entré sont incorrects.", err })
+          return res.status(401).json({ sub_err: "L'e-mail et le mot de passe entré sont incorrects.", err })
         }
         // account finded 
         else{
@@ -114,7 +114,7 @@ exports.login = (req, res, next) => {
             .then(function(bcryptResult) {
               // passwords don't matchs
               if(!bcryptResult) {
-                res.status(401).json({ sub_error: "L'e-mail et le mot de passe entré sont incorrects." })
+                res.status(401).json({ sub_err: "L'e-mail et le mot de passe entré sont incorrects." })
 
               }
               // passwords matchs
@@ -131,7 +131,7 @@ exports.login = (req, res, next) => {
               }
             })
             // bcrypt.compare() failed
-            .catch(err => res.status(500).json({ sub_error: "La tentative d'authentification a échoué, veuillez réessayer dans quelques instants.", err }))
+            .catch(err => res.status(500).json({ sub_err: "La tentative d'authentification a échoué, veuillez réessayer dans quelques instants.", err }))
           }
         }
       ) 
@@ -139,7 +139,7 @@ exports.login = (req, res, next) => {
   }
   // fields missing
   else{
-    return res.status(400).json({ sub_error: "Validation de donnée: Il semblerait que l'un des champs requis est manquant." })
+    return res.status(400).json({ sub_err: "Validation de donnée: Il semblerait que l'un des champs requis est manquant." })
   }
 }
   
