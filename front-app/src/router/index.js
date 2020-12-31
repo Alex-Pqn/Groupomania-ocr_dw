@@ -1,12 +1,14 @@
 import Vue from "vue";
 import VueRouter from "vue-router";
 
-import Login from "../views/Login.vue";
-import Register from "../views/Register.vue";
-import Home from "../views/Home.vue";
-import Profile from "../views/Profile.vue";
-import Parameters from "../views/Parameters.vue";
-import pageNotFound from "../components/pageNotFound.vue";
+import Login from "@/views/Login.vue";
+import Register from "@/views/Register.vue";
+import Home from "@/views/Home.vue";
+import Profile from "@/views/Profile.vue";
+import Parameters from "@/views/Parameters.vue";
+import pageNotFound from "@/components/pageNotFound.vue";
+
+import { errorHandler } from "@/utils/scripts";
 
 Vue.use(VueRouter);
 
@@ -63,7 +65,7 @@ const router = new VueRouter({
 });
 
 router.beforeEach((to, from, next) => {
-  const status = require("../utils/status_config");
+  const status = require("@/utils/status_config");
   let cookie = document.cookie.split(";");
   let cookieUserId;
   let cookieUserToken;
@@ -98,13 +100,11 @@ router.beforeEach((to, from, next) => {
         this.status === status.http.OK
       ) {
         next();
-
-        // ERRORS HANDLER
-      } else {
+      } 
+      // ERRORS HANDLER
+      else {
         next("/login");
-        console.error(
-          `HTTP Status: ${this.status} ; ReadyState Status: ${this.readyState} | Type: ${response.err.name} ; Error: ${response.err.message} ; Sub-Error: ${response.sub_error}`
-        );
+        errorHandler(response.err, response.sub_err, this.readyState, this.status)
       }
     };
   }
