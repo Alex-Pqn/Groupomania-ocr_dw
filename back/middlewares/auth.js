@@ -29,6 +29,6 @@ module.exports = (req, res, next) => {
       next();
     }
   } catch (err) {
-    res.status(401).json({ sub_error:"Le token d'authentification est incorrect ou a expiré.", err });
+    res.status(401).json({ sub_err:"Le token d'authentification est incorrect ou a expiré.", err });
   }
 };
