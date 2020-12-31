@@ -22,6 +22,9 @@
         <img src="@/assets/paper-plane-solid.svg" alt="" />
       </button>
     </div>
+    <!-- error-handler -->
+    <div class="create-forum__error-handler" id="create-forum_error-handler">
+    </div>
     <!-- img output -->
     <div id="create-forum_img" class="create-forum__img-output">
       <img id="create-forum_img-output" src="" alt="" />
@@ -37,8 +40,8 @@
 </template>
 
 <script>
-import { api, apiCallback } from "@/utils/scripts";
-const status = require("../../utils/status_config");
+import { api, apiCallback, errorHandler } from "@/utils/scripts";
+const status = require("@/utils/status_config");
 
 export default {
   name: "userCreateForum",
@@ -58,6 +61,8 @@ export default {
       document.getElementById("create-forum_img-output").src = "";
     },
     forumCreateSend() {
+      const errorContainer = document.getElementById('create-forum_error-handler')
+      
       // create formdata
       let formData = new FormData();
       
@@ -75,6 +80,8 @@ export default {
 
       // api request
       api("api/forums/create", "POST", formData);
+      errorContainer.textContent = ""
+      errorContainer.style.display = "none"
       
       // callback api request
       setTimeout(() => {
@@ -87,28 +94,17 @@ export default {
           readyState === status.readystate.DONE &&
           httpStatus === status.http.OK
         ) {
-          console.log(response);
-          // ERRORS HANDLER
-        } else if (
+          console.log(response)
+        } 
+        // ERRORS HANDLER
+        else if (
           httpStatus === status.http.UNAUTHORIZED ||
           httpStatus === status.http.INTERNAL_SERVER_ERROR ||
           httpStatus === status.http.BAD_REQUEST
         ) {
-        // displaySubmitInfoError(response.sub_error)
-        if (response.err) {
-          console.error(
-            `HTTP Status: ${httpStatus} ; ReadyState Status: ${readyState} | Error: ${response
-              .err.sqlMessage || response.err.message} ; Code: ${
-              response.err.code
-            } : ${response.err.errno} ; fatal?${
-              response.err.fatal
-            } ; SQLState: ${response.err.sqlState}`
-          );
-        } else {
-            console.error(
-              `HTTP Status: ${httpStatus} ; ReadyState Status: ${readyState}`
-            );
-          }
+          errorContainer.textContent = response.sub_err
+          errorContainer.style.display = "flex"
+          errorHandler(response.err, response.sub_err, readyState, httpStatus)
         }
       }, 50);
     }
@@ -165,6 +161,15 @@ export default {
       opacity: 0;
       position: absolute;
     }
+  }
+  // error-handler
+  &__error-handler {
+    display: none;
+    text-align: left;
+    margin: 6px 0 4px; 
+    color: rgb(204, 0, 0);
+    padding: 3px 5px 3px 6px;
+    background-color: rgba(255, 0, 0, 0.2);
   }
   // img output
   &__img-output {
