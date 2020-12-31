@@ -62,3 +62,28 @@ export function apiCallback () {
     apiHttpStatus:apiHttpStatus,
   }
 }
+
+export function errorHandler (err, sub_err, readyState, httpStatus) {
+  if (err && err.sqlMessage) {
+    console.error(
+      `SQL ERROR: ${err.sqlMessage || err.message} ; Code: ${
+        err.code
+      } : ${err.errno} ; fatal?${
+        err.fatal
+      } ; SQLState: ${err.sqlState}`
+    );
+  } else if (err && sub_err) {
+      console.error(
+        `Error: ${err} : ${sub_err}`
+      )
+  } else {
+    console.error(
+      `Error: ${sub_err}`
+    )
+  }
+  if (readyState || httpStatus) {
+      console.error(
+        `ReadyState: ${readyState}, HttpStatus: ${httpStatus}`
+      )
+  }
+}
