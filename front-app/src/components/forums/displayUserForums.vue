@@ -4,7 +4,7 @@
     <div class="user-forums user-forums--style">
       <!-- icon -->
       <div class="user-forums__icon">
-        <img :src="getImgUrl(pic_url)" alt="" />
+        <img :src="pic_url" alt="" />
       </div>
       <!-- main -->
       <div class="user-forums__main">
@@ -29,7 +29,7 @@
         </div>
         <!-- bottom -->
         <div class="user-forums__main__bottom">
-          <img :src="getImgUrl(image_url)" alt="" />
+          <img :src="image_url" alt="" />
         </div>
       </div>
     </div>
