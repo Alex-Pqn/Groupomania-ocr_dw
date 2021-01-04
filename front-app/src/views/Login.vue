@@ -76,7 +76,7 @@
 
 <script>
 import connection from "@/components/connection/connection.vue";
-import { errorHandler } from "@/utils/scripts";
+import { api, createUserCookie } from "@/utils/scripts";
 
 export default {
   name: "Login",
@@ -92,6 +92,21 @@ export default {
 
       const submitButton = document.getElementById("submit");
       const submitInfo = document.getElementById("submit-info");
+      
+      // error's & info's handler
+      function displaySubmitInfoError(errorValue) {
+        submitInfo.style.display = "none";
+        setTimeout(() => {
+          submitInfo.style.display = "flex";
+          submitInfo.style.color = "rgba(197, 0, 0, 0.85)";
+          submitInfo.innerHTML = errorValue;
+        }, 150);
+      }
+      function displaySubmitInfoSuccess(infoValue) {
+        submitInfo.style.display = "flex";
+        submitInfo.style.color = "green";
+        submitInfo.innerHTML = infoValue;
+      }
 
       const formData = [
         {
@@ -165,77 +180,39 @@ export default {
 
       // API REQUEST
       function sendLoginRequest() {
-        const status = require("@/utils/status_config");
-
-        let userParams = {
-          email: emailInput,
-          password: passwordInput
-        };
-
-        // error's & info's handler
-        function displaySubmitInfoError(errorValue) {
-          submitInfo.style.display = "none";
-          setTimeout(() => {
-            submitInfo.style.display = "flex";
-            submitInfo.style.color = "rgba(197, 0, 0, 0.85)";
-            submitInfo.innerHTML = errorValue;
-          }, 150);
-        }
-        function displaySubmitInfoSuccess(infoValue) {
-          submitInfo.style.display = "flex";
-          submitInfo.style.color = "green";
-          submitInfo.innerHTML = infoValue;
-        }
-
-        // xhr request
-        let xhr = new XMLHttpRequest();
-        xhr.open("POST", "http://localhost:3000/api/user/login", true);
-        xhr.setRequestHeader("Content-type", "application/json");
-        xhr.send(JSON.stringify(userParams));
-
-        xhr.onerror = () => {
+        // XHR ERROR
+        function xhrCallbackError () {
           displaySubmitInfoError(
             "Une erreur est survenue lors de la connexion à votre compte. Vérifiez l'état de vote connexion internet et réessayez."
           );
           submitButton.disabled = false;
         };
-
-        xhr.onreadystatechange = function() {
-          let response = JSON.parse(this.response);
-
-          // DONE & OK
-          if (
-            this.readyState === status.readystate.DONE &&
-            this.status === status.http.OK
-          ) {
-            submitButton.disabled = true;
-
-            // set http cookie with userId & auth token
-            let actualDate = new Date();
-            const dateMultiplicator = actualDate.setMonth(
-              actualDate.getMonth() + 1
-            );
-            let cookieExpireDate = new Date(dateMultiplicator).toUTCString();
-
-            document.cookie = `user_id=${response.userId};expires=${cookieExpireDate};path=/`;
-            document.cookie = `auth_token=${response.token};expires=${cookieExpireDate};path=/`;
-
-            // redirect to home
-            displaySubmitInfoSuccess(`${response.message}`);
-            setInterval(() => {
-              window.location.replace("/");
-            }, 1900);
-
-            // ERRORS HANDLER
-          } else if (
-            this.status === status.http.UNAUTHORIZED ||
-            this.status === status.http.INTERNAL_SERVER_ERROR ||
-            this.status === status.http.BAD_REQUEST
-          ) {
-            displaySubmitInfoError(response.sub_err);
-            errorHandler(response.err, response.sub_err, this.readyState, this.status)
-          }
+        
+        // API CALLBACK DONE
+        function apiCallbackDone (response) {
+          submitButton.disabled = true;
+          createUserCookie(response)
+          displaySubmitInfoSuccess(`${response.message}`);
+          
+          // redirect to home
+          setInterval(() => {
+            window.location.replace("/");
+          }, 1900);
         };
+        
+        // API CALLBACK ERROR
+        function apiCallbackError (response, readyState, httpStatus) {
+          displaySubmitInfoError(response.sub_err);
+          console.error(response)
+          console.error(`ReadyState: ${readyState}, HttpStatus: ${httpStatus}`)
+        }
+        
+        let userParams = {
+          email: emailInput,
+          password: passwordInput
+        };
+        
+        api("api/user/login", "POST", JSON.stringify(userParams), false, apiCallbackDone, apiCallbackError, xhrCallbackError);
       }
     }
   }

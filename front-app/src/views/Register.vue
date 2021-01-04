@@ -133,7 +133,7 @@
 
 <script>
 import connection from "@/components/connection/connection.vue";
-import { errorHandler } from "@/utils/scripts";
+import { api, createUserCookie } from "@/utils/scripts";
 
 export default {
   name: "Register",
@@ -163,6 +163,21 @@ export default {
 
       const submitButton = document.getElementById("submit");
       const submitInfo = document.getElementById("submit-info");
+      
+      // error's & info's handler
+      function displaySubmitInfoError(infoValue) {
+        submitInfo.style.display = "none";
+        setTimeout(() => {
+          submitInfo.style.display = "flex";
+          submitInfo.style.color = "rgba(197, 0, 0, 0.85)";
+          submitInfo.innerHTML = infoValue;
+        }, 150);
+      }
+      function displaySubmitInfoSuccess(infoValue) {
+        submitInfo.style.display = "flex";
+        submitInfo.style.color = "green";
+        submitInfo.innerHTML = infoValue;
+      }
 
       const formData = [
         {
@@ -274,8 +289,42 @@ export default {
 
       // API REQUEST
       function sendRegisterRequest() {
-        const status = require("@/utils/status_config");
-
+        
+        // XHR ERROR
+        function xhrCallbackError () {
+          displaySubmitInfoError(
+            "Une erreur est survenue lors de la création de votre compte. Vérifiez l'état de vote connexion internet et réessayez."
+          );
+          submitButton.disabled = false;
+        };
+        
+        // API CALLBACK DONE
+        function apiCallbackDone (response) {
+          submitButton.disabled = true;
+          createUserCookie(response)
+          
+          // redirect to home
+          let redirectionTime = 6;
+          let redirectionInterval = setInterval(() => {
+            if (redirectionTime === 0) {
+              clearInterval(redirectionInterval);
+              window.location.replace("/");
+            } else {
+              redirectionTime--;
+              displaySubmitInfoSuccess(
+                `${response.message} Redirection vers l'accueil dans ${redirectionTime} secondes...`
+              );
+            }
+          }, 1000);
+        }
+        
+        // API CALLBACK ERROR
+        function apiCallbackError (response, readyState, httpStatus) {
+          displaySubmitInfoError(response.sub_err);
+          console.error(response)
+          console.error(`ReadyState: ${readyState}, HttpStatus: ${httpStatus}`)
+        }
+        
         let userParams = {
           firstname: firstnameInput,
           lastname: lastnameInput,
@@ -283,78 +332,7 @@ export default {
           password: passwordInput,
           newsletters: newslettersInput
         };
-
-        // error's & info's handler
-        function displaySubmitInfoError(infoValue) {
-          submitInfo.style.display = "none";
-          setTimeout(() => {
-            submitInfo.style.display = "flex";
-            submitInfo.style.color = "rgba(197, 0, 0, 0.85)";
-            submitInfo.innerHTML = infoValue;
-          }, 150);
-        }
-        function displaySubmitInfoSuccess(infoValue) {
-          submitInfo.style.display = "flex";
-          submitInfo.style.color = "green";
-          submitInfo.innerHTML = infoValue;
-        }
-
-        // xhr request
-        let xhr = new XMLHttpRequest();
-        xhr.open("POST", "http://localhost:3000/api/user/register", true);
-        xhr.setRequestHeader("Content-type", "application/json");
-        xhr.send(JSON.stringify(userParams));
-
-        xhr.onerror = () => {
-          displaySubmitInfoError(
-            "Une erreur est survenue lors de la création de votre compte. Vérifiez l'état de vote connexion internet et réessayez."
-          );
-          submitButton.disabled = false;
-        };
-
-        xhr.onreadystatechange = function() {
-          let response = JSON.parse(this.response);
-
-          // DONE & OK
-          if (
-            this.readyState === status.readystate.DONE &&
-            this.status === status.http.OK
-          ) {
-            submitButton.disabled = true;
-
-            // set http cookie with userId & auth token
-            let actualDate = new Date();
-            const dateMultiplicator = actualDate.setMonth(
-              actualDate.getMonth() + 1
-            );
-            let cookieExpireDate = new Date(dateMultiplicator).toUTCString();
-            document.cookie = `user_id=${response.userId};expires=${cookieExpireDate};path=/`;
-            document.cookie = `auth_token=${response.token};expires=${cookieExpireDate};path=/`;
-
-            // redirect to home
-            let redirectionTime = 6;
-            let redirectionInterval = setInterval(() => {
-              if (redirectionTime === 0) {
-                clearInterval(redirectionInterval);
-                window.location.replace("/");
-              } else {
-                redirectionTime--;
-                displaySubmitInfoSuccess(
-                  `${response.message} Redirection vers l'accueil dans ${redirectionTime} secondes...`
-                );
-              }
-            }, 1000);
-
-            // ERRORS HANDLER
-          } else if (
-            this.status === status.http.UNAUTHORIZED ||
-            this.status === status.http.INTERNAL_SERVER_ERROR ||
-            this.status === status.http.BAD_REQUEST
-          ) {
-            displaySubmitInfoError(response.sub_err);
-            errorHandler(response.err, response.sub_err, this.readyState, this.status)
-          }
-        };
+        api("api/user/register", "POST", JSON.stringify(userParams), false, apiCallbackDone, apiCallbackError, xhrCallbackError);
       }
     }
   }

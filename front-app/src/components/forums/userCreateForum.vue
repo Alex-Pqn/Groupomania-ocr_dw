@@ -40,8 +40,7 @@
 </template>
 
 <script>
-import { api, apiCallback, errorHandler } from "@/utils/scripts";
-const status = require("@/utils/status_config");
+import { api } from "@/utils/scripts";
 
 export default {
   name: "userCreateForum",
@@ -77,36 +76,22 @@ export default {
         text: forumTextOutput
       };
       formData.append("forum", JSON.stringify(forum));
-
-      // api request
-      api("api/forums/create", "POST", formData);
-      errorContainer.textContent = ""
-      errorContainer.style.display = "none"
       
-      // callback api request
-      setTimeout(() => {
-        let response = apiCallback().apiResponse
-        let readyState = apiCallback().apiReadyState
-        let httpStatus = apiCallback().apiHttpStatus
-
-        // DONE & OK
-        if (
-          readyState === status.readystate.DONE &&
-          httpStatus === status.http.OK
-        ) {
-          console.log(response)
-        } 
-        // ERRORS HANDLER
-        else if (
-          httpStatus === status.http.UNAUTHORIZED ||
-          httpStatus === status.http.INTERNAL_SERVER_ERROR ||
-          httpStatus === status.http.BAD_REQUEST
-        ) {
+      function xhrCallbackError () {}
+      
+      function apiCallbackDone (response) {
+        console.log(response)
+      }
+      
+      function apiCallbackError (response) {
           errorContainer.textContent = response.sub_err
           errorContainer.style.display = "flex"
-          errorHandler(response.err, response.sub_err, readyState, httpStatus)
-        }
-      }, 50);
+      }
+
+      // api request
+      api("api/forums/create", "POST", formData, true, apiCallbackDone, apiCallbackError, xhrCallbackError);
+      errorContainer.textContent = ""
+      errorContainer.style.display = "none"
     }
   }
 };

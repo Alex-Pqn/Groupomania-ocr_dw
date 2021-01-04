@@ -86,9 +86,7 @@ import userCreateForum from "@/components/forums/userCreateForum.vue";
 import trends from "@/components/trends/trends.vue";
 import mainNav from "@/components/nav/mainNav.vue";
 import profilePopup from "@/components/nav/profilePopup.vue";
-import { getImgUrl, displayProfilePopup } from "@/utils/scripts";
-import { api, apiCallback, errorHandler } from "@/utils/scripts";
-const status = require("@/utils/status_config");
+import { api, getImgUrl, displayProfilePopup } from "@/utils/scripts";
 
 export default {
   name: "Home",
@@ -156,31 +154,19 @@ export default {
       ]
     };
   },
-  beforeMount() {
+  beforeMount () {
     let formData = new FormData();
-    api("api/forums/get", "GET", formData);
     
-    setTimeout(() => {
-      let response = apiCallback().apiResponse
-      let readyState = apiCallback().apiReadyState
-      let httpStatus = apiCallback().apiHttpStatus
-      
-      // DONE & OK
-      if (
-        readyState === status.readystate.DONE &&
-        httpStatus === status.http.OK
-      ) {
-        console.log(response)
-      } 
-      // ERRORS HANDLER
-      else if (
-        httpStatus === status.http.UNAUTHORIZED ||
-        httpStatus === status.http.INTERNAL_SERVER_ERROR ||
-        httpStatus === status.http.BAD_REQUEST
-      ) {
-        errorHandler(response.err, response.sub_err, readyState, httpStatus)
-      }
-    }, 50);
+    function apiCallbackDone (response) {
+      console.log(response)
+    }
+    function apiCallbackError () {
+    }
+    function xhrCallbackError () {
+      console.error("xr")
+    }
+    
+    api("api/forums/get", "GET", formData, true, apiCallbackDone, apiCallbackError, xhrCallbackError);
   },
   methods: {
     getImgUrl,
