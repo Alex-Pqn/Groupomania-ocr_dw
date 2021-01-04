@@ -4,6 +4,7 @@
     <!-- content -->
     <div class="create-forum__content">
       <textarea
+        minlength="1"
         maxlength="320"
         placeholder="Quoi de neuf aujourd'hui ?"
         id="create-forum_text"
@@ -12,13 +13,13 @@
         <img src="@/assets/cloud-upload-alt-solid.svg" alt="" />
       </label>
       <input
-        @change="forumCreateImgChange($event)"
+        @change="imgChange($event)"
         id="create-forum_upload-img"
         type="file"
         accept="image/*"
         name="image"
       />
-      <button v-on:click="forumCreateSend">
+      <button v-on:click="createForum">
         <img src="@/assets/paper-plane-solid.svg" alt="" />
       </button>
     </div>
@@ -30,7 +31,7 @@
       <img id="create-forum_img-output" src="" alt="" />
       <div>
         <img
-          v-on:click="forumCreateImgClose"
+          v-on:click="imgClose"
           src="@/assets/times-solid.svg"
           alt=""
         />
@@ -46,7 +47,7 @@ export default {
   name: "userCreateForum",
   props: {},
   methods: {
-    forumCreateImgChange(event) {
+    imgChange(event) {
       let reader = new FileReader();
       reader.onload = function() {
         document.getElementById("create-forum_img-output").src = reader.result;
@@ -54,44 +55,78 @@ export default {
       };
       reader.readAsDataURL(event.target.files[0]);
     },
-    forumCreateImgClose() {
+    imgClose() {
       document.getElementById("create-forum_img").style.display = "none";
       document.getElementById("create-forum_upload-img").value = "";
       document.getElementById("create-forum_img-output").src = "";
     },
-    forumCreateSend() {
-      const errorContainer = document.getElementById('create-forum_error-handler')
-      
-      // create formdata
+    createForum() {
       let formData = new FormData();
-      
-      // attach image
+      const errorContainer = document.getElementById('create-forum_error-handler')
       let inputImage = document.querySelector("input[type=file]").files[0];
-      if (inputImage) {
-        formData.append("image", inputImage, inputImage.name);
-      }
-
       let forumTextOutput = document.getElementById("create-forum_text").value;
-      let forum = {
-        text: forumTextOutput
-      };
-      formData.append("forum", JSON.stringify(forum));
       
-      function xhrCallbackError () {}
-      
-      function apiCallbackDone (response) {
-        console.log(response)
-      }
-      
-      function apiCallbackError (response) {
-          errorContainer.textContent = response.sub_err
+      // error handler
+      function errorHandler (err) {
+        errorContainer.style.display = "none"
+        setTimeout(() => {
+          errorContainer.textContent = err
           errorContainer.style.display = "flex"
+        }, 150);
       }
-
-      // api request
-      api("api/forums/create", "POST", formData, true, apiCallbackDone, apiCallbackError, xhrCallbackError);
-      errorContainer.textContent = ""
-      errorContainer.style.display = "none"
+      
+      // forum validation
+      const forumValidation = {
+        minLength: 1,
+        maxLength: 320
+      }
+      if(forumTextOutput.length > forumValidation.minLength) {
+        if(forumTextOutput.length < forumValidation.maxLength) {
+          // if input valid, call api
+          sendCreateForumRequest()
+        }else{
+          errorHandler(`Votre message ne peut contenir qu'au maximum ${forumValidation.maxLength} caractères.`)
+        }
+      }else{
+        errorHandler(`Votre message doit contenir au minimum ${forumValidation.minLength + 1} caractère.`)
+      }
+      
+      // API REQUEST
+      function sendCreateForumRequest () {
+        // attach image
+        if (inputImage) {
+          formData.append("image", inputImage, inputImage.name);
+        }
+        
+        // attach forum
+        let forum = {
+          text: forumTextOutput
+        };
+        formData.append("forum", JSON.stringify(forum)); 
+        
+        // api request
+        api("api/forums/create", "POST", formData, true, apiCallbackDone, apiCallbackError, xhrCallbackError);
+        errorContainer.textContent = ""
+        errorContainer.style.display = "none"
+      }
+      
+      // XHR ERROR
+      function xhrCallbackError (response) {
+        errorHandler(response)
+        console.error(response)
+      }
+      
+      // API CALLBACK DONE
+      function apiCallbackDone () {
+        document.location.reload();
+      }
+      
+      // API CALLBACK ERROR
+      function apiCallbackError (response, readyState, httpStatus) {
+        errorHandler(response.sub_err)
+        console.error(response)
+        console.error(`ReadyState: ${readyState}, HttpStatus: ${httpStatus}`)
+      }
     }
   }
 };
@@ -151,10 +186,10 @@ export default {
   &__error-handler {
     display: none;
     text-align: left;
-    margin: 6px 0 4px; 
     color: rgb(204, 0, 0);
+    background-color: rgba(255, 118, 118, 0.12);
+    margin-top: 5px;
     padding: 3px 5px 3px 6px;
-    background-color: rgba(255, 0, 0, 0.2);
   }
   // img output
   &__img-output {
