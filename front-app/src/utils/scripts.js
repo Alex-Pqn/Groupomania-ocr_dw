@@ -1,3 +1,6 @@
+const localUrl = "http://localhost:3000/";
+const status = require("@/utils/status_config");
+
 export function getImgUrl(img) {
   if (img !== "") {
     return require(`@/assets/` + img);
@@ -13,77 +16,117 @@ export function displayProfilePopup(DOMContainer) {
   }
 }
 
-let apiResponse
-let apiReadyState
-let apiHttpStatus
+export function api(urlAPI, method, data, tokenRequired, apiCallbackDone, apiCallbackError, xhrCallbackError) {
+  // token required, api request with authorization header
+  if(tokenRequired) {
+    // token auth
+    let cookie = document.cookie.split(";");
+    // if no token exists
+    if (cookie[0] === "" || cookie[1] === "" || cookie.length < 2) {
+      if(urlAPI !== "api/user/page/auth"){
+        window.location.replace("/login");
+      }
+    }
+    // if token exists
+    else {
+      let cookieUserId = cookie[0].replace("user_id=", "");
+      let cookieUserToken = cookie[1].replace("auth_token=", "");
 
-export function api(urlAPI, method, formData) {
-  const localUrl = "http://localhost:3000/";
-  
-  // token auth
-  let cookie = document.cookie.split(";");
-  if (cookie[0] === "" || cookie[1] === "" || cookie.length < 2) {
-    console.error(
-      "Le token d'authentification est incorrect ou a expiré. Veuillez vous reconnecter."
-    );
-  } else {
-    let cookieUserId = cookie[0].replace("user_id=", "");
-    let cookieUserToken = cookie[1].replace("auth_token=", "");
-
-    // data to send
-    let user = {
-      id: cookieUserId
-    };
-    formData.append("user", JSON.stringify(user));
-    
+      // data to send
+      let user = {
+        id: cookieUserId
+      };
+      data.append("user", JSON.stringify(user)); 
+      
+      // api request
+      let xhr = new XMLHttpRequest();
+      xhr.open(method, localUrl + urlAPI, true);
+      xhr.setRequestHeader("Authorization", "Bearer " + cookieUserToken);
+      xhr.send(data);
+      
+      xhr.onerror = function() {
+        xhrCallbackError(`Une erreur est survenue lors de la communication avec l'API. Vérifiez l'état de vote connexion internet et réessayez.`)
+        console.error('XHR Request Error: Please retry later')
+      };
+      xhr.onreadystatechange = function() {
+        let response = JSON.parse(this.response);
+        let readyState = this.readyState;
+        let httpStatus = this.status;
+        
+        // DONE & OK
+        if (
+          readyState === status.readystate.DONE &&
+          httpStatus === status.http.OK
+        ) {
+          apiCallbackDone(response)
+        } 
+        // ERRORS HANDLER
+        else if (
+          httpStatus === status.http.UNAUTHORIZED ||
+          httpStatus === status.http.INTERNAL_SERVER_ERROR ||
+          httpStatus === status.http.BAD_REQUEST
+        ) {
+          apiCallbackError(response, readyState, httpStatus)
+          if(response.err && response.err.sqlMessage) {
+            mysqlErrorHandler(response.err) 
+          }
+        }
+      };
+    } 
+  }else{
     // api request
     let xhr = new XMLHttpRequest();
     xhr.open(method, localUrl + urlAPI, true);
-    xhr.setRequestHeader("Authorization", "Bearer " + cookieUserToken);
-    xhr.send(formData);
-
+    xhr.setRequestHeader("Content-type", "application/json");
+    xhr.send(data);
     xhr.onerror = function() {
-      console.error(
-        `Une erreur est survenue lors de la communication avec l'API. Vérifiez l'état de vote connexion internet et réessayez.`
-      )
+      xhrCallbackError(`Une erreur est survenue lors de la communication avec l'API. Vérifiez l'état de vote connexion internet et réessayez.`)
+      console.error('XHR Request Error: Please retry later')
     };
     xhr.onreadystatechange = function() {
-      apiResponse = JSON.parse(this.response);
-      apiReadyState = this.readyState;
-      apiHttpStatus = this.status;
+      let response = JSON.parse(this.response);
+      let readyState = this.readyState;
+      let httpStatus = this.status;
+      
+      // DONE & OK
+      if (
+        readyState === status.readystate.DONE &&
+        httpStatus === status.http.OK
+      ) {
+        apiCallbackDone(response)
+      } 
+      // ERRORS HANDLER
+      else if (
+        httpStatus === status.http.UNAUTHORIZED ||
+        httpStatus === status.http.INTERNAL_SERVER_ERROR ||
+        httpStatus === status.http.BAD_REQUEST
+      ) {
+        apiCallbackError(response, readyState, httpStatus)
+        if(response.err && response.err.sqlMessage) {
+          mysqlErrorHandler(response.err) 
+        }
+      }
     };
   }
 }
 
-export function apiCallback () {
-  return {
-    apiResponse:apiResponse,
-    apiReadyState:apiReadyState,
-    apiHttpStatus:apiHttpStatus,
-  }
+export function mysqlErrorHandler (err) {
+  console.error(
+    `SQL ERROR: ${err.sqlMessage || err.message} ; Code: ${
+      err.code
+    } : ${err.errno} ; fatal?${
+      err.fatal
+    } ; SQLState: ${err.sqlState}`
+  );
 }
 
-export function errorHandler (err, sub_err, readyState, httpStatus) {
-  if (err && err.sqlMessage) {
-    console.error(
-      `SQL ERROR: ${err.sqlMessage || err.message} ; Code: ${
-        err.code
-      } : ${err.errno} ; fatal?${
-        err.fatal
-      } ; SQLState: ${err.sqlState}`
-    );
-  } else if (err && sub_err) {
-      console.error(
-        `Error: ${err} : ${sub_err}`
-      )
-  } else {
-    console.error(
-      `Error: ${sub_err}`
-    )
-  }
-  if (readyState || httpStatus) {
-      console.error(
-        `ReadyState: ${readyState}, HttpStatus: ${httpStatus}`
-      )
-  }
+export function createUserCookie (response) {
+  let actualDate = new Date();
+  const dateMultiplicator = actualDate.setMonth(
+    actualDate.getMonth() + 1
+  );
+  
+  let cookieExpireDate = new Date(dateMultiplicator).toUTCString();
+  document.cookie = `user_id=${response.userId};expires=${cookieExpireDate};path=/`;
+  document.cookie = `auth_token=${response.token};expires=${cookieExpireDate};path=/`;
 }
