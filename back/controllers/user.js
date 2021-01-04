@@ -12,7 +12,7 @@ const db = mysql.createPool(dbConfig.params)
 
 // page requires auth : return status 200 after validation token by auth middleware
 exports.pageAuth = (req, res, next) => {
-  res.status(200)
+  res.status(200).json({ message: "Valid token, authentication success." })
 }
 
 //register
