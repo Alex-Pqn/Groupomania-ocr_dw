@@ -8,21 +8,11 @@ import Profile from "@/views/Profile.vue";
 import Parameters from "@/views/Parameters.vue";
 import pageNotFound from "@/components/pageNotFound.vue";
 
-import { errorHandler } from "@/utils/scripts";
+import { api } from "@/utils/scripts";
 
 Vue.use(VueRouter);
 
 const routes = [
-  {
-    path: "/register",
-    name: "Register",
-    component: Register
-  },
-  {
-    path: "/login",
-    name: "Login",
-    component: Login
-  },
   {
     path: "/",
     name: "Home",
@@ -48,9 +38,22 @@ const routes = [
     }
   },
   {
+    path: "/register",
+    name: "Register",
+    component: Register,
+  },
+  {
+    path: "/login",
+    name: "Login",
+    component: Login,
+  },
+  {
     path: "/:pathMatch(.*)",
-    component: pageNotFound
-  }
+    component: pageNotFound,
+    meta: {
+      requiresAuth: true
+    }
+  },
 ];
 
 // route level code-splitting
@@ -65,49 +68,41 @@ const router = new VueRouter({
 });
 
 router.beforeEach((to, from, next) => {
-  const status = require("@/utils/status_config");
-  let cookie = document.cookie.split(";");
-  let cookieUserId;
-  let cookieUserToken;
-
-  if (to.matched.some(route => route.meta.requiresAuth)) {
-    if (cookie[0] === "" || cookie[1] === "" || cookie.length < 2) {
+  
+  // xhr request error
+  function xhrCallbackError () {
+    if (to.matched.some(route => route.meta.requiresAuth)) {
       next("/login");
-    } else {
-      cookieUserId = cookie[0].replace("user_id=", "");
-      cookieUserToken = cookie[1].replace("auth_token=", "");
+    }else{
+      next();
     }
-
-    let user = {
-      id: cookieUserId,
-    };
-
-    // xhr request
-    let xhr = new XMLHttpRequest();
-    xhr.open("POST", "http://localhost:3000/api/user/page/auth", true);
-    xhr.setRequestHeader("Content-type", "application/json");
-    xhr.setRequestHeader("Authorization", "Bearer " + cookieUserToken);
-    xhr.send(JSON.stringify(user));
-    xhr.onerror = () => {
-      next("/login");
-    };
-    xhr.onreadystatechange = function() {
-      let response = JSON.parse(this.response);
-
-      // DONE & OK
-      if (
-        this.readyState === status.readystate.DONE &&
-        this.status === status.http.OK
-      ) {
-        next();
-      } 
-      // ERRORS HANDLER
-      else {
-        next("/login");
-        errorHandler(response.err, response.sub_err, this.readyState, this.status)
-      }
-    };
   }
+  
+  // token invalid or api error
+  function apiCallbackError () {
+    if (to.matched.some(route => route.meta.requiresAuth)) {
+      next("/login");
+    }else{
+      next();
+    }
+  }
+  
+  // token valid
+  function apiCallbackDone () {
+    // page requires auth, redirect to this
+    if (to.matched.some(route => route.meta.requiresAuth)) {
+      next();
+    }
+    // redirect to home page, user is already connected and cannot acces to /login or /register
+    else{
+      next("/");
+    }
+  }
+
+  // api request
+  let formData = new FormData();
+  api("api/user/page/auth", "POST", formData, true, apiCallbackDone, apiCallbackError, xhrCallbackError); 
+  
   next();
 });
 
