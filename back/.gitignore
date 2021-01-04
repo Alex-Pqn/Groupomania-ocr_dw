@@ -1,4 +1,5 @@
 node_modules
 commands.sql
 .env
-images
+images/*
+!images/user-icon.jpg
