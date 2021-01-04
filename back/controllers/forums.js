@@ -10,14 +10,13 @@ const db = mysql.createPool(dbConfig.params)
 
 exports.getAllForums = (req, res, next) => {
     db.query(
-        `SELECT a.id,
-                a.firstname,
+        `SELECT a.firstname,
                 a.lastname,
                 a.pic_url,
+                f.id,
                 f.text,
                 f.image_url,
                 f.created_at,
-                f.updated_at,
                 f.total_comments
         FROM Accounts as a
         INNER JOIN Forums as f
@@ -25,6 +24,15 @@ exports.getAllForums = (req, res, next) => {
         if(err) {
             return res.status(400).json({ sub_err: "La récupération du fil d'actualité a échouée, veuillez réessayer dans quelques instants.", err })
         }
+        // if user doesn't have custom icon, replace by vanilla icon
+        result.forEach(userForum => {
+            if(!userForum.pic_url) {
+                userForum.pic_url = "http://localhost:3000/images/user-icon.jpg"
+            }
+        });
+        // reverse order, new forum at beginning to the older forum at end
+        result = result.slice().reverse()
+        
         res.status(200).json({ result })
     })
 }
