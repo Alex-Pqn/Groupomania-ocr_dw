@@ -5,7 +5,7 @@ const forumSchema = Joi.object({
         .required(),
     
     text: Joi.string()
-        .min(1)
+        .min(2)
         .max(320)
         .required(),
         
