@@ -13,7 +13,7 @@ exports.getAllForums = (req, res, next) => {
         if(err) {
             return res.status(400).json({ sub_err: "La récupération du fil d'actualité a échouée, veuillez réessayer dans quelques instants.", err })
         }
-        return res.status(200).json({ result })
+        res.status(200).json({ result })
     })
 }
 
