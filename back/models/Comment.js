@@ -8,8 +8,8 @@ const commentSchema = Joi.object({
         .required(),
     
     text: Joi.string()
-        // .min()
-        // .max()
+        .min(2)
+        .max(320)
         .required(),
 })
 
