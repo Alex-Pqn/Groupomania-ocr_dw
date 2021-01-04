@@ -9,7 +9,19 @@ const dbConfig = require('../db_config')
 const db = mysql.createPool(dbConfig.params)
 
 exports.getAllForums = (req, res, next) => {
-    db.query('SELECT * FROM Forums', (err, result) => {
+    db.query(
+        `SELECT a.id,
+                a.firstname,
+                a.lastname,
+                a.pic_url,
+                f.text,
+                f.image_url,
+                f.created_at,
+                f.updated_at,
+                f.total_comments
+        FROM Accounts as a
+        INNER JOIN Forums as f
+        ON a.id = f.user_id`, (err, result) => {
         if(err) {
             return res.status(400).json({ sub_err: "La récupération du fil d'actualité a échouée, veuillez réessayer dans quelques instants.", err })
         }
