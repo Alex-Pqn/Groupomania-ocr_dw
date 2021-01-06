@@ -4,7 +4,7 @@
     <div class="user-trends user-trends--style">
       <!-- icon -->
       <div class="user-trends__icon">
-        <img :src="getImgUrl(pic_url)" alt="" />
+        <img :src="pic_url" alt="" />
       </div>
       <!-- main -->
       <div class="user-trends__main">
@@ -33,8 +33,6 @@
 </template>
 
 <script>
-import { getImgUrl } from "@/utils/scripts";
-
 export default {
   name: "displayUserTrends",
   props: {
@@ -57,13 +55,7 @@ export default {
     text: {
       type: String,
       required: true
-    },
-    image_url: {
-      type: String
     }
-  },
-  methods: {
-    getImgUrl
   }
 };
 </script>
