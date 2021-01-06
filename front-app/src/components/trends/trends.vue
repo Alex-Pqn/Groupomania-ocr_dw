@@ -1,75 +1,106 @@
 <template>
-  <!-- trends container -->
-  <section class="trends-container">
-    <!-- trends -->
-    <div class="trends trends--style">
-      <!-- header -->
-      <header class="trends__header">
-        <h1>
-          Tendances
-        </h1>
-      </header>
-      <!-- main -->
-      <div class="trends__main">
-        <div class="trends__main__recents trends__main__recents--style">
-          <h4>
-            Discussion récentes
-          </h4>
-          <article v-for="item in recentsTrends" :key="item.id">
-            <displayUserTrends
-              :published_date="item.published_date"
-              :pic_url="item.pic_url"
-              :image_url="item.image_url"
-              :firstname="item.firstname"
-              :lastname="item.lastname"
-              :text="item.text"
-            />
-          </article>
+  <!-- trends -->
+  <div class="trends trends--style">
+    <!-- header -->
+    <header class="trends__header">
+      <h1>
+        Tendances
+      </h1>
+    </header>
+    <!-- main -->
+    <div class="trends__main">
+      <div class="trends__main__recents trends__main__recents--style">
+        <h4>
+          Discussion récentes
+        </h4>
+        <div id="error-handler">
+          <h3>
+            Erreur
+          </h3>
+          <p></p>
         </div>
+        <article v-for="item in recentsTrends" :key="item.id">
+          <displayUserTrends
+            :published_date="item.published_date"
+            :pic_url="item.pic_url"
+            :firstname="item.firstname"
+            :lastname="item.lastname"
+            :text="item.text"
+          />
+        </article>
       </div>
     </div>
-  </section>
+  </div>
 </template>
 
 <script>
 import displayUserTrends from "@/components/trends/displayUserTrends.vue";
+import { api } from "@/utils/scripts";
 
 export default {
   name: "trends",
   data() {
     return {
       recentsTrends: [
-        {
-          id: 8531265,
-          published_date: "23/11/2020",
-          pic_url: "user-icon.png",
-          firstname: "Alexandre",
-          lastname: "Pqn",
-          text:
-            "tUtque proeliorum periti rectores primo catervas densas opponunt et fortes, deinde leves armaturas, post iaculatores ultimasque subsidiales acies, si fors adegerit, iuvaturas, ita praepositis urbanae familiae suspensae digerentibus sollicite, quos insignes faciunt virgae dexteris aptatae v",
-          image_url: "icon-left-font.png"
-        },
-        {
-          id: 8456531265,
-          published_date: "23/11/2020",
-          pic_url: "user-icon.png",
-          firstname: "Alexandre",
-          lastname: "Pqn",
-          text:
-            "tUtque proeliorum periti rectores primo catervas densas opponunt et fortes, deinde leves armaturas, post iaculatores ultimasque subsidiales acies, si fors adegerit, iuvaturas, ita praepositis urbanae familiae suspensae digerentibus sollicite, quos insignes faciunt virgae dexteris aptatae v"
-        },
-        {
-          id: 85341265,
-          published_date: "23/11/2020",
-          pic_url: "user-icon.png",
-          firstname: "Alexandre",
-          lastname: "Pqn",
-          text:
-            "tUtque proeliorum periti rectores primo catervas densas opponunt et fortes, deinde leves armaturas, post iaculatores ultimasque subsidiales acies, si fors adegerit, iuvaturas, ita praepositis urbanae familiae suspensae digerentibus sollicite, quos insignes faciunt virgae dexteris aptatae v",
-          image_url: "icon-left-font.png"
-        }
+        // {
+        //   id: 8531265,
+        //   published_date: "23/11/2020",
+        //   pic_url: "user-icon.png",
+        //   firstname: "Alexandre",
+        //   lastname: "Pqn",
+        //   text:
+        //     "tUtque proeliorum periti rectores primo catervas densas opponunt et fortes, deinde leves armaturas, post iaculatores ultimasque subsidiales acies, si fors adegerit, iuvaturas, ita praepositis urbanae familiae suspensae digerentibus sollicite, quos insignes faciunt virgae dexteris aptatae v"
+        // },
       ]
     };
+  },
+  beforeMount: async function () {
+    const vm = this
+    let formData = new FormData();
+    let result
+    
+    // XHR ERROR
+    function xhrCallbackError (response) {
+      vm.errorHandler(response)
+      console.error(response)
+    }
+    
+     // API CALLBACK ERROR
+    function apiCallbackError (response, readyState, httpStatus) {
+      vm.errorHandler(response.sub_err)
+      console.error(response)
+      console.error(`ReadyState: ${readyState}, HttpStatus: ${httpStatus}`)
+    }
+    
+    // API CALLBACK DONE
+    function apiCallbackDone (response) {
+      result = response.result
+      
+      result.forEach(forum => {
+        forum.created_at = forum.created_at.split("T").join(" à ").split(".000Z").join("")
+        
+        let userForum = {
+          published_date: forum.created_at,
+          pic_url: forum.pic_url,
+          firstname: forum.firstname,
+          lastname: forum.lastname,
+          text: forum.text
+        }
+
+        // push the forum in data
+        vm.recentsTrends.push(userForum)
+      });
+    }
+
+    // API CALL
+    api("api/forums/trends/get", "GET", formData, apiCallbackDone, apiCallbackError, xhrCallbackError)
+  },
+  methods: {
+    errorHandler (err) {
+      const errorContainer = document.getElementById('error-handler')
+      document.querySelector('#error-handler p').innerHTML = err
+      errorContainer.style.display = "block"
+    },
   },
   components: {
     displayUserTrends
@@ -78,10 +109,6 @@ export default {
 </script>
 
 <style lang="scss">
-// trends-container
-.trends-container {
-  min-width: 370px !important;
-}
 // trends
 .trends {
   display: flex;
@@ -124,9 +151,6 @@ export default {
   }
 }
 @media screen and (min-width: 1024px) and (max-width: 1600px) {
-  .trends-container {
-    min-width: 305px !important;
-  }
   .trends {
     width: 290px;
   }
@@ -134,6 +158,7 @@ export default {
 @media screen and (min-width: 740px) and (max-width: 1023px) {
   .trends {
     width: 60%;
+    top: 25px;
     &--style {
       border-radius: 0;
       background-color: rgb(245, 245, 245);
@@ -170,21 +195,17 @@ export default {
 }
 @media screen and (max-width: 740px) {
   .trends {
-    width: 92%;
+    top: 15px;
+    width: 90%;
+    left: 0;
+    margin-bottom: 15px;
   }
 }
 @media screen and (max-width: 1023px) {
-  .trends-container {
-    min-width: 100% !important;
-    margin-top: 20px;
-    display: flex;
-    justify-content: center;
-  }
   .trends {
     height: 100%;
     position: relative;
-    top: 0;
-    left: 0;
+    
     &--style {
       border-radius: 0;
       background-color: rgb(245, 245, 245);
