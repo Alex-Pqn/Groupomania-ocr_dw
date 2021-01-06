@@ -14,7 +14,7 @@
         <img
           v-on:click="displayProfilePopup(`profile-popup_nav`)"
           id="user-icon"
-          :src="getImgUrl(pic_url)"
+          :src="pic_url"
           alt=""
         />
         <profilePopup
@@ -29,7 +29,7 @@
 </template>
 
 <script>
-import { getImgUrl, displayProfilePopup } from "@/utils/scripts";
+import { displayProfilePopup } from "@/utils/scripts";
 import profilePopup from "@/components/nav/profilePopup.vue";
 export default {
   name: "mainNav",
@@ -45,13 +45,15 @@ export default {
     lastname: {
       type: String,
       required: true
+    },
+    description: {
+      type: String
     }
   },
   components: {
     profilePopup
   },
   methods: {
-    getImgUrl,
     displayProfilePopup
   }
 };
@@ -68,8 +70,9 @@ export default {
 // main-nav
 .main-nav {
   display: flex;
+  position: fixed;
+  right: 0;
   width: 100px;
-  margin-right: 20px;
 
   // content
   &__content {
@@ -110,7 +113,6 @@ export default {
 @media screen and (min-width: 1024px) and (max-width: 1600px) {
   .main-nav {
     width: 90px;
-    margin-right: 36px;
     &__content {
       width: 90px;
       &__top {
