@@ -23,7 +23,7 @@
               <img
                 v-on:click="displayProfilePopup(`profile-popup_mobile-home`)"
                 id="user-icon"
-                :src="getImgUrl(user.pic_url)"
+                :src="user.pic_url"
                 alt=""
               />
               <profilePopup
@@ -50,6 +50,7 @@
             <article v-for="item in forums" :key="item.id">
               <displayUserForums
                 :id="item.id"
+                :user_id="item.user_id"
                 :published_date="item.published_date"
                 :pic_url="item.pic_url"
                 :image_url="item.image_url"
@@ -92,7 +93,7 @@ import userCreateForum from "@/components/forums/userCreateForum.vue";
 import trends from "@/components/trends/trends.vue";
 import mainNav from "@/components/nav/mainNav.vue";
 import profilePopup from "@/components/nav/profilePopup.vue";
-import { api, getImgUrl, displayProfilePopup } from "@/utils/scripts";
+import { api, displayProfilePopup } from "@/utils/scripts";
 
 export default {
   name: "Home",
@@ -104,60 +105,115 @@ export default {
         lastname: "Pqn"
       },
       forums: [
-
       ]
     };
   },
   beforeMount: async function () {
+    const vm = this
+    let formData = new FormData();
     let result
     
-    function errorHandler (err) {
-      const errorContainer = document.getElementById('error-handler')
-      document.querySelector('#error-handler p').innerHTML = err
-      errorContainer.style.display = "block"
+    // XHR ERROR
+    function xhrCallbackError (response) {
+      vm.errorHandler(response)
+      console.error(response)
+    }
+    
+     // API CALLBACK ERROR
+    function apiCallbackError (response, readyState, httpStatus) {
+      vm.errorHandler(response.sub_err)
+      console.error(response)
+      console.error(`ReadyState: ${readyState}, HttpStatus: ${httpStatus}`)
     }
     
     // API CALLBACK DONE
     function apiCallbackDone (response) {
       result = response.result
-    }
-    
-     // API CALLBACK ERROR
-    function apiCallbackError (response, readyState, httpStatus) {
-      errorHandler(response.sub_err)
-      console.error(response)
-      console.error(`ReadyState: ${readyState}, HttpStatus: ${httpStatus}`)
-    }
-    
-    // XHR ERROR
-    function xhrCallbackError (response) {
-      errorHandler(response)
-      console.error(response)
-    }
-    
-    setTimeout(() => {
+      let forums_list = []
+      
       result.forEach(forum => {
         forum.created_at = forum.created_at.split("T").join(" à ").split(".000Z").join("")
         
         let userForum = {
           id: forum.id,
+          user_id: forum.user_id,
           published_date: forum.created_at,
           pic_url: forum.pic_url,
           firstname: forum.firstname,
           lastname: forum.lastname,
           text: forum.text,
-          total_comments: forum.total_comments,
-          image_url: forum.image_url
+          total_comments: 0,
+          image_url: forum.image_url,
+          comments: []
         }
-        this.forums.push(userForum)
+
+        // add the forum in forums_list to get comments below
+        forums_list.push(forum.id)
+        // push the forum in data
+        vm.forums.push(userForum)
       });
-    }, 500);
-    
-    let formData = new FormData();
-    api("api/forums/get", "GET", formData, true, apiCallbackDone, apiCallbackError, xhrCallbackError)
+      
+      // call getComments method with forums list
+      if(forums_list.length >= 1) {
+        vm.getComments(forums_list)
+      }
+    }
+
+    // API CALL
+    api("api/forums/global/get", "GET", formData, apiCallbackDone, apiCallbackError, xhrCallbackError)
   },
   methods: {
-    getImgUrl,
+    getComments (forums_list) {
+      const vm = this
+      let data = [
+        forums_list
+      ]
+      
+      // XHR ERROR
+      function xhrCallbackError (response) {
+        console.error(response)
+      }
+      
+      // API CALLBACK ERROR
+      function apiCallbackError (response, readyState, httpStatus) {
+        console.error(response)
+        console.error(`ReadyState: ${readyState}, HttpStatus: ${httpStatus}`)
+      }
+      
+      // API CALLBACK DONE
+      function apiCallbackDone (response) {
+        let comments = response.result
+        let forums = vm.forums
+        let userComment
+        
+        comments.forEach(comment => {
+          comment.created_at = comment.created_at.split("T").join(" à ").split(".000Z").join("")
+          
+          userComment = {
+            pic_url: comment.pic_url,
+            firstname: comment.firstname,
+            lastname: comment.lastname,
+            published_date: comment.created_at,
+            text: comment.text
+          }
+          
+          forums.forEach(forum => {
+            if(comment.forum_id == forum.id) {
+              forum.comments.push(userComment)
+            }
+            
+            forum.total_comments = forum.comments.length
+          })
+        });
+      }
+      
+      api("api/comments/get", "POST", data, apiCallbackDone, apiCallbackError, xhrCallbackError)
+    },
+    errorHandler (err) {
+      const errorContainer = document.getElementById('error-handler')
+      document.querySelector('#error-handler p').innerHTML = err
+      errorContainer.style.display = "block"
+    },
     displayProfilePopup
   },
   components: {
@@ -201,20 +257,6 @@ export default {
   flex-direction: column;
   align-items: center;
   width: 100%;
-  
-  // error handler
-  #error-handler {
-    display: none;
-    background-color: rgba(226, 0, 0, 0.2);
-    padding-bottom: 10px;
-    border-top-left-radius: .7em;
-    border-top-right-radius: .7em;
-    border-bottom: 4px solid rgba(128, 0, 0, 0.7)!important;
-    border: 1px solid rgba(128, 0, 0, 0.7);
-    h3 {
-      margin-bottom: 5px;
-    }
-  }
 
   // header
   &__header {
@@ -224,7 +266,8 @@ export default {
     top: 0;
     padding-bottom: 10px;
     padding-top: 10px;
-    margin-top: 15px;
+    margin-top: 5px;
+    margin-left: 185px;
     width: 50%;
     height: 7%;
     z-index: 999;
@@ -254,6 +297,7 @@ export default {
     flex-direction: column;
     align-items: center;
     margin-top: 25px;
+    margin-left: 185px;
     width: 45%;
     h3 {
       margin: 15px 0 20px;
@@ -272,7 +316,7 @@ export default {
     &__header {
       margin-top: 5px;
       padding-top: 15px;
-      width: 75%;
+      width: 58%;
       &__left {
         img {
           width: 230px;
@@ -280,7 +324,7 @@ export default {
       }
     }
     &__main {
-      width: 60%;
+      width: 50%;
       h3 {
         margin: 10px 0 20px;
       }
@@ -353,6 +397,7 @@ export default {
 @media screen and (max-width: 1023px) {
   .forums {
     &__header {
+      margin-left: 0;
       &__left {
         img {
           width: 220px;
@@ -364,6 +409,9 @@ export default {
           width: 42px;
         }
       }
+    }
+    &__main {
+      margin-left: 0;
     }
   }
 }
