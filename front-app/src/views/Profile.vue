@@ -8,7 +8,7 @@
       <!-- profile -->
       <div class="user-profile" id="top">
         <!-- header -->
-        <userHeader
+        <userHeader class="user-profile__header"
           :description="user.description"
           :pic_url="user.pic_url"
           :firstname="user.firstname"
@@ -19,10 +19,17 @@
           <h3>
             Mon fil de discussion
           </h3>
+          <div id="error-handler">
+            <h3>
+              Erreur
+            </h3>
+            <p></p>
+          </div>
           <!-- forums list -->
           <article v-for="item in forums" :key="item.id">
             <displayUserForums
               :id="item.id"
+              :user_id="item.user_id"
               :published_date="item.published_date"
               :pic_url="item.pic_url"
               :image_url="item.image_url"
@@ -64,6 +71,7 @@ import userCreateForum from "@/components/forums/userCreateForum.vue";
 import trends from "@/components/trends/trends.vue";
 import mainNav from "@/components/nav/mainNav.vue";
 import userHeader from "@/components/userHeader.vue";
+import { api } from "@/utils/scripts";
 
 export default {
   name: "Profile",
@@ -76,68 +84,6 @@ export default {
         description: "sfdfwcsdfsd"
       },
       forums: [
-        {
-          id: 96765454123,
-          published_date: "23/11/2020",
-          pic_url: "user-icon.png",
-          firstname: "Alexandre",
-          lastname: "Pqn",
-          text:
-            "tUtque proeliorum periti rectores primo catervas densas opponunt et fortes, deinde leves armaturas, post iaculatores ultimasque subsidiales acies, si fors adegerit, iuvaturas, ita praepositis urbanae familiae suspensae digerentibus sollicite, quos insignes faciunt virgae dexteris aptatae v",
-          image_url: "icon-left-font.png",
-          total_comments: 13,
-          comments: [
-            {
-              id: 92655456423,
-              published_date: "23/11/2020",
-              pic_url: "user-icon.png",
-              firstname: "Alexandre",
-              lastname: "Pqn",
-              text:
-                "tUtque proeliorum periti rectores primo catervas densas opponunt et fortes, deinde leves armaturas, post iaculatores ultimasque subsidiales acies, si fors adegerit, iuvaturas, ita praepositis urbanae familiae suspensae digerentibus sollicite, quos insignes faciunt virgae dexteris aptatae v"
-            },
-            {
-              id: 926546756423,
-              published_date: "23/11/2020",
-              pic_url: "user-icon.png",
-              firstname: "Alexandre",
-              lastname: "Pqn",
-              text:
-                "tUtque proeliorum periti rectores primo catervas densas opponunt et fortes, deinde leves armaturas, post iaculatores ultimasque subsidiales acies, si fors adegerit, iuvaturas, ita praepositis urbanae familiae suspensae digerentibus sollicite, quos insignes faciunt virgae dexteris aptatae v"
-            }
-          ]
-        },
-        {
-          id: 96769554123,
-          published_date: "23/11/2020",
-          pic_url: "user-icon.png",
-          firstname: "Alexandre",
-          lastname: "Pqn",
-          text:
-            "tUtque proeliorum periti rectores primo catervas densas opponunt et fortes, deinde leves armaturas, post iaculatores ultimasque subsidiales acies, si fors adegerit, iuvaturas, ita praepositis urbanae familiae suspensae digerentibus sollicite, quos insignes faciunt virgae dexteris aptatae v",
-          image_url: "icon-left-font.png",
-          total_comments: 13,
-          comments: [
-            {
-              id: 926547856423,
-              published_date: "23/11/2020",
-              pic_url: "user-icon.png",
-              firstname: "Alexandre",
-              lastname: "Pqn",
-              text:
-                "tUtque proeliorum periti rectores primo catervas densas opponunt et fortes, deinde leves armaturas, post iaculatores ultimasque subsidiales acies, si fors adegerit, iuvaturas, ita praepositis urbanae familiae suspensae digerentibus sollicite, quos insignes faciunt virgae dexteris aptatae v"
-            },
-            {
-              id: 9265631456423,
-              published_date: "23/11/2020",
-              pic_url: "user-icon.png",
-              firstname: "Alexandre",
-              lastname: "Pqn",
-              text:
-                "tUtque proeliorum periti rectores primo catervas densas opponunt et fortes, deinde leves armaturas, post iaculatores ultimasque subsidiales acies, si fors adegerit, iuvaturas, ita praepositis urbanae familiae suspensae digerentibus sollicite, quos insignes faciunt virgae dexteris aptatae v"
-            }
-          ]
-        }
       ]
     };
   },
@@ -149,7 +95,112 @@ export default {
     mainNav,
     userHeader
   },
+  beforeMount: async function () {
+    const vm = this
+    let result
+    
+    // XHR ERROR
+    function xhrCallbackError (response) {
+      vm.errorHandler(response)
+      console.error(response)
+    }
+    
+     // API CALLBACK ERROR
+    function apiCallbackError (response, readyState, httpStatus) {
+      vm.errorHandler(response.sub_err)
+      console.error(response)
+      console.error(`ReadyState: ${readyState}, HttpStatus: ${httpStatus}`)
+    }
+    
+    // API CALLBACK DONE
+    function apiCallbackDone (response) {
+      result = response.result
+      let forums_list = []
+      
+      result.forEach(forum => {
+        forum.created_at = forum.created_at.split("T").join(" à ").split(".000Z").join("")
+        
+        let userForum = {
+          id: forum.id,
+          user_id: forum.user_id,
+          published_date: forum.created_at,
+          pic_url: forum.pic_url,
+          firstname: forum.firstname,
+          lastname: forum.lastname,
+          text: forum.text,
+          total_comments: 0,
+          image_url: forum.image_url,
+          comments: []
+        }
+
+        // add the forum in forums_list to get comments below
+        forums_list.push(forum.id)
+        // push the forum in data
+        vm.forums.push(userForum)
+      });
+      
+      // call getComments method with forums list
+      if(forums_list.length >= 1) {
+        vm.getComments(forums_list)
+      }
+    }
+
+    // API CALL
+    let data = []
+    api("api/forums/user/get", "POST", data, apiCallbackDone, apiCallbackError, xhrCallbackError)
+  },
   methods: {
+     getComments (forums_list) {
+      const vm = this
+      let data = [
+        forums_list
+      ]
+      
+      // XHR ERROR
+      function xhrCallbackError (response) {
+        console.error(response)
+      }
+      
+      // API CALLBACK ERROR
+      function apiCallbackError (response, readyState, httpStatus) {
+        console.error(response)
+        console.error(`ReadyState: ${readyState}, HttpStatus: ${httpStatus}`)
+      }
+      
+      // API CALLBACK DONE
+      function apiCallbackDone (response) {
+        let comments = response.result
+        let forums = vm.forums
+        let userComment
+        
+        comments.forEach(comment => {
+          comment.created_at = comment.created_at.split("T").join(" à ").split(".000Z").join("")
+          
+          userComment = {
+            pic_url: comment.pic_url,
+            firstname: comment.firstname,
+            lastname: comment.lastname,
+            published_date: comment.created_at,
+            text: comment.text
+          }
+          
+          forums.forEach(forum => {
+            if(comment.forum_id == forum.id) {
+              forum.comments.push(userComment)
+            }
+            
+            forum.total_comments = forum.comments.length
+          })
+        });
+      }
+      
+      api("api/comments/get", "POST", data, apiCallbackDone, apiCallbackError, xhrCallbackError)
+    },
+    errorHandler (err) {
+      const errorContainer = document.getElementById('error-handler')
+      document.querySelector('#error-handler p').innerHTML = err
+      errorContainer.style.display = "block"
+    },
     forumCreateImgChange(event) {
       let reader = new FileReader();
       reader.onload = function() {
@@ -162,8 +213,7 @@ export default {
       document.getElementById("create-forum_img").style.display = "none";
       document.getElementById("create-forum_upload-img").value = "";
       document.getElementById("create-forum_img-output").src = "";
-    },
-    forumCreateSend() {}
+    }
   }
 };
 </script>
@@ -179,14 +229,21 @@ export default {
   flex-direction: column;
   align-items: center;
   width: 100%;
+  
+  &__header {
+    margin-left: 185px;
+  }
   &__forums {
     display: flex;
     flex-direction: column;
     align-items: center;
     margin-top: 15px;
+    margin-left: 185px;
     width: 45%;
     article {
       margin-bottom: 35px;
+      overflow-wrap: break-word;
+      width: 100%;
     }
     h3 {
       margin-top: 15px;
@@ -197,8 +254,11 @@ export default {
 @media screen and (min-width: 1024px) and (max-width: 1600px) {
   // user-profile
   .user-profile {
+    &__header {
+      width: 58%;
+    }
     &__forums {
-      width: 60%;
+      width: 50%;
       article {
         margin-bottom: 25px;
       }
@@ -211,6 +271,9 @@ export default {
 @media screen and (min-width: 740px) and (max-width: 1023px) {
   // user-profile
   .user-profile {
+    &__header {
+      width: 87%;
+    }
     &__forums {
       width: 75%;
       article {
@@ -249,6 +312,17 @@ export default {
         margin-top: 30px;
         margin-bottom: 20px;
       }
+    }
+  }
+}
+@media screen and (max-width: 1023px) {
+  // user-profile
+  .user-profile {
+    &__header {
+      margin-left: 0;
+    }
+    &__forums {
+      margin-left: 0;
     }
   }
 }
