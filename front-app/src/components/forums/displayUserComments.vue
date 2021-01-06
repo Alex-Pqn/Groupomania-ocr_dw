@@ -3,7 +3,7 @@
   <div class="user-comments user-comments--style">
     <!-- icon -->
     <div class="user-comments__icon">
-      <img :src="getImgUrl(pic_url)" alt="" />
+      <img :src="pic_url" alt="" />
     </div>
     <!-- main -->
     <div class="user-comments__main">
@@ -27,8 +27,6 @@
 </template>
 
 <script>
-import { getImgUrl } from "@/utils/scripts";
-
 export default {
   name: "displayUserComments",
   props: {
@@ -52,9 +50,6 @@ export default {
       type: String,
       required: true
     }
-  },
-  methods: {
-    getImgUrl
   }
 };
 </script>
@@ -74,10 +69,10 @@ export default {
   }
   // icon
   &__icon {
-    width: 9%;
+    width: 7.8%;
     text-align: left;
     img {
-      width: 75%;
+      width: 67%;
       @include profile-pic;
     }
   }
@@ -85,7 +80,7 @@ export default {
   &__main {
     display: flex;
     flex-direction: column;
-    width: 91%;
+    width: 93.2%;
     &__author {
       display: flex;
       margin-bottom: 3px;
