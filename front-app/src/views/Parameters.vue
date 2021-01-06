@@ -132,7 +132,7 @@
               >
                 <img
                   id="user-parameters-pic_img-output"
-                  :src="getImgUrl(user.pic_url)"
+                  :src="user.pic_url"
                   alt=""
                 />
                 <div>
@@ -163,7 +163,6 @@
 </template>
 
 <script>
-import { getImgUrl } from "@/utils/scripts";
 import trends from "@/components/trends/trends.vue";
 import mainNav from "@/components/nav/mainNav.vue";
 import userHeader from "@/components/userHeader.vue";
@@ -188,7 +187,6 @@ export default {
     }
   },
   methods: {
-    getImgUrl,
     userParamatersImgChange(event) {
       let reader = new FileReader();
       reader.onload = function() {
