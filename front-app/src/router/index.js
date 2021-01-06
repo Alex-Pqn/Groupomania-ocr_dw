@@ -101,7 +101,7 @@ router.beforeEach((to, from, next) => {
 
   // api request
   let formData = new FormData();
-  api("api/user/page/auth", "POST", formData, true, apiCallbackDone, apiCallbackError, xhrCallbackError); 
+  api("api/user/page/auth", "POST", formData, apiCallbackDone, apiCallbackError, xhrCallbackError); 
   
   next();
 });
