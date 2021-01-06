@@ -76,7 +76,7 @@
 
 <script>
 import connection from "@/components/connection/connection.vue";
-import { api, createUserCookie } from "@/utils/scripts";
+import { apiAuth, createUserCookie } from "@/utils/scripts";
 
 export default {
   name: "Login",
@@ -84,29 +84,13 @@ export default {
     connection
   },
   methods: {
+    // LOGIN SUBMIT
     loginSubmit: function(event) {
       event.preventDefault();
+      const vm = this
 
       let emailInput = document.loginForm.email.value;
       let passwordInput = document.loginForm.password.value;
-
-      const submitButton = document.getElementById("submit");
-      const submitInfo = document.getElementById("submit-info");
-      
-      // error's & info's handler
-      function displaySubmitInfoError(errorValue) {
-        submitInfo.style.display = "none";
-        setTimeout(() => {
-          submitInfo.style.display = "flex";
-          submitInfo.style.color = "rgba(197, 0, 0, 0.85)";
-          submitInfo.innerHTML = errorValue;
-        }, 150);
-      }
-      function displaySubmitInfoSuccess(infoValue) {
-        submitInfo.style.display = "flex";
-        submitInfo.style.color = "green";
-        submitInfo.innerHTML = infoValue;
-      }
 
       const formData = [
         {
@@ -168,53 +152,72 @@ export default {
             );
           }
         }
-        // if all inputs are valids, call api
         data.stepValidation = true;
+        // if all inputs are valids, call api
         if (
           formData[0].stepValidation === true &&
           formData[1].stepValidation === true
         ) {
-          sendLoginRequest();
+          vm.loginRequest(emailInput, passwordInput);
         }
       });
-
-      // API REQUEST
-      function sendLoginRequest() {
-        // XHR ERROR
-        function xhrCallbackError () {
-          displaySubmitInfoError(
-            "Une erreur est survenue lors de la connexion à votre compte. Vérifiez l'état de vote connexion internet et réessayez."
-          );
-          submitButton.disabled = false;
-        };
+    },
+    // API REQUEST
+    loginRequest (emailInput, passwordInput) {
+      const vm = this
+      const submitButton = document.getElementById("submit");
+      
+      let userParams = {
+        email: emailInput,
+        password: passwordInput
+      };
+     
+      // XHR ERROR
+      function xhrCallbackError () {
+        vm.displaySubmitInfoError(
+          "Une erreur est survenue lors de la connexion à votre compte. Vérifiez l'état de vote connexion internet et réessayez."
+        );
+        submitButton.disabled = false;
+      };
+      
+      // API CALLBACK DONE
+      function apiCallbackDone (response) {
+        submitButton.disabled = true;
+        createUserCookie(response)
+        vm.displaySubmitInfoSuccess(`${response.message}`);
         
-        // API CALLBACK DONE
-        function apiCallbackDone (response) {
-          submitButton.disabled = true;
-          createUserCookie(response)
-          displaySubmitInfoSuccess(`${response.message}`);
-          
-          // redirect to home
-          setInterval(() => {
-            window.location.replace("/");
-          }, 1900);
-        };
-        
-        // API CALLBACK ERROR
-        function apiCallbackError (response, readyState, httpStatus) {
-          displaySubmitInfoError(response.sub_err);
-          console.error(response)
-          console.error(`ReadyState: ${readyState}, HttpStatus: ${httpStatus}`)
-        }
-        
-        let userParams = {
-          email: emailInput,
-          password: passwordInput
-        };
-        
-        api("api/user/login", "POST", JSON.stringify(userParams), false, apiCallbackDone, apiCallbackError, xhrCallbackError);
+        setInterval(() => {
+          window.location.replace("/");
+        }, 1900);
+      };
+      
+      // API CALLBACK ERROR
+      function apiCallbackError (response, readyState, httpStatus) {
+        vm.displaySubmitInfoError(response.sub_err);
+        console.error(response)
+        console.error(`ReadyState: ${readyState}, HttpStatus: ${httpStatus}`)
       }
-    }
+      
+      // API CALL
+      apiAuth("api/user/login", "POST", JSON.stringify(userParams), apiCallbackDone, apiCallbackError, xhrCallbackError);
+    },
+    displaySubmitInfoError(errorValue) {
+      const submitInfo = document.getElementById("submit-info");
+      
+      submitInfo.style.display = "none";
+      setTimeout(() => {
+        submitInfo.style.display = "flex";
+        submitInfo.style.color = "rgba(197, 0, 0, 0.85)";
+        submitInfo.innerHTML = errorValue;
+      }, 150);
+    },
+    displaySubmitInfoSuccess (successValue) {
+      const submitInfo = document.getElementById("submit-info");
+      
+      submitInfo.style.display = "flex";
+      submitInfo.style.color = "green";
+      submitInfo.innerHTML = successValue;
+    },
   }
 };
 </script>

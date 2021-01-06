@@ -133,7 +133,7 @@
 
 <script>
 import connection from "@/components/connection/connection.vue";
-import { api, createUserCookie } from "@/utils/scripts";
+import { apiAuth, createUserCookie } from "@/utils/scripts";
 
 export default {
   name: "Register",
@@ -151,7 +151,9 @@ export default {
     });
   },
   methods: {
+    // REGISTER SUBMIT
     registerSubmit: function(event) {
+      const vm = this
       event.preventDefault();
 
       let firstnameInput = document.registerForm.firstname.value;
@@ -160,24 +162,6 @@ export default {
       let passwordInput = document.registerForm.password.value;
       let repasswordInput = document.registerForm.repassword.value;
       let newslettersInput = document.registerForm.newsletters.value;
-
-      const submitButton = document.getElementById("submit");
-      const submitInfo = document.getElementById("submit-info");
-      
-      // error's & info's handler
-      function displaySubmitInfoError(infoValue) {
-        submitInfo.style.display = "none";
-        setTimeout(() => {
-          submitInfo.style.display = "flex";
-          submitInfo.style.color = "rgba(197, 0, 0, 0.85)";
-          submitInfo.innerHTML = infoValue;
-        }, 150);
-      }
-      function displaySubmitInfoSuccess(infoValue) {
-        submitInfo.style.display = "flex";
-        submitInfo.style.color = "green";
-        submitInfo.innerHTML = infoValue;
-      }
 
       const formData = [
         {
@@ -226,23 +210,17 @@ export default {
         }
       ];
 
-      // personnalized input form error
-      function displayFormError(errorIdContainer, errorValue) {
-        document.getElementById(errorIdContainer).innerHTML = errorValue;
-        document.getElementById(errorIdContainer).style.display = "flex";
-      }
-
       // inputs validator
       formData.forEach(data => {
         document.getElementById(data.errorIdContainer).style.display = "none";
         // length validation
         if (data.value.length < data.minLength) {
-          return displayFormError(
+          return vm.displayFormError(
             data.errorIdContainer,
             `Votre ${data.name} doit être composé de ${data.minLength} caractères au minimum.`
           );
         } else if (data.value.length > data.maxLength) {
-          return displayFormError(
+          return vm.displayFormError(
             data.errorIdContainer,
             `Votre ${data.name} ne peut être composé que de ${data.maxLength} caractères au maximum.`
           );
@@ -250,17 +228,17 @@ export default {
         // regex validation
         if (data.regex.test(data.value) === false) {
           if (data.id === 1 || data.id === 2) {
-            return displayFormError(
+            return vm.displayFormError(
               data.errorIdContainer,
               `Votre ${data.name} est composé de caractères spéciaux prohibés.`
             );
           } else if (data.id === 3) {
-            return displayFormError(
+            return vm.displayFormError(
               data.errorIdContainer,
               "L'e-mail que vous avez entré est invalide."
             );
           } else {
-            return displayFormError(
+            return vm.displayFormError(
               data.errorIdContainer,
               "Votre mot de passe doit contenir au minimum une lettre majuscule, une lettre minuscule et un chiffre."
             );
@@ -269,71 +247,95 @@ export default {
         // passwords corresponds validation
         if (data.id === 4) {
           if (repasswordInput !== data.value) {
-            return displayFormError(
+            return vm.displayFormError(
               data.errorIdContainer,
               "Les deux mots de passe entrés doivent correspondre."
             );
           }
         }
-        // if all inputs are valids, call api
         data.stepValidation = true;
+        // if all inputs are valids, call api
         if (
           formData[0].stepValidation === true &&
           formData[1].stepValidation === true &&
           formData[2].stepValidation === true &&
           formData[3].stepValidation === true
         ) {
-          sendRegisterRequest();
+          vm.registerRequest(firstnameInput, lastnameInput, emailInput, passwordInput, newslettersInput);
         }
       });
-
-      // API REQUEST
-      function sendRegisterRequest() {
-        
-        // XHR ERROR
-        function xhrCallbackError () {
-          displaySubmitInfoError(
-            "Une erreur est survenue lors de la création de votre compte. Vérifiez l'état de vote connexion internet et réessayez."
-          );
-          submitButton.disabled = false;
-        };
-        
-        // API CALLBACK DONE
-        function apiCallbackDone (response) {
-          submitButton.disabled = true;
-          createUserCookie(response)
-          
-          // redirect to home
-          let redirectionTime = 6;
-          let redirectionInterval = setInterval(() => {
-            if (redirectionTime === 0) {
-              clearInterval(redirectionInterval);
-              window.location.replace("/");
-            } else {
-              redirectionTime--;
-              displaySubmitInfoSuccess(
-                `${response.message} Redirection vers l'accueil dans ${redirectionTime} secondes...`
-              );
-            }
-          }, 1000);
-        }
-        
-        // API CALLBACK ERROR
-        function apiCallbackError (response, readyState, httpStatus) {
-          displaySubmitInfoError(response.sub_err);
-          console.error(response)
-          console.error(`ReadyState: ${readyState}, HttpStatus: ${httpStatus}`)
-        }
-        
-        let userParams = {
-          firstname: firstnameInput,
-          lastname: lastnameInput,
-          email: emailInput,
-          password: passwordInput,
-          newsletters: newslettersInput
-        };
-        api("api/user/register", "POST", JSON.stringify(userParams), false, apiCallbackDone, apiCallbackError, xhrCallbackError);
+    },
+    // API REQUEST
+    registerRequest(firstname, lastname, email, password, newsletters) {
+      const vm = this
+      const submitButton = document.getElementById("submit");
+      
+      let userParams = {
+        firstname,
+        lastname,
+        email,
+        password,
+        newsletters,
+      };
+      
+      // XHR ERROR
+      function xhrCallbackError () {
+        vm.displaySubmitInfoError(
+          "Une erreur est survenue lors de la création de votre compte. Vérifiez l'état de vote connexion internet et réessayez."
+        );
+        submitButton.disabled = false;
+      };
+      
+      // API CALLBACK ERROR
+      function apiCallbackError (response, readyState, httpStatus) {
+        vm.displaySubmitInfoError(response.sub_err);
+        console.error(response)
+        console.error(`ReadyState: ${readyState}, HttpStatus: ${httpStatus}`)
       }
+      
+      // API CALLBACK DONE
+      function apiCallbackDone (response) {
+        submitButton.disabled = true;
+        createUserCookie(response)
+        
+        // redirect to home
+        let redirectionTime = 6;
+        let redirectionInterval = setInterval(() => {
+          if (redirectionTime === 0) {
+            clearInterval(redirectionInterval);
+            window.location.replace("/");
+          } else {
+            redirectionTime--;
+            vm.displaySubmitInfoSuccess(
+              `${response.message} Redirection vers l'accueil dans ${redirectionTime} secondes...`
+            );
+          }
+        }, 1000);
+      }
+      
+      // API CALL
+      apiAuth("api/user/register", "POST", JSON.stringify(userParams), apiCallbackDone, apiCallbackError, xhrCallbackError);
+    },
+    displaySubmitInfoError(infoValue) {
+      const submitInfo = document.getElementById("submit-info");
+      
+      submitInfo.style.display = "none";
+      setTimeout(() => {
+        submitInfo.style.display = "flex";
+        submitInfo.style.color = "rgba(197, 0, 0, 0.85)";
+        submitInfo.innerHTML = infoValue;
+      }, 150);
+    },
+    displaySubmitInfoSuccess(successValue) {
+      const submitInfo = document.getElementById("submit-info");
+      
+      submitInfo.style.display = "flex";
+      submitInfo.style.color = "green";
+      submitInfo.innerHTML = successValue;
+    },
+    displayFormError(errorIdContainer, errorValue) {
+      document.getElementById(errorIdContainer).innerHTML = errorValue;
+      document.getElementById(errorIdContainer).style.display = "flex";
     }
   }
 };
