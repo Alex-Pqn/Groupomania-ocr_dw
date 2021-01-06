@@ -3,7 +3,7 @@
   <header class="user-header user-header--style">
     <!-- icon -->
     <a class="user-header__user-icon" href="#top">
-      <img :src="getImgUrl(pic_url)" alt="" />
+      <img :src="pic_url" alt="" />
     </a>
     <!-- mobile display -->
     <div class="user-header__mobile-display">
@@ -29,7 +29,7 @@
 </template>
 
 <script>
-import { getImgUrl, displayProfilePopup } from "@/utils/scripts";
+import { displayProfilePopup } from "@/utils/scripts";
 import profilePopup from "@/components/nav/profilePopup.vue";
 
 export default {
@@ -52,7 +52,6 @@ export default {
     }
   },
   methods: {
-    getImgUrl,
     displayProfilePopup
   },
   components: {
