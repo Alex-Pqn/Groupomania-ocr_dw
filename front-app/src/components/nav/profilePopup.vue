@@ -3,12 +3,17 @@
   <div class="profile-popup profile-popup--style">
     <!-- user infos -->
     <div class="profile-popup__user-infos">
-      <img :src="getImgUrl(pic_url)" alt="" />
+      <img :src="pic_url" alt="" />
       <h4>{{ firstname }} {{ lastname }}</h4>
     </div>
     <!-- nav -->
     <nav class="profile-popup__nav">
       <ul>
+        <li>
+          <router-link to="/">
+            Accueil
+          </router-link>
+        </li>
         <li>
           <router-link to="/profile">
             Voir le profil
@@ -30,7 +35,6 @@
 </template>
 
 <script>
-import { getImgUrl } from "@/utils/scripts";
 export default {
   name: "profilePopup",
   props: {
@@ -48,7 +52,6 @@ export default {
     }
   },
   methods: {
-    getImgUrl,
     sessionDisconnect: () => {
       document.cookie = `user_id=;expires=/;path=/`;
       document.cookie = `auth_token=;expires=/;path=/`;
