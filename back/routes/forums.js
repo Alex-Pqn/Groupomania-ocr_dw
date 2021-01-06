@@ -3,10 +3,19 @@ const express = require('express');
 const router = express.Router();
 
 const forumsController = require('../controllers/forums');
+
 const auth = require('../middlewares/auth');
 const multer = require('../middlewares/multer-config');
 
-router.get('/get', auth, forumsController.getAllForums);
-router.post('/create', auth, multer, forumsController.createOneForum);
+// global
+router.get('/global/get', auth, forumsController.getAllForumsGlobal);
+router.post('/global/create', auth, multer, forumsController.createOneForumGlobal);
+
+// user
+router.post('/user/get', auth, forumsController.getAllForumsUser)
+
+// trends
+router.get('/trends/get', auth, forumsController.getAllForumsTrends)
+
 
 module.exports = router
