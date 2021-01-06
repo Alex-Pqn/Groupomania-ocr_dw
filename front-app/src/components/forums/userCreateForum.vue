@@ -61,58 +61,45 @@ export default {
       document.getElementById("create-forum_img-output").src = "";
     },
     createForum() {
-      let formData = new FormData();
-      const errorContainer = document.getElementById('create-forum_error-handler')
-      let inputImage = document.querySelector("input[type=file]").files[0];
+      const vm = this
+      let forumImgOutput = document.querySelector("input[type=file]").files[0];
       let forumTextOutput = document.getElementById("create-forum_text").value;
-      
-      // error handler
-      function errorHandler (err) {
-        errorContainer.style.display = "none"
-        setTimeout(() => {
-          errorContainer.textContent = err
-          errorContainer.style.display = "flex"
-        }, 150);
-      }
       
       // forum validation
       const forumValidation = {
-        minLength: 1,
+        minLength: 2,
         maxLength: 320
       }
-      if(forumTextOutput.length > forumValidation.minLength) {
-        if(forumTextOutput.length < forumValidation.maxLength) {
+      if(forumTextOutput.length >= forumValidation.minLength) {
+        if(forumTextOutput.length <= forumValidation.maxLength) {
           // if input valid, call api
-          sendCreateForumRequest()
+          vm.createForumRequest(forumTextOutput, forumImgOutput)
         }else{
-          errorHandler(`Votre message ne peut contenir qu'au maximum ${forumValidation.maxLength} caractères.`)
+          vm.errorHandler(`Votre message ne peut contenir qu'au maximum ${forumValidation.maxLength} caractères.`)
         }
       }else{
-        errorHandler(`Votre message doit contenir au minimum ${forumValidation.minLength + 1} caractère.`)
+        vm.errorHandler(`Votre message doit contenir au minimum ${forumValidation.minLength + 1} caractère.`)
+      }
+    },
+    // API REQUEST
+    createForumRequest (forumText, forumImage) {
+      const vm = this
+      let formData = new FormData();
+      
+      // formdata attach image
+      if (forumImage) {
+        formData.append("image", forumImage, forumImage.name);
       }
       
-      // API REQUEST
-      function sendCreateForumRequest () {
-        // attach image
-        if (inputImage) {
-          formData.append("image", inputImage, inputImage.name);
-        }
-        
-        // attach forum
-        let forum = {
-          text: forumTextOutput
-        };
-        formData.append("forum", JSON.stringify(forum)); 
-        
-        // api request
-        api("api/forums/create", "POST", formData, true, apiCallbackDone, apiCallbackError, xhrCallbackError);
-        errorContainer.textContent = ""
-        errorContainer.style.display = "none"
-      }
+      // formdata attach forum
+      let forum = {
+        text: forumText
+      };
+      formData.append("forum", JSON.stringify(forum)); 
       
       // XHR ERROR
       function xhrCallbackError (response) {
-        errorHandler(response)
+        vm.errorHandler(response)
         console.error(response)
       }
       
@@ -123,10 +110,22 @@ export default {
       
       // API CALLBACK ERROR
       function apiCallbackError (response, readyState, httpStatus) {
-        errorHandler(response.sub_err)
+        vm.errorHandler(response.sub_err)
         console.error(response)
         console.error(`ReadyState: ${readyState}, HttpStatus: ${httpStatus}`)
       }
+      
+      // API CALL
+      api("api/forums/global/create", "POST", formData, apiCallbackDone, apiCallbackError, xhrCallbackError);
+    },
+    errorHandler (errValue) {
+      const errorContainer = document.getElementById('create-forum_error-handler')
+      
+      errorContainer.style.display = "none"
+      setTimeout(() => {
+        errorContainer.textContent = errValue
+        errorContainer.style.display = "flex"
+      }, 150);
     }
   }
 };
