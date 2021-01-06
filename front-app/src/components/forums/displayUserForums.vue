@@ -1,5 +1,5 @@
 <template>
-  <main>
+  <div>
     <!-- user-forums -->
     <div class="user-forums user-forums--style">
       <!-- icon -->
@@ -38,47 +38,56 @@
     <div class="user-interacts user-interacts--style">
       <!-- left -->
       <div class="user-interacts__left">
-        <button v-on:click="createForumComment(id)">
+        <button v-on:click="displayCommentContainer(id, user_id)">
           Commenter
         </button>
       </div>
       <!-- right -->
-      <div :id="'post=' + id" class="user-interacts__right">
+      <div :id="'post=' + id + user_id" class="user-interacts__right">
         <p>
-          <a :href="'#post=' + id"> {{ total_comments }} commentaires </a>
+          <a :href="'#post=' + id + user_id"> {{ total_comments }} commentaires </a>
         </p>
       </div>
     </div>
     <!-- create-comment container -->
-    <div class="create-comment-display" :id="id">
+    <div class="create-comment-display" :id="'create-comment_container-' + id + user_id">
       <!-- create-comment -->
       <div class="create-comment create-comment--style">
         <!-- text -->
         <div class="create-comment__text">
           <textarea
-            maxlength="255"
+            maxlength="320"
             placeholder="Écrivez votre réponse ici..."
-            id="create-comment_text"
+            :id="'create-comment_text-' + id + user_id"
           ></textarea>
         </div>
         <!-- send -->
         <div class="create-comment__send">
-          <button>
+          <button v-on:click="createComment(id, user_id)">
             <img src="@/assets/paper-plane-solid.svg" alt="" />
           </button>
         </div>
       </div>
+      <div>
+      <!-- error-handler -->
+      <div class="create-comment__error-handler" :id="'create-comment_error-handler-'+ id + user_id">
+      </div>
+      </div>
     </div>
-  </main>
+  </div>
 </template>
 
 <script>
-import { getImgUrl } from "@/utils/scripts";
+import { api } from "@/utils/scripts";
 
 export default {
   name: "displayUserForums",
   props: {
     id: {
+      type: Number,
+      required: true
+    },
+    user_id: {
       type: Number,
       required: true
     },
@@ -111,15 +120,76 @@ export default {
     }
   },
   methods: {
-    getImgUrl,
-    createForumComment(id) {
-      let displayCommentContainer = document.getElementById(id);
+    displayCommentContainer(forum_id, user_id) {
+      let commentContainer = document.getElementById("create-comment_container-" + forum_id + user_id);
 
-      if (displayCommentContainer.style.display == "initial") {
-        displayCommentContainer.style.display = "none";
+      if (commentContainer.style.display == "initial") {
+        commentContainer.style.display = "none";
       } else {
-        displayCommentContainer.style.display = "initial";
+        commentContainer.style.display = "initial";
       }
+    },
+    createComment (forum_id, user_id) {
+      const vm = this
+      let commentTextOutput = document.getElementById("create-comment_text-" + forum_id + user_id).value;
+      
+      // comment validation
+      const commentValidation = {
+        minLength: 2,
+        maxLength: 320
+      }
+      
+      if(commentTextOutput.length >= commentValidation.minLength) {
+        if(commentTextOutput.length <= commentValidation.maxLength) {
+          // if input valid, call api
+          vm.createCommentRequest(forum_id, commentTextOutput, user_id)
+        }else{
+          vm.errorHandler(`Votre message ne peut contenir qu'au maximum ${commentValidation.maxLength} caractères.`, forum_id, user_id)
+        }
+      }else{
+        vm.errorHandler(`Votre message doit contenir au minimum ${commentValidation.minLength} caractère.`, forum_id, user_id)
+      }
+    },
+    // API REQUEST
+    createCommentRequest (forum_id, comment_text, user_id) {
+      const vm = this
+      
+      let comment = [
+        {
+          forum_id: forum_id,
+          text: comment_text
+        }
+      ]
+      
+      // XHR ERROR
+      function xhrCallbackError (response) {
+        vm.errorHandler(response, forum_id, user_id)
+        console.error(response)
+      }
+      
+      // API CALLBACK DONE
+      function apiCallbackDone () {
+        document.location.reload();
+      }
+      
+      // API CALLBACK ERROR
+      function apiCallbackError (response, readyState, httpStatus) {
+        vm.errorHandler(response.sub_err, forum_id, user_id)
+        console.error(response)
+        console.error(`ReadyState: ${readyState}, HttpStatus: ${httpStatus}`)
+      }
+      
+      // API CALL
+      api("api/comments/create", "POST", comment, apiCallbackDone, apiCallbackError, xhrCallbackError) 
+    },
+    errorHandler (errValue, forum_id, user_id) {
+      const errorContainer = document.getElementById('create-comment_error-handler-' + forum_id + user_id)
+      
+      errorContainer.style.display = "none"
+      setTimeout(() => {
+        errorContainer.textContent = errValue
+        errorContainer.style.display = "flex"
+      }, 150);
     }
   }
 };
@@ -138,9 +208,10 @@ export default {
   }
   // icon
   &__icon {
-    width: 10%;
+    width: 8.5%;
     text-align: left;
     img {
+      margin-left: 3px;
       width: 47px;
       @include profile-pic;
     }
@@ -149,7 +220,7 @@ export default {
   &__main {
     display: flex;
     flex-direction: column;
-    width: 90%;
+    width: 91.5%;
     // top
     &__top {
       display: flex;
@@ -354,6 +425,15 @@ export default {
   display: flex;
   &--style {
     border-bottom: 1px solid rgba(109, 109, 109, 0.2);
+  }
+  // error-handler
+  &__error-handler{
+    display: none;
+    text-align: left;
+    color: rgb(204, 0, 0);
+    background-color: rgba(255, 118, 118, 0.12);
+    margin-top: 5px;
+    padding: 3px 5px 3px 6px;
   }
   // text
   &__text {
