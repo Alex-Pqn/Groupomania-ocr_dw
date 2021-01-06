@@ -8,19 +8,21 @@ const Forum = require('../models/Forum')
 const dbConfig = require('../db_config')
 const db = mysql.createPool(dbConfig.params)
 
-exports.getAllForums = (req, res, next) => {
+exports.getAllForumsGlobal = (req, res, next) => {
     db.query(
-        `SELECT a.firstname,
+        `SELECT a.id as user_id,
+                a.firstname,
                 a.lastname,
                 a.pic_url,
                 f.id,
                 f.text,
                 f.image_url,
-                f.created_at,
-                f.total_comments
+                f.created_at
         FROM Accounts as a
         INNER JOIN Forums as f
-        ON a.id = f.user_id`, (err, result) => {
+        ON a.id = f.user_id
+        ORDER BY f.created_at DESC
+        `, (err, result) => {
         if(err) {
             return res.status(400).json({ sub_err: "La récupération du fil d'actualité a échouée, veuillez réessayer dans quelques instants.", err })
         }
@@ -30,14 +32,12 @@ exports.getAllForums = (req, res, next) => {
                 userForum.pic_url = "http://localhost:3000/images/user-icon.jpg"
             }
         });
-        // reverse order, new forum at beginning to the older forum at end
-        result = result.slice().reverse()
         
         res.status(200).json({ result })
     })
 }
 
-exports.createOneForum = (req, res, next) => {
+exports.createOneForumGlobal = (req, res, next) => {
     let forum_text = JSON.parse(req.body.forum).text
     let user_id = JSON.parse(req.body.user).id
     
@@ -77,6 +77,7 @@ exports.createOneForum = (req, res, next) => {
                             res.status(500).json({ err })
                         }
                     }))
+                    return res.status(400).json({ sub_err: "La création du forum a échoué, veuillez réessayer dans quelques instants..", err })
                 }
                 // forum created
                 return res.status(200).json({
@@ -89,4 +90,62 @@ exports.createOneForum = (req, res, next) => {
     else{
         return res.status(400).json({ sub_err: "Validation de donnée: Il semblerait que l'un des champs requis est manquant." })
     }
+}
+
+exports.getAllForumsUser = (req, res, next) => {
+    let user_id = req.body[0].id
+
+    db.query(
+        `SELECT a.id as user_id,
+                a.firstname,
+                a.lastname,
+                a.pic_url,
+                f.id,
+                f.text,
+                f.image_url,
+                f.created_at
+        FROM Accounts as a
+        INNER JOIN Forums as f
+        ON a.id = f.user_id
+        WHERE f.user_id = ${user_id}
+        ORDER BY f.created_at DESC
+        `, (err, result) => {
+        if(err) {
+            return res.status(400).json({ sub_err: "La récupération du fil d'actualité personnel a échouée, veuillez réessayer dans quelques instants.", err })
+        }
+        // if user doesn't have custom icon, replace by vanilla icon
+        result.forEach(userForum => {
+            if(!userForum.pic_url) {
+                userForum.pic_url = "http://localhost:3000/images/user-icon.jpg"
+            }
+        });
+        
+        return res.status(200).json({ result })
+    })
+}
+
+exports.getAllForumsTrends = (req, res, next) => {
+    db.query(
+        `SELECT a.firstname,
+                a.lastname,
+                a.pic_url,
+                f.text,
+                f.created_at
+        FROM Accounts as a
+        INNER JOIN Forums as f
+        ON a.id = f.user_id
+        ORDER BY f.created_at DESC
+        LIMIT 3`, (err, result) => {
+        if(err) {
+            return res.status(400).json({ sub_err: "La récupération du fil d'actualité personnel a échouée, veuillez réessayer dans quelques instants.", err })
+        }
+        // if user doesn't have custom icon, replace by vanilla icon
+        result.forEach(userForum => {
+            if(!userForum.pic_url) {
+                userForum.pic_url = "http://localhost:3000/images/user-icon.jpg"
+            }
+        });
+        
+        return res.status(200).json({ result })
+    })
 }
