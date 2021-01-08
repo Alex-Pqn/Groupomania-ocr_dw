@@ -14,14 +14,14 @@
         <img
           v-on:click="displayProfilePopup(`profile-popup_nav`)"
           id="user-icon"
-          :src="pic_url"
+          :src="user.pic_url"
           alt=""
         />
         <profilePopup
           id="profile-popup_nav"
-          :pic_url="pic_url"
-          :firstname="firstname"
-          :lastname="lastname"
+          :pic_url="user.pic_url"
+          :firstname="user.firstname"
+          :lastname="user.lastname"
         />
       </article>
     </div>
@@ -29,26 +29,45 @@
 </template>
 
 <script>
-import { displayProfilePopup } from "@/utils/scripts";
+import { displayProfilePopup, api } from "@/utils/scripts";
 import profilePopup from "@/components/nav/profilePopup.vue";
 export default {
   name: "mainNav",
-  props: {
-    pic_url: {
-      type: String,
-      required: true
-    },
-    firstname: {
-      type: String,
-      required: true
-    },
-    lastname: {
-      type: String,
-      required: true
-    },
-    description: {
-      type: String
+  data () {
+    return {
+      user: {
+        pic_url: "",
+        firstname: "",
+        lastname: ""
+      }
     }
+  },
+  beforeMount: async function () {
+      const vm = this
+      
+      // XHR ERROR
+      function xhrCallbackError (response) {
+        console.error(response)
+      }
+      
+      // API CALLBACK ERROR
+      function apiCallbackError (response, readyState, httpStatus) {
+        console.error(response)
+        console.error(`ReadyState: ${readyState}, HttpStatus: ${httpStatus}`)
+      }
+      
+      // API CALLBACK DONE
+      function apiCallbackDone (response) {
+        let user = response.result[0]
+        
+        vm.user.pic_url = user.pic_url
+        vm.user.firstname = user.firstname
+        vm.user.lastname = user.lastname
+      }
+      
+      // API CALL
+      let data = []
+      api("api/user/primaryInfos", "POST", data, apiCallbackDone, apiCallbackError, xhrCallbackError)
   },
   components: {
     profilePopup
