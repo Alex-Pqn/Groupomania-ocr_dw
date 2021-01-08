@@ -39,16 +39,13 @@ export default {
   name: "profilePopup",
   props: {
     pic_url: {
-      type: String,
-      required: true
+      type: String
     },
     firstname: {
-      type: String,
-      required: true
+      type: String
     },
     lastname: {
-      type: String,
-      required: true
+      type: String
     }
   },
   methods: {
@@ -115,6 +112,19 @@ export default {
       img {
         width: 42px;
       }
+    }
+  }
+}
+@media screen and (max-width: 1024px) {
+  .profile-popup {
+    // user infos
+    &__user-infos {
+      display: none;
+    }
+    // nav
+    &__nav {
+      border-top: none;
+      padding-top: 0;
     }
   }
 }
