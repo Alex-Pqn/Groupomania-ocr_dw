@@ -3,9 +3,9 @@
   <div class="trends trends--style">
     <!-- header -->
     <header class="trends__header">
-      <h1>
+      <h2>
         Tendances
-      </h1>
+      </h2>
     </header>
     <!-- main -->
     <div class="trends__main">
@@ -42,15 +42,6 @@ export default {
   data() {
     return {
       recentsTrends: [
-        // {
-        //   id: 8531265,
-        //   published_date: "23/11/2020",
-        //   pic_url: "user-icon.png",
-        //   firstname: "Alexandre",
-        //   lastname: "Pqn",
-        //   text:
-        //     "tUtque proeliorum periti rectores primo catervas densas opponunt et fortes, deinde leves armaturas, post iaculatores ultimasque subsidiales acies, si fors adegerit, iuvaturas, ita praepositis urbanae familiae suspensae digerentibus sollicite, quos insignes faciunt virgae dexteris aptatae v"
-        // },
       ]
     };
   },
@@ -76,8 +67,33 @@ export default {
     function apiCallbackDone (response) {
       result = response.result
       
+      const monthNames = ["janv", "févr", "mars", "avr", "mai", "juin",
+        "juill", "août", "sept", "oct", "nov", "déc"
+      ];
+      
       result.forEach(forum => {
-        forum.created_at = forum.created_at.split("T").join(" à ").split(".000Z").join("")
+        let date = new Date(forum.created_at)
+        
+        let date_currentYear = new Date().getFullYear()
+        let date_currentMonth = new Date().getMonth()
+        let date_currentDay = new Date().getDate()
+        
+        let created_at_date = forum.created_at.split("T")[0].split("-").reverse()
+        let created_at_date_day = created_at_date[0]
+        let created_at_date_month = monthNames[date.getMonth()]
+        let created_at_date_year = created_at_date[2]
+        
+        let created_at_time = forum.created_at.split("T")[1].split(".")[0].split(":")
+        let created_at_time_hour = created_at_time[0]
+        let created_at_time_minute = created_at_time[1]
+        
+        if(date_currentDay == created_at_date_day && date_currentMonth == date.getMonth() && date_currentYear == created_at_date_year) {
+          forum.created_at = `${created_at_time_hour}h${created_at_time_minute}`
+        }else if(created_at_date_year == date_currentYear) {
+          forum.created_at = `${created_at_date_day} ${created_at_date_month}.`
+        }else{
+          forum.created_at = `${created_at_date_day} ${created_at_date_month}. ${created_at_date_year}`
+        }
         
         let userForum = {
           published_date: forum.created_at,
@@ -118,6 +134,7 @@ export default {
   height: 97vh;
   top: 1.5vh;
   left: 1.5vh;
+  z-index: 20;
   &--style {
     background-color: rgb(241, 241, 241);
     border: 1px solid $small_black-border;

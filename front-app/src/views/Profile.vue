@@ -8,12 +8,7 @@
       <!-- profile -->
       <div class="user-profile" id="top">
         <!-- header -->
-        <userHeader class="user-profile__header"
-          :description="user.description"
-          :pic_url="user.pic_url"
-          :firstname="user.firstname"
-          :lastname="user.lastname"
-        />
+        <userHeader class="user-profile__header"/>
         <section class="user-profile__forums">
           <userCreateForum />
           <h3>
@@ -55,11 +50,7 @@
       </div>
 
       <!-- main-nav -->
-      <mainNav
-        :pic_url="user.pic_url"
-        :firstname="user.firstname"
-        :lastname="user.lastname"
-      />
+      <mainNav/>
     </div>
   </div>
 </template>
@@ -77,12 +68,6 @@ export default {
   name: "Profile",
   data() {
     return {
-      user: {
-        pic_url: "user-icon.png",
-        firstname: "Alexandre",
-        lastname: "Pqn",
-        description: "sfdfwcsdfsd"
-      },
       forums: [
       ]
     };
@@ -117,8 +102,33 @@ export default {
       result = response.result
       let forums_list = []
       
+      const monthNames = ["janv", "févr", "mars", "avr", "mai", "juin",
+        "juill", "août", "sept", "oct", "nov", "déc"
+      ];
+      
       result.forEach(forum => {
-        forum.created_at = forum.created_at.split("T").join(" à ").split(".000Z").join("")
+        let date = new Date(forum.created_at)
+                
+        let date_currentYear = new Date().getFullYear()
+        let date_currentMonth = new Date().getMonth()
+        let date_currentDay = new Date().getDate()
+        
+        let created_at_date = forum.created_at.split("T")[0].split("-").reverse()
+        let created_at_date_day = created_at_date[0]
+        let created_at_date_month = monthNames[date.getMonth()]
+        let created_at_date_year = created_at_date[2]
+        
+        let created_at_time = forum.created_at.split("T")[1].split(".")[0].split(":")
+        let created_at_time_hour = created_at_time[0]
+        let created_at_time_minute = created_at_time[1]
+        
+        if(date_currentDay == created_at_date_day && date_currentMonth == date.getMonth() && date_currentYear == created_at_date_year) {
+          forum.created_at = `${created_at_time_hour}h${created_at_time_minute}`
+        }else if(created_at_date_year == date_currentYear) {
+          forum.created_at = `${created_at_date_day} ${created_at_date_month}.`
+        }else{
+          forum.created_at = `${created_at_date_day} ${created_at_date_month}. ${created_at_date_year}`
+        }
         
         let userForum = {
           id: forum.id,

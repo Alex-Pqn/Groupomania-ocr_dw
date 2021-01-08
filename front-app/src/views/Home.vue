@@ -23,15 +23,10 @@
               <img
                 v-on:click="displayProfilePopup(`profile-popup_mobile-home`)"
                 id="user-icon"
-                :src="user.pic_url"
+                src="@/assets/ellipsis-v-solid.svg"
                 alt=""
               />
-              <profilePopup
-                id="profile-popup_mobile-home"
-                :pic_url="user.pic_url"
-                :firstname="user.firstname"
-                :lastname="user.lastname"
-              />
+              <profilePopup id="profile-popup_mobile-home"/>
             </div>
           </header>
           <!-- main -->
@@ -76,11 +71,7 @@
         </section>
 
         <!-- main nav -->
-        <mainNav
-          :pic_url="user.pic_url"
-          :firstname="user.firstname"
-          :lastname="user.lastname"
-        />
+        <mainNav/>
       </div>
     </div>
   </main>
@@ -99,11 +90,6 @@ export default {
   name: "Home",
   data() {
     return {
-      user: {
-        pic_url: "user-icon.png",
-        firstname: "Alexandre",
-        lastname: "Pqn"
-      },
       forums: [
       ]
     };
@@ -131,8 +117,33 @@ export default {
       result = response.result
       let forums_list = []
       
+      const monthNames = ["janv", "févr", "mars", "avr", "mai", "juin",
+        "juill", "août", "sept", "oct", "nov", "déc"
+      ];
+      
       result.forEach(forum => {
-        forum.created_at = forum.created_at.split("T").join(" à ").split(".000Z").join("")
+        let date = new Date(forum.created_at)
+        
+        let date_currentYear = new Date().getFullYear()
+        let date_currentMonth = new Date().getMonth()
+        let date_currentDay = new Date().getDate()
+        
+        let created_at_date = forum.created_at.split("T")[0].split("-").reverse()
+        let created_at_date_day = created_at_date[0]
+        let created_at_date_month = monthNames[date.getMonth()]
+        let created_at_date_year = created_at_date[2]
+        
+        let created_at_time = forum.created_at.split("T")[1].split(".")[0].split(":")
+        let created_at_time_hour = created_at_time[0]
+        let created_at_time_minute = created_at_time[1]
+        
+        if(date_currentDay == created_at_date_day && date_currentMonth == date.getMonth() && date_currentYear == created_at_date_year) {
+          forum.created_at = `${created_at_time_hour}h${created_at_time_minute}`
+        }else if(created_at_date_year == date_currentYear) {
+          forum.created_at = `le ${created_at_date_day} ${created_at_date_month}. à ${created_at_time_hour}h${created_at_time_minute}`
+        }else{
+          forum.created_at = `le ${created_at_date_day} ${created_at_date_month}. ${created_at_date_year} à ${created_at_time_hour}h${created_at_time_minute}`
+        }
         
         let userForum = {
           id: forum.id,
@@ -186,8 +197,33 @@ export default {
         let forums = vm.forums
         let userComment
         
+        const monthNames = ["janv", "févr", "mars", "avr", "mai", "juin",
+          "juill", "août", "sept", "oct", "nov", "déc"
+        ];
+        
         comments.forEach(comment => {
-          comment.created_at = comment.created_at.split("T").join(" à ").split(".000Z").join("")
+        let date = new Date(comment.created_at)
+        
+        let date_currentYear = new Date().getFullYear()
+        let date_currentMonth = new Date().getMonth()
+        let date_currentDay = new Date().getDate()
+        
+        let created_at_date = comment.created_at.split("T")[0].split("-").reverse()
+        let created_at_date_day = created_at_date[0]
+        let created_at_date_month = monthNames[date.getMonth()]
+        let created_at_date_year = created_at_date[2]
+        
+        let created_at_time = comment.created_at.split("T")[1].split(".")[0].split(":")
+        let created_at_time_hour = created_at_time[0]
+        let created_at_time_minute = created_at_time[1]
+        
+        if(date_currentDay == created_at_date_day && date_currentMonth == date.getMonth() && date_currentYear == created_at_date_year) {
+          comment.created_at = `${created_at_time_hour}h${created_at_time_minute}`
+        }else if(created_at_date_year == date_currentYear) {
+          comment.created_at = `le ${created_at_date_day} ${created_at_date_month}. à ${created_at_time_hour}h${created_at_time_minute}`
+        }else{
+          comment.created_at = `le ${created_at_date_day} ${created_at_date_month}. ${created_at_date_year} à ${created_at_time_hour}h${created_at_time_minute}`
+        }
           
           userComment = {
             pic_url: comment.pic_url,
@@ -230,8 +266,8 @@ export default {
 <style lang="scss">
 // profile-popup mobile home
 #profile-popup_mobile-home {
-  right: 53px;
-  top: 73px;
+  right: 27px;
+  top: 50px;
   border-top-right-radius: 0;
 }
 @media screen and (max-width: 479px) {
@@ -406,7 +442,8 @@ export default {
       &__right {
         display: flex;
         #user-icon {
-          width: 42px;
+          width: 13.5px;
+          border: none;
         }
       }
     }
