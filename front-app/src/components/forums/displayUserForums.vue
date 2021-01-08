@@ -249,7 +249,8 @@ export default {
         display: table-row;
         max-width: 350px;
         max-height: 350px;
-        border: 1px solid $small_black-border;
+        border: 1px solid $smooth_black-border;
+        padding: 1px;
       }
     }
   }
@@ -346,7 +347,7 @@ export default {
     button {
       font-size: 0.93em;
       padding: 5px;
-      margin-left: 15px;
+      margin-left: 10px;
     }
   }
   // right
@@ -432,7 +433,7 @@ export default {
     text-align: left;
     color: rgb(204, 0, 0);
     background-color: rgba(255, 118, 118, 0.12);
-    margin-top: 5px;
+    margin: 5px 0;
     padding: 3px 5px 3px 6px;
   }
   // text
