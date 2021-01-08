@@ -37,7 +37,13 @@
     <title>Groupomania</title>
     <link rel="icon" href="<%= BASE_URL %>favicon.ico">
     <meta name='theme-color' content='#5DC8A8'>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/vue/3.0.2/vue.cjs.js"></script>
+    <!--Cookies libraries-->
+    <link rel="stylesheet" type="text/css" href="https://cdn.wpcc.io/lib/1.0.2/cookieconsent.min.css"/>
+    <script src="https://cdn.wpcc.io/lib/1.0.2/cookieconsent.min.js" defer></script>
+    <script>
+      window.addEventListener("load", function() {
+        window.wpcc.init({"colors":{"popup":{"background":"#ffe4e1","text":"#000000","border":"#c25e5e"},"button":{"background":"#c25e5e","text":"#ffffff"}},"position":"bottom-right","border":"thin","corners":"small","padding":"small","margin":"large","transparency":"10","content":{"message":"Groupomania respecte votre vie privée. Nous n'utilisons aucun cookies à des fins de marketing ou de ciblage de masse. Seuls des cookies obligatoires et nécessaires sont présents. En continuant à utiliser et à naviguer sur notre site, vous acceptez et consentez à notre utilisation des cookies dans votre navigateur.","button":"J'ai compris","link":"En savoir plus","href":"https://www.noodo-wifi.com/faq/cookie-informatique/"}})});
+    </script>
   </head>
   <body>
     <noscript>
