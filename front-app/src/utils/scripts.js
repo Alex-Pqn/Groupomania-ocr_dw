@@ -30,7 +30,12 @@ export function api(urlAPI, method, data, apiCallbackDone, apiCallbackError, xhr
     };
     
     // if "api/comments/create" || "api/comments/get", push without formdata
-    if(urlAPI == "api/comments/create" || urlAPI == "api/comments/get" || urlAPI == "api/forums/user/get"){
+    if(
+      urlAPI == "api/comments/create" || 
+      urlAPI == "api/comments/get" || 
+      urlAPI == "api/forums/user/get" || 
+      urlAPI == "api/user/primaryInfos" ||
+      urlAPI == "api/user/parameters/get"){
       data.push(user)
     }
     // push in formdata
@@ -44,7 +49,12 @@ export function api(urlAPI, method, data, apiCallbackDone, apiCallbackError, xhr
     xhr.setRequestHeader("Authorization", "Bearer " + cookieUserToken);
     
     // if "api/comments/create" || "api/comments/get" route, define application/json header
-    if(urlAPI == "api/comments/create" || urlAPI == "api/comments/get" || urlAPI == "api/forums/user/get") {
+    if(
+      urlAPI == "api/comments/create" || 
+      urlAPI == "api/comments/get" || 
+      urlAPI == "api/forums/user/get" || 
+      urlAPI == "api/user/primaryInfos" ||
+      urlAPI == "api/user/parameters/get") {
       xhr.setRequestHeader("Content-type", "application/json");
       xhr.send(JSON.stringify(data));
     }
@@ -61,7 +71,7 @@ export function api(urlAPI, method, data, apiCallbackDone, apiCallbackError, xhr
     
     // API CALLBACK
     xhr.onreadystatechange = function() {
-      let response = JSON.parse(this.response);
+      let response = this.response;
       let readyState = this.readyState;
       let httpStatus = this.status;
       
@@ -70,7 +80,7 @@ export function api(urlAPI, method, data, apiCallbackDone, apiCallbackError, xhr
         readyState === status.readystate.DONE &&
         httpStatus === status.http.OK
       ) {
-        apiCallbackDone(response)
+        apiCallbackDone(JSON.parse(response))
       } 
       // ERRORS HANDLER
       else if (
