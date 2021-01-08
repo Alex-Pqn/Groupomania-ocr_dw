@@ -3,7 +3,7 @@
   <header class="user-header user-header--style">
     <!-- icon -->
     <a class="user-header__user-icon" href="#top">
-      <img :src="pic_url" alt="" />
+      <img :src="user.pic_url" alt="" />
     </a>
     <!-- mobile display -->
     <div class="user-header__mobile-display">
@@ -15,41 +15,62 @@
       />
       <profilePopup
         id="profile-popup_mobile-user"
-        :pic_url="pic_url"
-        :firstname="firstname"
-        :lastname="lastname"
+        :pic_url="user.pic_url"
+        :firstname="user.firstname"
+        :lastname="user.lastname"
       />
     </div>
     <!-- infos -->
-    <h3>{{ firstname }} {{ lastname }}</h3>
+    <h3>{{ user.firstname }} {{ user.lastname }}</h3>
     <p>
-      {{ description }}
+      {{ user.description }}
     </p>
   </header>
 </template>
 
 <script>
-import { displayProfilePopup } from "@/utils/scripts";
+import { displayProfilePopup, api } from "@/utils/scripts";
 import profilePopup from "@/components/nav/profilePopup.vue";
 
 export default {
   name: "userHeader",
-  props: {
-    pic_url: {
-      type: String,
-      required: true
-    },
-    firstname: {
-      type: String,
-      required: true
-    },
-    lastname: {
-      type: String,
-      required: true
-    },
-    description: {
-      type: String
+  data () {
+    return {
+      user: {
+        pic_url: "",
+        firstname: "",
+        lastname: "",
+        description: ""
+      }
     }
+  },
+  beforeMount: async function () {
+      const vm = this
+      
+      // XHR ERROR
+      function xhrCallbackError (response) {
+        console.error(response)
+      }
+      
+      // API CALLBACK ERROR
+      function apiCallbackError (response, readyState, httpStatus) {
+        console.error(response)
+        console.error(`ReadyState: ${readyState}, HttpStatus: ${httpStatus}`)
+      }
+      
+      // API CALLBACK DONE
+      function apiCallbackDone (response) {
+        let user = response.result[0]
+        
+        vm.user.pic_url = user.pic_url
+        vm.user.firstname = user.firstname
+        vm.user.lastname = user.lastname
+        vm.user.description = user.description
+      }
+      
+      // API CALL
+      let data = []
+      api("api/user/primaryInfos", "POST", data, apiCallbackDone, apiCallbackError, xhrCallbackError)
   },
   methods: {
     displayProfilePopup
@@ -78,7 +99,7 @@ export default {
   padding-bottom: 15px;
   padding-top: 15px;
   margin-bottom: 15px;
-  z-index: 999;
+  z-index: 10;
   width: 50%;
   &--style {
     border-bottom: 1px solid rgba(0, 0, 0, 0.2);
