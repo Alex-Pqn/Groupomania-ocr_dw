@@ -8,37 +8,42 @@ const dbConfig = require('../db_config')
 const db = mysql.createPool(dbConfig.params)
 
 exports.getAllComments = (req, res, next) => {
-  db.query(
-    `
-    SELECT  c.created_at,
-            c.text,
-            c.forum_id,
-            a.firstname,
-            a.lastname,
-            a.pic_url
-    FROM Comments as c
-    INNER JOIN Accounts as a
-    ON a.id = c.user_id
-    WHERE
-    forum_id in (${req.body[0]})
-    `
-    , (err, result) => {
-    // error handler
-    if(err) {
-      return res.status(400).json({ sub_err: "La récupération des réponses a échouée, veuillez réessayer dans quelques instants..", err })
-    }
-    
-    // if user doesn't have custom icon, replace by vanilla icon
-    result.forEach(userComment => {
-      if(!userComment.pic_url) {
-          userComment.pic_url = "http://localhost:3000/images/user-icon.jpg"
+  if(req.body[0]) {
+    db.query(
+      `
+      SELECT  c.created_at,
+              c.text,
+              c.forum_id,
+              a.firstname,
+              a.lastname,
+              a.pic_url
+      FROM Comments as c
+      INNER JOIN Accounts as a
+      ON a.id = c.user_id
+      WHERE
+      forum_id in (${req.body[0]})
+      ORDER BY c.created_at DESC
+      `
+      , (err, result) => {
+      // error handler
+      if(err) {
+        return res.status(400).json({ sub_err: "La récupération des commentaires a échouée, veuillez réessayer dans quelques instants..", err })
       }
-    });
-    // reverse order, new comment at beginning to the older comment at end
-    result = result.slice().reverse()
-    
-    return res.status(200).json({ result })
-  })
+      
+      // if user doesn't have custom icon, replace by vanilla icon
+      result.forEach(userComment => {
+        if(!userComment.pic_url) {
+            userComment.pic_url = "http://localhost:3000/images/user-icon.png"
+        }
+      });
+      
+      return res.status(200).json({ result })
+    })
+  }
+  // fields missing
+  else{
+    return res.status(400).json({ sub_err: "Validation de donnée: Il semblerait que l'un des champs requis est manquant." })
+  }
 }
 
 exports.createOneComment = (req, res, next) => {
