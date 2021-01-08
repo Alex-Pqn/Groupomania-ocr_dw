@@ -20,7 +20,7 @@ module.exports = Joi.object().keys({
         // accept e-mail caracters (number, letters and many special caracters)
         .pattern(new RegExp(/[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?/)),
         
-    password: Joi.string()
+    password: Joi.string().allow('', null)
         .min(8)
         .max(50)
         // password require 8 caracters minimum, he also accept letters, numbers and many special caracters
@@ -28,7 +28,7 @@ module.exports = Joi.object().keys({
         
     newsletters: Joi.boolean(),
     
-    description: Joi.string()
+    description: Joi.string().allow('', null)
         .max(255),
         
     pic_url: Joi.string()
