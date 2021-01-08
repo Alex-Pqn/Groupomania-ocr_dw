@@ -1,3 +1,4 @@
+const fs = require('fs')
 const mysql = require('mysql')
 const jwt = require('jsonwebtoken')
 const bcrypt = require('bcrypt')
@@ -142,11 +143,158 @@ exports.login = (req, res, next) => {
     return res.status(400).json({ sub_err: "Validation de donnée: Il semblerait que l'un des champs requis est manquant." })
   }
 }
+
+exports.getPrimaryInfos = (req, res, next) => {
+  let userId = req.body[0].id
+  
+  if(userId) {
+    db.query(
+      `SELECT pic_url,
+              firstname,
+              lastname,
+              description
+      FROM Accounts
+      WHERE id = ${userId}`, 
+      (err, result) => {
+      // error handler
+      if(err) {
+        // other
+        return res.status(400).json({ sub_err: "La récupération des données de l'utilisateur a échouée, veuillez réessayer dans quelques instants.", err })
+      }
+      result.forEach(userAccount => {
+        if(!userAccount.pic_url) {
+          userAccount.pic_url = "http://localhost:3000/images/user-icon.png"
+        }
+    });
+      // account created
+      return res.status(200).json({ result })
+    })
+  }
+  // fields missing
+  else{
+    return res.status(400).json({ sub_err: "Validation de donnée: Il semblerait que l'un des champs requis est manquant." })
+  }
+}
   
 exports.getParameters = (req, res, next) => {
+  let userId = req.body[0].id
   
+  if(userId) {
+    db.query(
+      `SELECT pic_url,
+              firstname,
+              lastname,
+              description,
+              email,
+              newsletters
+      FROM Accounts
+      WHERE id = ${userId}`, 
+      (err, result) => {
+      // error handler
+      if(err) {
+        // other
+        return res.status(400).json({ sub_err: "La récupération des paramètres de l'utilisateur a échouée, veuillez réessayer dans quelques instants.", err })
+      }
+      result.forEach(userAccount => {
+        if(!userAccount.pic_url) {
+          userAccount.pic_url = "http://localhost:3000/images/user-icon.png"
+        }
+    });
+      // account created
+      return res.status(200).json({ result })
+    })
+  }
+  // fields missing
+  else{
+    return res.status(400).json({ sub_err: "Validation de donnée: Il semblerait que l'un des champs requis est manquant." })
+  }
 }
 
 exports.updateParameters = (req, res, next) => {
+  let userParameters = JSON.parse(req.body.userParameters)
+  let userId = JSON.parse(req.body.user).id
+  let dbQuery
+  
+  if(userParameters.firstname && userParameters.lastname && userParameters.email && userParameters.newsletters && userParameters.pic_url && userId) {
+    // data validation
+    let dataValidation
+    dataValidation = User.validate(userParameters)
+    
+    // data validation failed
+    if(dataValidation.error) {
+      let dataValidationError = {
+        message: dataValidation.error.details[0].message,
+        code: dataValidation.error.details[0].type
+      }
+      return res.status(400).json({ sub_err: "Validation de donnée: Il semblerait que l'un des champs requis est incorrect.", err: dataValidationError })
+    }
+    // data validation success
+    else{
+      if(req.file) {
+        // userParameters.pic_url = older user pic url
+        if(userParameters.pic_url != "http://localhost:3000/images/user-icon.png") {
+          fs.unlink(`images/${userParameters.pic_url.split('/images/')[1]}`, (err => {
+            if(err) {
+                res.status(500).json({ err })
+            }
+          }))
+        }
+        
+        userParameters.pic_url = `${req.protocol}://${req.get('host')}/images/${req.file.filename}`;
+      }
+      if(userParameters.password) {
+        // hash password with bcrypt
+        bcrypt.hash(userParameters.password, bcryptSaltRounds)
+        .then(function (hashed_password) {
+          dbQuery = `UPDATE Accounts SET  pic_url='${userParameters.pic_url}', 
+                                          firstname='${userParameters.firstname}', 
+                                          lastname='${userParameters.lastname}', 
+                                          description='${userParameters.description}', 
+                                          email='${userParameters.email}',
+                                          hashed_password='${hashed_password}',
+                                          newsletters=${userParameters.newsletters}
+                                          WHERE id = ${userId}`
+          updateParameters()
+        })
+        // bcrypt.compare() failed
+        .catch((err) => res.status(500).json({ sub_err: "La modification des paramètres utilisateur a échouée, veuillez réessayer dans quelques instants..", err })) 
+      }else{
+        dbQuery = `UPDATE Accounts SET  pic_url='${userParameters.pic_url}', 
+                                        firstname='${userParameters.firstname}', 
+                                        lastname='${userParameters.lastname}', 
+                                        description='${userParameters.description}', 
+                                        email='${userParameters.email}', 
+                                        newsletters=${userParameters.newsletters}
+                                        WHERE id = ${userId}`
+        updateParameters()
+      }
+      function updateParameters () {
+        db.query(dbQuery, (err, result) => {
+          // error handler
+          if(err) {
+            if(req.file) {
+              fs.unlink(`images/${userParameters.pic_url.split('/images/')[1]}`, (err => {
+                if(err) {
+                    res.status(500).json({ err })
+                }
+            }))
+            }
+              return res.status(400).json({ sub_err: "La modification des paramètres utilisateur a échouée, veuillez réessayer dans quelques instants..", err })
+          }
+          // forum created
+          return res.status(200).json({
+            message: `Les modifications ont été enregistrées.`,
+          })
+        }) 
+      } 
+    }
+  }  
+  // fields missing
+  else{
+    return res.status(400).json({ sub_err: "Validation de donnée: Il semblerait que l'un des champs requis est manquant." })
+  }
+}
+
+exports.deleteAccount = (req, res, next) => {
   
 }
