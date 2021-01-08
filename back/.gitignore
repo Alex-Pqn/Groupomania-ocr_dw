@@ -2,4 +2,4 @@ node_modules
 commands.sql
 .env
 images/*
-!images/user-icon.jpg
+!images/user-icon.png
