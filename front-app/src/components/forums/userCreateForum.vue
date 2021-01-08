@@ -78,7 +78,7 @@ export default {
           vm.errorHandler(`Votre message ne peut contenir qu'au maximum ${forumValidation.maxLength} caractères.`)
         }
       }else{
-        vm.errorHandler(`Votre message doit contenir au minimum ${forumValidation.minLength + 1} caractère.`)
+        vm.errorHandler(`Votre message doit contenir au minimum ${forumValidation.minLength} caractère.`)
       }
     },
     // API REQUEST
