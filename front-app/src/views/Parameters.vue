@@ -155,34 +155,36 @@
           <button id="delete-account_button" v-on:click="deleteAccountModal">
             Supprimer mon compte
           </button>
-          <div class="delete-account-modal">
+          <div class="delete-account-modal" id="delete-account-container">
             <div class="delete-account-modal__content">
               <h4>
                 Suppression de votre compte
               </h4>
               <p>
-                En supprimant votre compte Groupomania, les données suivantes seront supprimées de nos services de façon définitive :
+                En supprimant votre compte Groupomania, les données suivantes seront supprimées de nos services :
               </p>
               <ul>
                 <li>
                   - Les discussions postées
                 </li>
                 <li>
-                  - Les commentaires postées
+                  - Les commentaires postés
                 </li>
                 <li>
                   - L'ensemble des données ratachées à votre compte, comprenant notamment votre e-mail et votre mot de passe.
                 </li>
               </ul>
               <p>
-                Après avoir cliqué sur <strong>supprimer mon compte</strong>, l'ensemble de ces données seront supprimées et votre compte sera rendu innacessible de façon permanente.
+                En cliquant sur <strong>supprimer mon compte</strong>, vous acceptez perdre l'ensemble de ces données ainsi que l'accès à votre compte de façon définitive.
               </p>
               <button id="delete-account" v-on:click="deleteAccount">
                 Supprimer mon compte
               </button>
-              <button v-on:click="quitDeleteAccountModal">
+              <button id="quit-delete-account" v-on:click="quitDeleteAccountModal">
                 Retour
               </button>
+              <!-- info handler -->
+              <p id="handler-delete-account"></p>
             </div>
           </div>
         </div>
@@ -468,14 +470,67 @@ export default {
       document.getElementById("user-parameters-pic_img-output").src = "";
     },
     deleteAccountModal () {
-      
-    },
-    deleteAccount () {
-      
+      document.getElementById('delete-account-container').style.display = "flex"
     },
     quitDeleteAccountModal () {
-      
+      document.getElementById('delete-account-container').style.display = "none"
     },
+    deleteAccount () {
+      const vm = this
+      
+      // XHR ERROR
+      function xhrCallbackError (response) {
+        vm.infoHandler(response, 'red')
+        console.error(response)
+      }
+      
+      // API CALLBACK ERROR
+      function apiCallbackError (response, readyState, httpStatus) {
+        console.log(response)
+        vm.infoHandler(response.sub_err, 'red')
+        console.error(`ReadyState: ${readyState}, HttpStatus: ${httpStatus}`)
+      }
+      
+      // API CALLBACK DONE
+      function apiCallbackDone (response) {
+        document.cookie = `user_id=;expires=/;path=/`;
+        document.cookie = `auth_token=;expires=/;path=/`;
+        
+        let redirectionTime = 6;
+        let redirectionInterval = setInterval(() => {
+          if (redirectionTime === 0) {
+            clearInterval(redirectionInterval);
+            window.location.replace("/login");
+          } else {
+            redirectionTime--;
+            vm.infoHandler(
+              `${response.message} Redirection vers la page de connexion dans ${redirectionTime} secondes.`, 'green'
+            );
+          }
+        }, 1000);
+      }
+
+      // API CALL
+      api("api/user/account/delete", "DELETE", undefined, apiCallbackDone, apiCallbackError, xhrCallbackError)
+    },
+    infoHandler(infoValue, infoColor) {
+      const infoContainer = document.getElementById('handler-delete-account')
+      
+      let timeoutTime
+      
+      if(infoColor == "green") {
+        timeoutTime = 0
+      }else{
+        timeoutTime = 150
+      }
+      
+      infoContainer.style.color = infoColor
+      infoContainer.style.display = "none"
+      setTimeout(() => {
+        infoContainer.textContent = infoValue
+        infoContainer.style.display = "flex"
+      }, timeoutTime);
+    }
   },
   components: {
     trends,
@@ -499,6 +554,19 @@ export default {
   border-radius: .1em;
   background-color: rgba(255, 52, 52, 0.459);
   border: 1px solid rgb(156, 1, 1);
+  &:hover {
+    background-color: rgba(255, 52, 52, 0.3);
+    border: 1px solid rgba(197, 0, 0, 0.5);
+  }
+}
+
+@keyframes opacity {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
 }
 
 .delete-account-modal {
@@ -512,35 +580,56 @@ export default {
   width: 100%;
   height: 100%;
   overflow: auto;
-  background-color: rgb(0,0,0);
-  background-color: rgba(0,0,0,0.4);
+  background-color: rgba(0,0,0,0.5);
+  animation-name: opacity;
+  animation-duration: .3s;
   &__content {
+    margin-bottom: 125px;
     background-color: white;
-    width: 18%;
     padding: 17px 20px;
     border-radius: .5em;
+    animation: opacity .5s;
+    width: 18%;
     h4 {
+      margin-bottom: 11px!important;
+      padding-bottom: 10px;
       font-size: 1.15em;
+      border-bottom: 1px solid rgba(172, 172, 172, 0.6);
     }
     p {
       font-size: 1.05em;
     }
     ul {
-      margin: 15px;
+      margin: 13px 0;
       li {
         margin-top: 9px;
       }
+    }
+    button {
+      padding: 7px 10px;
+      border-radius: .1em;
+      margin: 13px 3px 0;
+    }
+    #handler-delete-account {
+      justify-content: center;
+      margin-top: 13px;
     }
     #delete-account {
       color: rgb(156, 1, 1);
       background-color: rgba(255, 52, 52, 0.459);
       border: 1px solid rgb(156, 1, 1);
+      &:hover {
+        color: rgb(104, 0, 0);
+        background-color: rgba(119, 0, 0, 0.247);
+        border: 1px solid rgba(107, 0, 0, 0.904);
+      }
     }
-    button {
-      padding: 7px 10px;
-      border-radius: .1em;
+    #quit-delete-account {
       border: 1px solid black;
-      margin: 10px 3px 0;
+      &:hover {
+        opacity: .9;
+        border: 1px solid rgba(0, 0, 0, 0.63);
+      }
     }
   }
 }
