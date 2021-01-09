@@ -2,15 +2,7 @@ const jwt = require('jsonwebtoken');
 
 module.exports = (req, res, next) => {
   try {
-    let bodyUserId
-    
-    // formdata format
-    if(req.fields) {
-      bodyUserId = JSON.parse(req.fields.user).id
-    // json format (for auth) 
-    }else{
-      bodyUserId = req.body.id
-    }
+    let userIdHeader = req.headers.userid
 
     //get bearer auth token in headers
     const JWTAuthToken = req.headers.authorization.split(' ')[2];
@@ -21,7 +13,7 @@ module.exports = (req, res, next) => {
     const { userId } = decodedToken;
 
     //invalid JWT token
-    if (bodyUserId && bodyUserId != userId) {
+    if (userIdHeader && userIdHeader != userId) {
       throw "Le token d'authentification est incorrect ou a expiré.";
     }
     //valid token, call the next module 
