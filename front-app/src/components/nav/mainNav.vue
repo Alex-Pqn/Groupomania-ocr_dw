@@ -66,8 +66,7 @@ export default {
       }
       
       // API CALL
-      let data = []
-      api("api/user/primaryInfos", "POST", data, apiCallbackDone, apiCallbackError, xhrCallbackError)
+      api("api/user/primaryInfos", "GET", undefined, apiCallbackDone, apiCallbackError, xhrCallbackError)
   },
   components: {
     profilePopup

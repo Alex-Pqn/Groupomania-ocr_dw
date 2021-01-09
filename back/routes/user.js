@@ -6,15 +6,15 @@ const userController = require('../controllers/user');
 const auth = require('../middlewares/auth');
 const multer = require('../middlewares/multer-config');
 
-router.post('/page/auth', auth, userController.pageAuth),
+router.get('/page/auth', auth, userController.pageAuth),
 router.delete('/account/delete', auth, userController.deleteAccount)
 
 router.post('/login', userController.login);
 router.post('/register', userController.register);
 
-router.post('/primaryInfos', auth, userController.getPrimaryInfos )
+router.get('/primaryInfos', auth, userController.getPrimaryInfos )
 
-router.post('/parameters/get', auth, userController.getParameters);
-router.post('/parameters/update', auth, multer, userController.updateParameters);
+router.get('/parameters/get', auth, userController.getParameters);
+router.patch('/parameters/update', auth, multer, userController.updateParameters);
 
 module.exports = router

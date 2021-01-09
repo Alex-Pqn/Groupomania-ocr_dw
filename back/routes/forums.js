@@ -12,7 +12,7 @@ router.get('/global/get', auth, forumsController.getAllForumsGlobal);
 router.post('/global/create', auth, multer, forumsController.createOneForumGlobal);
 
 // user
-router.post('/user/get', auth, forumsController.getAllForumsUser)
+router.get('/user/get', auth, forumsController.getAllForumsUser)
 
 // trends
 router.get('/trends/get', auth, forumsController.getAllForumsTrends)
