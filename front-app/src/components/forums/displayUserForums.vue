@@ -29,7 +29,7 @@
         </div>
         <!-- bottom -->
         <div class="user-forums__main__bottom">
-          <img :src="image_url" alt="" />
+          <img v-if="image_url" :src="image_url" alt="" />
         </div>
       </div>
     </div>
@@ -129,6 +129,7 @@ export default {
         commentContainer.style.display = "initial";
       }
     },
+    // CREATE COMMENT
     createComment (forum_id, user_id) {
       const vm = this
       let commentTextOutput = document.getElementById("create-comment_text-" + forum_id + user_id).value;
@@ -150,16 +151,9 @@ export default {
         vm.errorHandler(`Votre message doit contenir au minimum ${commentValidation.minLength} caractère.`, forum_id, user_id)
       }
     },
-    // API REQUEST
+    // CREATE COMMENT API REQUEST
     createCommentRequest (forum_id, comment_text, user_id) {
       const vm = this
-      
-      let comment = [
-        {
-          forum_id: forum_id,
-          text: comment_text
-        }
-      ]
       
       // XHR ERROR
       function xhrCallbackError (response) {
@@ -180,6 +174,10 @@ export default {
       }
       
       // API CALL
+      let comment = {
+          forum_id: forum_id,
+          text: comment_text
+      }
       api("api/comments/create", "POST", comment, apiCallbackDone, apiCallbackError, xhrCallbackError) 
     },
     errorHandler (errValue, forum_id, user_id) {
@@ -239,7 +237,7 @@ export default {
     &__middle {
       text-align: left;
       line-height: 27px;
-      margin-bottom: 13px;
+      margin-bottom: 8px;
     }
     // bottom
     &__bottom {
