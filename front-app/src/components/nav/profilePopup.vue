@@ -50,6 +50,7 @@ export default {
   },
   methods: {
     sessionDisconnect: () => {
+      window.location.href = "/login";
       document.cookie = `user_id=;expires=/;path=/`;
       document.cookie = `auth_token=;expires=/;path=/`;
     }
