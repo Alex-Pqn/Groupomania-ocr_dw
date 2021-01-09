@@ -216,38 +216,7 @@ export default {
   },
   beforeMount: async function () {
     const vm = this
-    
-    // XHR ERROR
-    function xhrCallbackError (response) {
-      console.error(response)
-    }
-    
-    // API CALLBACK ERROR
-    function apiCallbackError (response, readyState, httpStatus) {
-      console.error(response)
-      console.error(`ReadyState: ${readyState}, HttpStatus: ${httpStatus}`)
-    }
-    
-    // API CALLBACK DONE
-    function apiCallbackDone (response) {
-      let user = response.result[0]
-      
-      vm.user.pic_url = user.pic_url
-      vm.user.firstname = user.firstname
-      vm.user.lastname = user.lastname
-      vm.user.email = user.email
-      vm.user.description = user.description
-      vm.user.newsletters = user.newsletters
-      
-      if(user.newsletters === 1) {
-        document.getElementById('newsletters').checked = true
-        document.getElementById('newsletters').value = true
-      }
-    }
-    
-    // API CALL
-    let data = []
-    api("api/user/parameters/get", "POST", data, apiCallbackDone, apiCallbackError, xhrCallbackError)
+    vm.getUserParameters()
   },
   mounted() {
     const newslettersCheckbox = document.getElementById("newsletters");
@@ -260,26 +229,42 @@ export default {
     });
   },
   methods: {
-    userParamatersImgChange(event) {
-      let reader = new FileReader();
-      reader.onload = function() {
-        document.getElementById("user-parameters-pic_img-output").src =
-          reader.result;
-        document.getElementById(
-          "user-parameters-pic_img-container"
-        ).style.display = "flex";
-      };
-      reader.readAsDataURL(event.target.files[0]);
+    // GET USER PARAMETERS
+    getUserParameters () {
+      const vm = this
+    
+      // XHR ERROR
+      function xhrCallbackError (response) {
+        console.error(response)
+      }
+      
+      // API CALLBACK ERROR
+      function apiCallbackError (response, readyState, httpStatus) {
+        console.error(response)
+        console.error(`ReadyState: ${readyState}, HttpStatus: ${httpStatus}`)
+      }
+      
+      // API CALLBACK DONE
+      function apiCallbackDone (response) {
+        let user = response.result[0]
+        
+        vm.user.pic_url = user.pic_url
+        vm.user.firstname = user.firstname
+        vm.user.lastname = user.lastname
+        vm.user.email = user.email
+        vm.user.description = user.description
+        vm.user.newsletters = user.newsletters
+        
+        if(user.newsletters === 1) {
+          document.getElementById('newsletters').checked = true
+          document.getElementById('newsletters').value = true
+        }
+      }
+      
+      // API CALL
+      api("api/user/parameters/get", "GET", undefined, apiCallbackDone, apiCallbackError, xhrCallbackError)
     },
-    userParamatersImgClose() {
-      document.getElementById(
-        "user-parameters-pic_img-container"
-      ).style.display = "none";
-      document.getElementById("user-parameters-pic_upload-img").style.display =
-        "none";
-      document.getElementById("user-parameters-pic_upload-img").value = "";
-      document.getElementById("user-parameters-pic_img-output").src = "";
-    },
+    // USER PARAMETERS FORM VALIDATION
     userParametersFormSend() {
       event.preventDefault();
       const vm = this
@@ -409,6 +394,7 @@ export default {
         }
       });
     },
+    // USER PARAMETERS UPDATE
     userParametersRequest(firstname, lastname, description, email, newsletters, password) {
       const vm = this
       let formData = new FormData();
@@ -433,24 +419,24 @@ export default {
       
       // XHR ERROR
       function xhrCallbackError (response) {
-        vm.displayFormError(response, "red")
+        vm.displayFormInfo(response, "red")
         console.error(response)
       }
       
       // API CALLBACK DONE
       function apiCallbackDone (response) {
-        vm.displayFormError(response.message, "green")
+        vm.displayFormInfo(response.message, "green")
       }
       
       // API CALLBACK ERROR
       function apiCallbackError (response, readyState, httpStatus) {
-        vm.displayFormError(response.sub_err, "red")
+        vm.displayFormInfo(response.sub_err, "red")
         console.error(response)
         console.error(`ReadyState: ${readyState}, HttpStatus: ${httpStatus}`)
       }
       
       // API CALL
-      api("api/user/parameters/update", "POST", formData, apiCallbackDone, apiCallbackError, xhrCallbackError);
+      api("api/user/parameters/update", "PATCH", formData, apiCallbackDone, apiCallbackError, xhrCallbackError);
     },
     displayFormInfo(errorValue, color) {
       setTimeout(() => {
@@ -458,6 +444,28 @@ export default {
         errorContainer.innerHTML = errorValue;
         errorContainer.style.color = color
       }, 150);
+    },
+    // Generate local FileReader base64 for imported image
+    userParamatersImgChange(event) {
+      let reader = new FileReader();
+      reader.onload = function() {
+        document.getElementById("user-parameters-pic_img-output").src =
+          reader.result;
+        document.getElementById(
+          "user-parameters-pic_img-container"
+        ).style.display = "flex";
+      };
+      reader.readAsDataURL(event.target.files[0]);
+    },
+    // Close image in FileReader
+    userParamatersImgClose() {
+      document.getElementById(
+        "user-parameters-pic_img-container"
+      ).style.display = "none";
+      document.getElementById("user-parameters-pic_upload-img").style.display =
+        "none";
+      document.getElementById("user-parameters-pic_upload-img").value = "";
+      document.getElementById("user-parameters-pic_img-output").src = "";
     },
     deleteAccountModal () {
       
@@ -485,7 +493,7 @@ export default {
 
 // delete account
 #delete-account_button {
-  margin-top: 15px;
+  margin: 15px 0;
   padding: 5px;
   font-size: .9em;
   border-radius: .1em;
