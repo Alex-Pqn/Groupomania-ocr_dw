@@ -33,7 +33,6 @@
             minlength="5"
             maxlength="55"
             required
-            value="test@gmail.com"
           />
           <p id="email-error"></p>
         </div>
@@ -49,7 +48,6 @@
             minlength="8"
             maxlength="50"
             required
-            value="testtest1Aa"
           />
           <p id="password-error"></p>
         </div>
@@ -126,6 +124,7 @@ export default {
       // inputs validator
       formData.forEach(data => {
         document.getElementById(data.errorIdContainer).style.display = "none";
+        
         // length validation
         if (data.value.length < data.minLength) {
           return displayFormInputError(
@@ -138,6 +137,7 @@ export default {
             `Votre ${data.name} ne peut être composé que de ${data.maxLength} caractères au maximum.`
           );
         }
+        
         // regex validation
         if (data.regex.test(data.value) === false) {
           if (data.id === 1) {
@@ -152,6 +152,7 @@ export default {
             );
           }
         }
+        
         data.stepValidation = true;
         // if all inputs are valids, call api
         if (
@@ -162,15 +163,10 @@ export default {
         }
       });
     },
-    // API REQUEST
-    loginRequest (emailInput, passwordInput) {
+    // LOGIN API REQUEST
+    loginRequest (email, password) {
       const vm = this
       const submitButton = document.getElementById("submit");
-      
-      let userParams = {
-        email: emailInput,
-        password: passwordInput
-      };
      
       // XHR ERROR
       function xhrCallbackError () {
@@ -199,6 +195,10 @@ export default {
       }
       
       // API CALL
+      let userParams = {
+        email,
+        password
+      };
       apiAuth("api/user/login", "POST", JSON.stringify(userParams), apiCallbackDone, apiCallbackError, xhrCallbackError);
     },
     displaySubmitInfoError(errorValue) {
