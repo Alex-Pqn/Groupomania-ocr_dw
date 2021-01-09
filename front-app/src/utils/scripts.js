@@ -10,43 +10,81 @@ export function displayProfilePopup(DOMContainer) {
   }
 }
 
+export function dateFormatting (object, formatedDate) {
+  const monthNames = [
+    "janv", 
+    "févr", 
+    "mars", 
+    "avr", 
+    "mai", 
+    "juin",
+    "juill", 
+    "août", 
+    "sept", 
+    "oct", 
+    "nov", 
+    "déc"
+  ];
+
+  let date = new Date(object.created_at)
+  
+  // current date
+  let date_currentYear = new Date().getFullYear()
+  let date_currentMonth = new Date().getMonth()
+  let date_currentDay = new Date().getDate()
+  
+  // object date
+  let created_at_date = object.created_at.split("T")[0].split("-").reverse()
+  let created_at_date_day = created_at_date[0]
+  let created_at_date_month = monthNames[date.getMonth()]
+  let created_at_date_year = created_at_date[2]
+  
+  // object time
+  let created_at_time = object.created_at.split("T")[1].split(".")[0].split(":")
+  let created_at_time_hour = parseInt(created_at_time[0], 10) + 2
+  let created_at_time_minute = created_at_time[1]
+  
+  // return formatted date
+  if(date_currentDay == created_at_date_day && date_currentMonth == date.getMonth() && date_currentYear == created_at_date_year) {
+    formatedDate(`${created_at_time_hour}h${created_at_time_minute}`)
+  }else if(created_at_date_year == date_currentYear) {
+    formatedDate(`${created_at_date_day} ${created_at_date_month}.`)
+  }else{
+    formatedDate(`${created_at_date_day} ${created_at_date_month}. ${created_at_date_year}`)
+  }
+}
+
 export function api(urlAPI, method, data, apiCallbackDone, apiCallbackError, xhrCallbackError) {
   let cookie = document.cookie.split(";");
   
   // if no token exists
-  if (cookie[0] === "" || cookie[1] === "" || cookie.length < 2) {
+  if (cookie.length < 2) {
     if(urlAPI !== "api/user/page/auth"){
       window.location.replace("/login");
     }
   }
   // if token exists
   else {
-    let cookieUserId = cookie[0].replace("user_id=", "");
-    let cookieUserToken = cookie[1].replace("auth_token=", "");
+    let cookieUserId
+    let cookieUserToken
     
-    // user id for auth token verification
-    let user = {
-      id: cookieUserId
-    };
-    
-    // if "api/comments/create" || "api/comments/get", push without formdata
-    if(
-      urlAPI == "api/comments/create" || 
-      urlAPI == "api/comments/get" || 
-      urlAPI == "api/forums/user/get" || 
-      urlAPI == "api/user/primaryInfos" ||
-      urlAPI == "api/user/parameters/get"){
-      data.push(user)
-    }
-    // push in formdata
-    else{
-      data.append("user", JSON.stringify(user));
-    }
+    // cookies
+    cookie.forEach(cookieValue => {
+      // user id
+      if(cookieValue.includes("user_id")) {
+        cookieUserId = cookieValue.replace("user_id=", "");    
+      }
+      // auth token
+      else if(cookieValue.includes("auth_token")) {
+        cookieUserToken = cookieValue.replace("auth_token=", "");
+      }
+    })
     
     // API REQUEST
     let xhr = new XMLHttpRequest();
     xhr.open(method, localUrl + urlAPI, true);
     xhr.setRequestHeader("Authorization", "Bearer " + cookieUserToken);
+    xhr.setRequestHeader("UserId", cookieUserId)
     
     // if "api/comments/create" || "api/comments/get" route, define application/json header
     if(
@@ -88,7 +126,7 @@ export function api(urlAPI, method, data, apiCallbackDone, apiCallbackError, xhr
         httpStatus === status.http.INTERNAL_SERVER_ERROR ||
         httpStatus === status.http.BAD_REQUEST
       ) {
-        apiCallbackError(response, readyState, httpStatus)
+        apiCallbackError(JSON.parse(response), readyState, httpStatus)
         if(response.err && response.err.sqlMessage) {
           mysqlErrorHandler(response.err) 
         }
@@ -148,8 +186,8 @@ export function createUserCookie (response) {
   const dateMultiplicator = actualDate.setMonth(
     actualDate.getMonth() + 1
   );
-  
   let cookieExpireDate = new Date(dateMultiplicator).toUTCString();
+  
   document.cookie = `user_id=${response.userId};expires=${cookieExpireDate};path=/`;
   document.cookie = `auth_token=${response.token};expires=${cookieExpireDate};path=/`;
 }
