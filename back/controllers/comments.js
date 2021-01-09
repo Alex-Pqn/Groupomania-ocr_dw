@@ -8,7 +8,11 @@ const dbConfig = require('../db_config')
 const db = mysql.createPool(dbConfig.params)
 
 exports.getAllComments = (req, res, next) => {
-  if(req.body[0]) {
+  let forum_id = req.body[0] 
+  
+  // required fields
+  if(forum_id) {
+    // returns comments (+ user informations) attached to forum id
     db.query(
       `
       SELECT  c.created_at,
@@ -21,7 +25,7 @@ exports.getAllComments = (req, res, next) => {
       INNER JOIN Accounts as a
       ON a.id = c.user_id
       WHERE
-      forum_id in (${req.body[0]})
+      forum_id in (${ forum_id })
       ORDER BY c.created_at DESC
       `
       , (err, result) => {
@@ -47,14 +51,14 @@ exports.getAllComments = (req, res, next) => {
 }
 
 exports.createOneComment = (req, res, next) => {
-    let user_id = req.body[1].id
-    let forum_id = req.body[0].forum_id
-    let comment_text = req.body[0].text
+    let userId = req.headers.userid
+    let forum_id = req.body.forum_id
+    let comment_text = req.body.text
     
     // required fields
-    if(user_id && forum_id && comment_text) {
+    if(userId && forum_id && comment_text) {
         let dataValidation
-        dataValidation = Comment.validate({user_id:user_id, forum_id:forum_id, text:comment_text})
+        dataValidation = Comment.validate({user_id:userId, forum_id:forum_id, text:comment_text})
         
         // data validation failed
         if(dataValidation.error) {
@@ -67,7 +71,7 @@ exports.createOneComment = (req, res, next) => {
         // data validation success
         else {
             // insert in db the new comment
-            db.query(`INSERT INTO Comments (user_id, forum_id, text) VALUES (${user_id}, ${forum_id}, "${comment_text}")`, (err, result) => {
+            db.query(`INSERT INTO Comments (user_id, forum_id, text) VALUES (${ userId }, ${ forum_id }, "${ comment_text }")`, (err, result) => {
                 // error handler
                 if(err) {
                     return res.status(400).json({ sub_err: "La création du commentaire a échoué, veuillez réessayer dans quelques instants..", err })
