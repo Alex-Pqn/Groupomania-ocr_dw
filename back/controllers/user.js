@@ -18,13 +18,20 @@ exports.pageAuth = (req, res, next) => {
 
 //register
 exports.register = (req, res, next) => {
+  let user = req.body
+  let firstname = user.firstname
+  let lastname = user.lastname
+  let email = user.email
+  let password = user.password
+  let newsletters = user.newsletters
+  
   // required fields
-  if(req.body.firstname && req.body.lastname && req.body.email && req.body.password && req.body.newsletters) {
+  if(firstname && lastname && email && password && newsletters) {
     // data validation
     let dataValidation
-    dataValidation = User.validate(req.body)
+    dataValidation = User.validate(user)
     
-    // data validation failed
+    // data validation error
     if(dataValidation.error) {
       let dataValidationError = {
         message: dataValidation.error.details[0].message,
@@ -35,17 +42,18 @@ exports.register = (req, res, next) => {
     // data validation success
     else{
       // hash password with bcrypt
-      bcrypt.hash(req.body.password, bcryptSaltRounds)
+      bcrypt.hash(password, bcryptSaltRounds)
+        // hash password success
         .then(function(hashed_password) {
           // insert in db the new account
           db.query(
-            `INSERT INTO Accounts (firstname, lastname, email, hashed_password, newsletters) VALUES ('${req.body.firstname}', '${req.body.lastname}', '${req.body.email}', '${hashed_password}', ${req.body.newsletters});`, 
+            `INSERT INTO Accounts (firstname, lastname, email, hashed_password, newsletters) VALUES ('${ firstname }', '${ lastname }', '${ email }', '${ hashed_password }', ${ newsletters });`, 
             (err, result) => {
             let userDb = result
             
             // error handler
             if(err) {
-              // duplicated entry code (account with this e-mail already exist)
+              // duplicated entry code
               if (err.errno === 1062) {
                 return res.status(400).json({ sub_err: "Il semblerait qu'un compte possédant cet e-mail est déjà existant.", err })
               }
@@ -56,7 +64,7 @@ exports.register = (req, res, next) => {
             }
             // account created
             return res.status(200).json({ 
-              message: `Nous te souhaitons la bienvenue ${req.body.firstname} !`,
+              message: `Nous te souhaitons la bienvenue ${ firstname } !`,
               userId: userDb.insertId,
               token: jwt.sign(
                 { userId: userDb.insertId },
@@ -66,7 +74,7 @@ exports.register = (req, res, next) => {
             })
           })
         })
-        // bcrypt.compare() failed
+        // hash password failed
         .catch((err) => res.status(500).json({ sub_err: "La création de votre compte a échoué, veuillez réessayer dans quelques instants.", err })) 
     }
   }
@@ -78,8 +86,11 @@ exports.register = (req, res, next) => {
  
 //login
 exports.login = (req, res, next) => {
+  let email = req.body.email
+  let password = req.body.password
+  
   // required fields
-  if(req.body.email && req.body.password) {
+  if(email && password) {
     // data validation
     let dataValidation
     dataValidation = User.validate(req.body)
@@ -92,11 +103,11 @@ exports.login = (req, res, next) => {
       }
       return res.status(400).json({ sub_err: "Validation de donnée: Il semblerait que l'un des champs requis est manquant ou incorrect.", err: dataValidationError })
     }
-    // validation success
+    // data validation success
     else{
       // search a row in db with this e-mail
       db.query(
-        `SELECT * FROM Accounts WHERE email LIKE '${req.body.email}'`, 
+        `SELECT * FROM Accounts WHERE email LIKE '${email}'`, 
         (err, result) => {
         let userDb = result[0]
         
@@ -108,14 +119,15 @@ exports.login = (req, res, next) => {
         if(result.length === 0) {
           return res.status(401).json({ sub_err: "L'e-mail et le mot de passe entré sont incorrects.", err })
         }
+        
         // account finded 
         else{
           // compare passwords
-          bcrypt.compare(req.body.password, userDb.hashed_password)
+          bcrypt.compare(password, userDb.hashed_password)
             .then(function(bcryptResult) {
               // passwords don't matchs
               if(!bcryptResult) {
-                res.status(401).json({ sub_err: "L'e-mail et le mot de passe entré sont incorrects." })
+                return res.status(401).json({ sub_err: "L'e-mail et le mot de passe entré sont incorrects." })
 
               }
               // passwords matchs
@@ -145,9 +157,11 @@ exports.login = (req, res, next) => {
 }
 
 exports.getPrimaryInfos = (req, res, next) => {
-  let userId = req.body[0].id
+  let userId = req.headers.userid
   
+  // required fields
   if(userId) {
+    // get primary user informations
     db.query(
       `SELECT pic_url,
               firstname,
@@ -156,16 +170,19 @@ exports.getPrimaryInfos = (req, res, next) => {
       FROM Accounts
       WHERE id = ${userId}`, 
       (err, result) => {
+        
       // error handler
       if(err) {
-        // other
         return res.status(400).json({ sub_err: "La récupération des données de l'utilisateur a échouée, veuillez réessayer dans quelques instants.", err })
       }
+      
+      // if user doesn't have custom icon, replace by vanilla icon
       result.forEach(userAccount => {
         if(!userAccount.pic_url) {
           userAccount.pic_url = "http://localhost:3000/images/user-icon.png"
         }
-    });
+      });
+      
       // account created
       return res.status(200).json({ result })
     })
@@ -177,9 +194,11 @@ exports.getPrimaryInfos = (req, res, next) => {
 }
   
 exports.getParameters = (req, res, next) => {
-  let userId = req.body[0].id
+  let userId = req.headers.userid
   
+  // required fields
   if(userId) {
+    // get user parameters
     db.query(
       `SELECT pic_url,
               firstname,
@@ -190,16 +209,19 @@ exports.getParameters = (req, res, next) => {
       FROM Accounts
       WHERE id = ${userId}`, 
       (err, result) => {
+        
       // error handler
       if(err) {
-        // other
         return res.status(400).json({ sub_err: "La récupération des paramètres de l'utilisateur a échouée, veuillez réessayer dans quelques instants.", err })
       }
+      
+      // if user doesn't have custom icon, replace by vanilla icon
       result.forEach(userAccount => {
         if(!userAccount.pic_url) {
           userAccount.pic_url = "http://localhost:3000/images/user-icon.png"
         }
-    });
+      });
+      
       // account created
       return res.status(200).json({ result })
     })
@@ -211,11 +233,20 @@ exports.getParameters = (req, res, next) => {
 }
 
 exports.updateParameters = (req, res, next) => {
+  let userId = req.headers.userid
+  
   let userParameters = JSON.parse(req.body.userParameters)
-  let userId = JSON.parse(req.body.user).id
+  let firstname = userParameters.firstname
+  let lastname = userParameters.lastname
+  let email = userParameters.email
+  let password = userParameters.password
+  let description = userParameters.description
+  let newsletters = userParameters.newsletters
+  let pic_url = userParameters.pic_url
+  
   let dbQuery
   
-  if(userParameters.firstname && userParameters.lastname && userParameters.email && userParameters.newsletters && userParameters.pic_url && userId) {
+  if(firstname && lastname && email && newsletters && pic_url && userId) {
     // data validation
     let dataValidation
     dataValidation = User.validate(userParameters)
@@ -230,56 +261,49 @@ exports.updateParameters = (req, res, next) => {
     }
     // data validation success
     else{
+      // if file in request, remove older user pic url / pic_url = older user pic url
       if(req.file) {
-        // userParameters.pic_url = older user pic url
-        if(userParameters.pic_url != "http://localhost:3000/images/user-icon.png") {
-          fs.unlink(`images/${userParameters.pic_url.split('/images/')[1]}`, (err => {
+        if(pic_url != "http://localhost:3000/images/user-icon.png") {
+          fs.unlink(`images/${pic_url.split('/images/')[1]}`, (err => {
             if(err) {
-                res.status(500).json({ err })
+                return res.status(500).json({ err })
             }
           }))
         }
-        
-        userParameters.pic_url = `${req.protocol}://${req.get('host')}/images/${req.file.filename}`;
+        // define new user pic url
+        pic_url = `${req.protocol}://${req.get('host')}/images/${req.file.filename}`;
       }
-      if(userParameters.password) {
-        // hash password with bcrypt
-        bcrypt.hash(userParameters.password, bcryptSaltRounds)
+      // if password in request, hash password with bcrypt
+      if(password) {
+        bcrypt.hash(password, bcryptSaltRounds)
+        
+        // hash password success
         .then(function (hashed_password) {
-          dbQuery = `UPDATE Accounts SET  pic_url='${userParameters.pic_url}', 
-                                          firstname='${userParameters.firstname}', 
-                                          lastname='${userParameters.lastname}', 
-                                          description='${userParameters.description}', 
-                                          email='${userParameters.email}',
-                                          hashed_password='${hashed_password}',
-                                          newsletters=${userParameters.newsletters}
-                                          WHERE id = ${userId}`
+          dbQuery = `UPDATE Accounts SET pic_url="${ pic_url }", firstname="${ firstname }", lastname="${ lastname }", description="${ description }", email="${ email }", hashed_password="${ hashed_password }", newsletters=${ newsletters } WHERE id = ${ userId }`
           updateParameters()
         })
-        // bcrypt.compare() failed
+        
+        // hash password failed
         .catch((err) => res.status(500).json({ sub_err: "La modification des paramètres utilisateur a échouée, veuillez réessayer dans quelques instants..", err })) 
-      }else{
-        dbQuery = `UPDATE Accounts SET  pic_url='${userParameters.pic_url}', 
-                                        firstname='${userParameters.firstname}', 
-                                        lastname='${userParameters.lastname}', 
-                                        description='${userParameters.description}', 
-                                        email='${userParameters.email}', 
-                                        newsletters=${userParameters.newsletters}
-                                        WHERE id = ${userId}`
+      }
+      // if there is not password in request
+      else{
+        dbQuery = `UPDATE Accounts SET pic_url="${ pic_url }", firstname="${ firstname }", lastname="${ lastname }", description="${ description }", email="${ email }", newsletters=${ newsletters } WHERE id = ${ userId }`
         updateParameters()
       }
       function updateParameters () {
         db.query(dbQuery, (err, result) => {
           // error handler
           if(err) {
+            // unlink the new user pic
             if(req.file) {
-              fs.unlink(`images/${userParameters.pic_url.split('/images/')[1]}`, (err => {
+              fs.unlink(`images/${pic_url.split('/images/')[1]}`, (err => {
                 if(err) {
-                    res.status(500).json({ err })
+                    return res.status(500).json({ err })
                 }
             }))
             }
-              return res.status(400).json({ sub_err: "La modification des paramètres utilisateur a échouée, veuillez réessayer dans quelques instants..", err })
+            return res.status(400).json({ sub_err: "La modification des paramètres utilisateur a échouée, veuillez réessayer dans quelques instants..", err })
           }
           // forum created
           return res.status(200).json({
@@ -291,6 +315,11 @@ exports.updateParameters = (req, res, next) => {
   }  
   // fields missing
   else{
+    fs.unlink(`images/${pic_url.split('/images/')[1]}`, (err => {
+      if(err) {
+          return res.status(500).json({ err })
+      }
+    }))
     return res.status(400).json({ sub_err: "Validation de donnée: Il semblerait que l'un des champs requis est manquant." })
   }
 }

@@ -39,12 +39,12 @@ exports.getAllForumsGlobal = (req, res, next) => {
 
 exports.createOneForumGlobal = (req, res, next) => {
     let forum_text = JSON.parse(req.body.forum).text
-    let user_id = JSON.parse(req.body.user).id
+    let userId = req.headers.userid
     
     // required fields
-    if (forum_text && user_id) {
+    if (forum_text && userId) {
         let dataValidation
-        dataValidation = Forum.validate({user_id:user_id, text:forum_text})
+        dataValidation = Forum.validate({user_id:userId, text:forum_text})
         
         // data validation failed
         if(dataValidation.error) {
@@ -62,11 +62,11 @@ exports.createOneForumGlobal = (req, res, next) => {
             // if image attach
             if (req.file) {
                 forum_image_url = `${req.protocol}://${req.get('host')}/images/${req.file.filename}`;
-                dbQuery = `INSERT INTO Forums (user_id, text, image_url) VALUES (${user_id}, '${forum_text}', '${forum_image_url}')`
+                dbQuery = `INSERT INTO Forums (user_id, text, image_url) VALUES (${userId}, '${forum_text}', '${forum_image_url}')`
             }
             // else
             else{
-                dbQuery = `INSERT INTO Forums (user_id, text) VALUES (${user_id}, '${forum_text}')`
+                dbQuery = `INSERT INTO Forums (user_id, text) VALUES (${userId}, '${forum_text}')`
             }
             // insert in db the new forum
             db.query(dbQuery, (err, result) => {
@@ -93,9 +93,9 @@ exports.createOneForumGlobal = (req, res, next) => {
 }
 
 exports.getAllForumsUser = (req, res, next) => {
-    let user_id = req.body[0].id
+    let userId = req.headers.userid
 
-    if(user_id) {
+    if(userId) {
         db.query(
             `SELECT a.id as user_id,
                     a.firstname,
@@ -108,7 +108,7 @@ exports.getAllForumsUser = (req, res, next) => {
             FROM Accounts as a
             INNER JOIN Forums as f
             ON a.id = f.user_id
-            WHERE f.user_id = ${user_id}
+            WHERE f.user_id = ${userId}
             ORDER BY f.created_at DESC
             `, (err, result) => {
             if(err) {
