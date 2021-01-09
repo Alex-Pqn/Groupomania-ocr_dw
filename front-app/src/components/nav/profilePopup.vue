@@ -78,7 +78,7 @@ export default {
     display: flex;
     flex-direction: column;
     align-items: center;
-    margin: 10px 0 9px 0;
+    margin: 4px 0 9px 0;
     font-size: 1.1em;
     img {
       @include profile-pic;
@@ -118,6 +118,7 @@ export default {
 }
 @media screen and (max-width: 1024px) {
   .profile-popup {
+    padding-top: 5px;
     // user infos
     &__user-infos {
       display: none;
