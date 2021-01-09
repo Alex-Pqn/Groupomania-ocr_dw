@@ -33,7 +33,6 @@
             minlength="3"
             maxlength="30"
             required
-            value="test"
           />
           <p id="firstname-error"></p>
         </div>
@@ -48,7 +47,6 @@
             minlength="3"
             maxlength="30"
             required
-            value="test"
           />
           <p id="lastname-error"></p>
         </div>
@@ -63,7 +61,6 @@
             minlength="5"
             maxlength="55"
             required
-            value="test@gmail.com"
           />
           <p id="email-error"></p>
         </div>
@@ -78,7 +75,6 @@
             minlength="8"
             maxlength="50"
             required
-            value="testtest1Aa"
           />
         </div>
         <div>
@@ -92,7 +88,6 @@
             minlength="8"
             maxlength="50"
             required
-            value="testtest1Aa"
           />
           <p id="password-error"></p>
         </div>
@@ -151,7 +146,7 @@ export default {
     });
   },
   methods: {
-    // REGISTER SUBMIT
+    // REGISTER SUBMIT VALIDATION
     registerSubmit: function(event) {
       const vm = this
       event.preventDefault();
@@ -213,6 +208,7 @@ export default {
       // inputs validator
       formData.forEach(data => {
         document.getElementById(data.errorIdContainer).style.display = "none";
+        
         // length validation
         if (data.value.length < data.minLength) {
           return vm.displayFormError(
@@ -225,6 +221,7 @@ export default {
             `Votre ${data.name} ne peut être composé que de ${data.maxLength} caractères au maximum.`
           );
         }
+        
         // regex validation
         if (data.regex.test(data.value) === false) {
           if (data.id === 1 || data.id === 2) {
@@ -244,6 +241,7 @@ export default {
             );
           }
         }
+        
         // passwords corresponds validation
         if (data.id === 4) {
           if (repasswordInput !== data.value) {
@@ -253,6 +251,7 @@ export default {
             );
           }
         }
+        
         data.stepValidation = true;
         // if all inputs are valids, call api
         if (
@@ -265,18 +264,10 @@ export default {
         }
       });
     },
-    // API REQUEST
+    // REGISTER API REQUEST
     registerRequest(firstname, lastname, email, password, newsletters) {
       const vm = this
       const submitButton = document.getElementById("submit");
-      
-      let userParams = {
-        firstname,
-        lastname,
-        email,
-        password,
-        newsletters,
-      };
       
       // XHR ERROR
       function xhrCallbackError () {
@@ -314,6 +305,13 @@ export default {
       }
       
       // API CALL
+      let userParams = {
+        firstname,
+        lastname,
+        email,
+        password,
+        newsletters,
+      };
       apiAuth("api/user/register", "POST", JSON.stringify(userParams), apiCallbackDone, apiCallbackError, xhrCallbackError);
     },
     displaySubmitInfoError(infoValue) {
