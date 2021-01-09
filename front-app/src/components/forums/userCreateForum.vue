@@ -47,19 +47,7 @@ export default {
   name: "userCreateForum",
   props: {},
   methods: {
-    imgChange(event) {
-      let reader = new FileReader();
-      reader.onload = function() {
-        document.getElementById("create-forum_img-output").src = reader.result;
-        document.getElementById("create-forum_img").style.display = "flex";
-      };
-      reader.readAsDataURL(event.target.files[0]);
-    },
-    imgClose() {
-      document.getElementById("create-forum_img").style.display = "none";
-      document.getElementById("create-forum_upload-img").value = "";
-      document.getElementById("create-forum_img-output").src = "";
-    },
+    // CREATE FORUM
     createForum() {
       const vm = this
       let forumImgOutput = document.querySelector("input[type=file]").files[0];
@@ -81,7 +69,7 @@ export default {
         vm.errorHandler(`Votre message doit contenir au minimum ${forumValidation.minLength} caractère.`)
       }
     },
-    // API REQUEST
+    // CREATE FORUM API REQUEST
     createForumRequest (forumText, forumImage) {
       const vm = this
       let formData = new FormData();
@@ -126,7 +114,22 @@ export default {
         errorContainer.textContent = errValue
         errorContainer.style.display = "flex"
       }, 150);
-    }
+    },
+    // Generate local FileReader base64 for imported image
+    imgChange(event) {
+      let reader = new FileReader();
+      reader.onload = function() {
+        document.getElementById("create-forum_img-output").src = reader.result;
+        document.getElementById("create-forum_img").style.display = "flex";
+      };
+      reader.readAsDataURL(event.target.files[0]);
+    },
+    // Close image in FileReader
+    imgClose() {
+      document.getElementById("create-forum_img").style.display = "none";
+      document.getElementById("create-forum_upload-img").value = "";
+      document.getElementById("create-forum_img-output").src = "";
+    },
   }
 };
 </script>
