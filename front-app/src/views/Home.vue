@@ -84,7 +84,7 @@ import userCreateForum from "@/components/forums/userCreateForum.vue";
 import trends from "@/components/trends/trends.vue";
 import mainNav from "@/components/nav/mainNav.vue";
 import profilePopup from "@/components/nav/profilePopup.vue";
-import { api, displayProfilePopup } from "@/utils/scripts";
+import { api, displayProfilePopup, dateFormatting } from "@/utils/scripts";
 
 export default {
   name: "Home",
@@ -96,89 +96,70 @@ export default {
   },
   beforeMount: async function () {
     const vm = this
-    let formData = new FormData();
-    let result
-    
-    // XHR ERROR
-    function xhrCallbackError (response) {
-      vm.errorHandler(response)
-      console.error(response)
-    }
-    
-     // API CALLBACK ERROR
-    function apiCallbackError (response, readyState, httpStatus) {
-      vm.errorHandler(response.sub_err)
-      console.error(response)
-      console.error(`ReadyState: ${readyState}, HttpStatus: ${httpStatus}`)
-    }
-    
-    // API CALLBACK DONE
-    function apiCallbackDone (response) {
-      result = response.result
-      let forums_list = []
-      
-      const monthNames = ["janv", "févr", "mars", "avr", "mai", "juin",
-        "juill", "août", "sept", "oct", "nov", "déc"
-      ];
-      
-      result.forEach(forum => {
-        let date = new Date(forum.created_at)
-        
-        let date_currentYear = new Date().getFullYear()
-        let date_currentMonth = new Date().getMonth()
-        let date_currentDay = new Date().getDate()
-        
-        let created_at_date = forum.created_at.split("T")[0].split("-").reverse()
-        let created_at_date_day = created_at_date[0]
-        let created_at_date_month = monthNames[date.getMonth()]
-        let created_at_date_year = created_at_date[2]
-        
-        let created_at_time = forum.created_at.split("T")[1].split(".")[0].split(":")
-        let created_at_time_hour = created_at_time[0]
-        let created_at_time_minute = created_at_time[1]
-        
-        if(date_currentDay == created_at_date_day && date_currentMonth == date.getMonth() && date_currentYear == created_at_date_year) {
-          forum.created_at = `${created_at_time_hour}h${created_at_time_minute}`
-        }else if(created_at_date_year == date_currentYear) {
-          forum.created_at = `le ${created_at_date_day} ${created_at_date_month}. à ${created_at_time_hour}h${created_at_time_minute}`
-        }else{
-          forum.created_at = `le ${created_at_date_day} ${created_at_date_month}. ${created_at_date_year} à ${created_at_time_hour}h${created_at_time_minute}`
-        }
-        
-        let userForum = {
-          id: forum.id,
-          user_id: forum.user_id,
-          published_date: forum.created_at,
-          pic_url: forum.pic_url,
-          firstname: forum.firstname,
-          lastname: forum.lastname,
-          text: forum.text,
-          total_comments: 0,
-          image_url: forum.image_url,
-          comments: []
-        }
-
-        // add the forum in forums_list to get comments below
-        forums_list.push(forum.id)
-        // push the forum in data
-        vm.forums.push(userForum)
-      });
-      
-      // call getComments method with forums list
-      if(forums_list.length >= 1) {
-        vm.getComments(forums_list)
-      }
-    }
-
-    // API CALL
-    api("api/forums/global/get", "GET", formData, apiCallbackDone, apiCallbackError, xhrCallbackError)
+    vm.getForums()
   },
   methods: {
+    // GET FORUMS
+    getForums () {
+      const vm = this
+      let result
+      
+      // XHR ERROR
+      function xhrCallbackError (response) {
+        vm.errorHandler(response)
+        console.error(response)
+      }
+      
+      // API CALLBACK ERROR
+      function apiCallbackError (response, readyState, httpStatus) {
+        vm.errorHandler(response.sub_err)
+        console.error(response)
+        console.error(`ReadyState: ${readyState}, HttpStatus: ${httpStatus}`)
+      }
+      
+      // API CALLBACK DONE
+      function apiCallbackDone (response) {
+        result = response.result
+        let forums_list = []
+        
+        result.forEach(forum => {
+          // data formatting
+          function formatedDate (date) {
+            forum.created_at = date
+          }
+          dateFormatting(forum, formatedDate)
+          
+          let userForum = {
+            id: forum.id,
+            user_id: forum.user_id,
+            published_date: forum.created_at,
+            pic_url: forum.pic_url,
+            firstname: forum.firstname,
+            lastname: forum.lastname,
+            text: forum.text,
+            total_comments: 0,
+            image_url: forum.image_url,
+            comments: []
+          }
+
+          // add the forum in forums_list to get comments below
+          forums_list.push(forum.id)
+          // push the forum in data
+          vm.forums.push(userForum)
+        });
+        
+        // call getComments method with forums list
+        if(forums_list.length >= 1) {
+          vm.getComments(forums_list)
+        }
+      }
+
+      // API CALL
+      api("api/forums/global/get", "GET", undefined, apiCallbackDone, apiCallbackError, xhrCallbackError)
+    },
+    // GET COMMENTS
     getComments (forums_list) {
       const vm = this
-      let data = [
-        forums_list
-      ]
       
       // XHR ERROR
       function xhrCallbackError (response) {
@@ -197,33 +178,12 @@ export default {
         let forums = vm.forums
         let userComment
         
-        const monthNames = ["janv", "févr", "mars", "avr", "mai", "juin",
-          "juill", "août", "sept", "oct", "nov", "déc"
-        ];
-        
         comments.forEach(comment => {
-        let date = new Date(comment.created_at)
-        
-        let date_currentYear = new Date().getFullYear()
-        let date_currentMonth = new Date().getMonth()
-        let date_currentDay = new Date().getDate()
-        
-        let created_at_date = comment.created_at.split("T")[0].split("-").reverse()
-        let created_at_date_day = created_at_date[0]
-        let created_at_date_month = monthNames[date.getMonth()]
-        let created_at_date_year = created_at_date[2]
-        
-        let created_at_time = comment.created_at.split("T")[1].split(".")[0].split(":")
-        let created_at_time_hour = created_at_time[0]
-        let created_at_time_minute = created_at_time[1]
-        
-        if(date_currentDay == created_at_date_day && date_currentMonth == date.getMonth() && date_currentYear == created_at_date_year) {
-          comment.created_at = `${created_at_time_hour}h${created_at_time_minute}`
-        }else if(created_at_date_year == date_currentYear) {
-          comment.created_at = `le ${created_at_date_day} ${created_at_date_month}. à ${created_at_time_hour}h${created_at_time_minute}`
-        }else{
-          comment.created_at = `le ${created_at_date_day} ${created_at_date_month}. ${created_at_date_year} à ${created_at_time_hour}h${created_at_time_minute}`
-        }
+          // data formatting
+          function formatedDate (date) {
+            comment.created_at = date
+          }
+          dateFormatting(comment, formatedDate)
           
           userComment = {
             pic_url: comment.pic_url,
@@ -243,6 +203,10 @@ export default {
         });
       }
       
+      // API CALL
+      let data = [
+        forums_list
+      ]
       api("api/comments/get", "POST", data, apiCallbackDone, apiCallbackError, xhrCallbackError)
     },
     errorHandler (err) {
