@@ -35,7 +35,7 @@
 
 <script>
 import displayUserTrends from "@/components/trends/displayUserTrends.vue";
-import { api } from "@/utils/scripts";
+import { api, dateFormatting } from "@/utils/scripts";
 
 export default {
   name: "trends",
@@ -47,71 +47,54 @@ export default {
   },
   beforeMount: async function () {
     const vm = this
-    let formData = new FormData();
-    let result
-    
-    // XHR ERROR
-    function xhrCallbackError (response) {
-      vm.errorHandler(response)
-      console.error(response)
-    }
-    
-     // API CALLBACK ERROR
-    function apiCallbackError (response, readyState, httpStatus) {
-      vm.errorHandler(response.sub_err)
-      console.error(response)
-      console.error(`ReadyState: ${readyState}, HttpStatus: ${httpStatus}`)
-    }
-    
-    // API CALLBACK DONE
-    function apiCallbackDone (response) {
-      result = response.result
-      
-      const monthNames = ["janv", "févr", "mars", "avr", "mai", "juin",
-        "juill", "août", "sept", "oct", "nov", "déc"
-      ];
-      
-      result.forEach(forum => {
-        let date = new Date(forum.created_at)
-        
-        let date_currentYear = new Date().getFullYear()
-        let date_currentMonth = new Date().getMonth()
-        let date_currentDay = new Date().getDate()
-        
-        let created_at_date = forum.created_at.split("T")[0].split("-").reverse()
-        let created_at_date_day = created_at_date[0]
-        let created_at_date_month = monthNames[date.getMonth()]
-        let created_at_date_year = created_at_date[2]
-        
-        let created_at_time = forum.created_at.split("T")[1].split(".")[0].split(":")
-        let created_at_time_hour = created_at_time[0]
-        let created_at_time_minute = created_at_time[1]
-        
-        if(date_currentDay == created_at_date_day && date_currentMonth == date.getMonth() && date_currentYear == created_at_date_year) {
-          forum.created_at = `${created_at_time_hour}h${created_at_time_minute}`
-        }else if(created_at_date_year == date_currentYear) {
-          forum.created_at = `${created_at_date_day} ${created_at_date_month}.`
-        }else{
-          forum.created_at = `${created_at_date_day} ${created_at_date_month}. ${created_at_date_year}`
-        }
-        
-        let userForum = {
-          published_date: forum.created_at,
-          pic_url: forum.pic_url,
-          firstname: forum.firstname,
-          lastname: forum.lastname,
-          text: forum.text
-        }
-
-        // push the forum in data
-        vm.recentsTrends.push(userForum)
-      });
-    }
-
-    // API CALL
-    api("api/forums/trends/get", "GET", formData, apiCallbackDone, apiCallbackError, xhrCallbackError)
+    vm.getForums()
   },
   methods: {
+    // GET FORUMS
+    getForums () {
+      const vm = this
+      let result
+      
+      // XHR ERROR
+      function xhrCallbackError (response) {
+        vm.errorHandler(response)
+        console.error(response)
+      }
+      
+      // API CALLBACK ERROR
+      function apiCallbackError (response, readyState, httpStatus) {
+        vm.errorHandler(response.sub_err)
+        console.error(response)
+        console.error(`ReadyState: ${readyState}, HttpStatus: ${httpStatus}`)
+      }
+      
+      // API CALLBACK DONE
+      function apiCallbackDone (response) {
+        result = response.result
+        
+        result.forEach(forum => {
+          // data formatting
+          function formatedDate (date) {
+            forum.created_at = date
+          }
+          dateFormatting(forum, formatedDate)
+          
+          let userForum = {
+            published_date: forum.created_at,
+            pic_url: forum.pic_url,
+            firstname: forum.firstname,
+            lastname: forum.lastname,
+            text: forum.text
+          }
+
+          // push the forum in data
+          vm.recentsTrends.push(userForum)
+        });
+      }
+
+      // API CALL
+      api("api/forums/trends/get", "GET", undefined, apiCallbackDone, apiCallbackError, xhrCallbackError)
+    },
     errorHandler (err) {
       const errorContainer = document.getElementById('error-handler')
       document.querySelector('#error-handler p').innerHTML = err
