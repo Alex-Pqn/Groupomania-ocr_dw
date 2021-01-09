@@ -298,7 +298,7 @@ export default {
           } else {
             redirectionTime--;
             vm.displaySubmitInfoSuccess(
-              `${response.message} Redirection vers l'accueil dans ${redirectionTime} secondes...`
+              `${response.message} Redirection vers l'accueil dans ${redirectionTime} secondes.`
             );
           }
         }, 1000);
