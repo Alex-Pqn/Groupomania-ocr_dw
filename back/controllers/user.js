@@ -246,6 +246,7 @@ exports.updateParameters = (req, res, next) => {
   
   let dbQuery
   
+  // required fields
   if(firstname && lastname && email && newsletters && pic_url && userId) {
     // data validation
     let dataValidation
@@ -325,5 +326,61 @@ exports.updateParameters = (req, res, next) => {
 }
 
 exports.deleteAccount = (req, res, next) => {
+  let userId = req.headers.userid
+  let userForumsList = []
   
+  // required fields
+  if(userId) {
+    
+    // get all forums created by user
+    db.query(`SELECT * FROM Forums WHERE user_id=${ userId }`, (err, result) => {
+      // error handler
+      if(err) {
+        return res.status(400).json({ sub_err: "La récupération de vos discussions et la suppression de votre compte a échouée, veuillez réessayer dans quelques instants.", err })
+      }
+      
+      // push forums id in array
+      result.forEach(forum => {
+        userForumsList.push(forum.id)
+      })
+      
+    // delete comments posted by the user + comments posted below forums
+    if(userForumsList.length >= 1) {
+      dbQuery = `DELETE FROM Comments WHERE user_id=${ userId } or forum_id in (${ userForumsList })`
+    }else{
+      dbQuery = `DELETE FROM Comments WHERE user_id=${ userId }`
+    }
+    db.query(dbQuery, (err, result) => {
+      // error handler
+      if(err) {
+        return res.status(400).json({ sub_err: "La suppression de vos commentaires et de votre compte a échouée, veuillez réessayer dans quelques instants.", err })
+      }
+      
+        // delete forums posted by user
+        db.query(`DELETE FROM Forums WHERE user_id=${ userId }`, (err, result) => {
+          // error handler
+          if(err) {
+            return res.status(400).json({ sub_err: "La suppression de vos discussions et de votre compte a échouée, veuillez réessayer dans quelques instants.", err })
+          }
+        
+          // delete account of user
+          db.query(`DELETE FROM Accounts WHERE id=${ userId }`, (err, result) => {
+            // error handler
+            if(err) {
+              return res.status(400).json({ sub_err: "La suppression de votre compte a échouée, veuillez réessayer dans quelques instants.", err })
+            }
+            // account deleted
+            return res.status(200).json({
+              message: `Votre compte a été correctement supprimé.`,
+            })
+          }) 
+        }) 
+      }) 
+    }) 
+  }
+  
+  // fields missing
+  else{
+    return res.status(400).json({ sub_err: "Validation de donnée: Il semblerait que l'un des champs requis est manquant." })
+  }
 }
