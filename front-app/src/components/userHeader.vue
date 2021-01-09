@@ -46,6 +46,12 @@ export default {
   },
   beforeMount: async function () {
       const vm = this
+      vm.getPrimaryInfos()
+  },
+  methods: {
+    // GET PRIMARY INFOS
+    getPrimaryInfos () {
+      const vm = this
       
       // XHR ERROR
       function xhrCallbackError (response) {
@@ -69,10 +75,8 @@ export default {
       }
       
       // API CALL
-      let data = []
-      api("api/user/primaryInfos", "POST", data, apiCallbackDone, apiCallbackError, xhrCallbackError)
-  },
-  methods: {
+      api("api/user/primaryInfos", "GET", undefined, apiCallbackDone, apiCallbackError, xhrCallbackError)
+    },
     displayProfilePopup
   },
   components: {
