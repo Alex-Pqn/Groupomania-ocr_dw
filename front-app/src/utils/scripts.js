@@ -90,7 +90,7 @@ export function api(urlAPI, method, data, apiCallbackDone, apiCallbackError, xhr
     if(
       urlAPI == "api/comments/create" || 
       urlAPI == "api/comments/get" || 
-      urlAPI == "api/forums/user/get" || 
+      urlAPI == "api/profile/get" || 
       urlAPI == "api/user/primaryInfos" ||
       urlAPI == "api/user/parameters/get") {
       xhr.setRequestHeader("Content-type", "application/json");

@@ -6,7 +6,9 @@ require('dotenv').config();
 
 // routes
 const commentsRoute = require('./routes/comments');
-const forumsRoute = require('./routes/forums')
+const homeRoute = require('./routes/home')
+const profileRoute = require('./routes/profile')
+const trendsRoute = require('./routes/trends')
 const userRoute = require('./routes/user');
 
 // initialize express in app
@@ -29,7 +31,9 @@ app.use(bodyParser.urlencoded({ extended: true }));
 // api routes
 app.use('/images', express.static(path.join(__dirname, 'images')));
 app.use('/api/user', userRoute);
-app.use('/api/forums', forumsRoute);
+app.use('/api/home', homeRoute);
+app.use('/api/profile', profileRoute);
+app.use('/api/trends', trendsRoute);
 app.use('/api/comments', commentsRoute);
 
 module.exports = app;

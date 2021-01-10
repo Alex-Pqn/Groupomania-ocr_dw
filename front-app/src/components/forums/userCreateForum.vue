@@ -104,7 +104,7 @@ export default {
       }
       
       // API CALL
-      api("api/forums/global/create", "POST", formData, apiCallbackDone, apiCallbackError, xhrCallbackError);
+      api("api/home/create", "POST", formData, apiCallbackDone, apiCallbackError, xhrCallbackError);
     },
     errorHandler (errValue) {
       const errorContainer = document.getElementById('create-forum_error-handler')

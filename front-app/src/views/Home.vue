@@ -156,7 +156,7 @@ export default {
       }
 
       // API CALL
-      api("api/forums/global/get", "GET", undefined, apiCallbackDone, apiCallbackError, xhrCallbackError)
+      api("api/home/get", "GET", undefined, apiCallbackDone, apiCallbackError, xhrCallbackError)
     },
     // GET COMMENTS
     getComments (forums_list) {

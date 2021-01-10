@@ -95,7 +95,7 @@ export default {
       }
 
       // API CALL
-      api("api/forums/trends/get", "GET", undefined, apiCallbackDone, apiCallbackError, xhrCallbackError)
+      api("api/trends/get", "GET", undefined, apiCallbackDone, apiCallbackError, xhrCallbackError)
     },
     errorHandler (err) {
       const errorContainer = document.getElementById('error-handler_trends')

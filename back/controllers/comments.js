@@ -8,7 +8,7 @@ const dbConfig = require('../db_config')
 const db = mysql.createPool(dbConfig.params)
 
 exports.getAllComments = (req, res, next) => {
-  let forum_id = req.body[0] 
+  let forum_id = req.body[0]
   
   // required fields
   if(forum_id) {
