@@ -92,7 +92,9 @@ export function api(urlAPI, method, data, apiCallbackDone, apiCallbackError, xhr
       urlAPI == "api/comments/get" || 
       urlAPI == "api/profile/get" || 
       urlAPI == "api/user/primaryInfos" ||
-      urlAPI == "api/user/parameters/get") {
+      urlAPI == "api/user/parameters/get" ||
+      urlAPI == "api/mod/comment/delete" ||
+      urlAPI == "api/mod/forum/delete") {
       xhr.setRequestHeader("Content-type", "application/json");
       xhr.send(JSON.stringify(data));
     }
