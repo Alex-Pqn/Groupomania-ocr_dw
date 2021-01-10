@@ -6,7 +6,6 @@ const profileController = require('../controllers/profile');
 
 const auth = require('../middlewares/auth');
 
-// user
 router.get('/get', auth, profileController.getAllForums)
 
 

@@ -6,7 +6,6 @@ const trendsController = require('../controllers/trends');
 
 const auth = require('../middlewares/auth');
 
-// trends
 router.get('/get', auth, trendsController.getAllForums)
 
 
