@@ -10,6 +10,13 @@
       <section id="top" class="user-parameters">
         <!-- header -->
         <userHeader/>
+        <!-- error handler -->
+        <div id="error-handler_parameters" class="error-handler">
+          <h3>
+            Erreur
+          </h3>
+          <p></p>
+        </div>
         <!-- main -->
         <div class="user-parameters__main">
           <h3>
@@ -237,11 +244,13 @@ export default {
     
       // XHR ERROR
       function xhrCallbackError (response) {
+        vm.errorHandler(response)
         console.error(response)
       }
       
       // API CALLBACK ERROR
       function apiCallbackError (response, readyState, httpStatus) {
+        vm.errorHandler(response.sub_err)
         console.error(response)
         console.error(`ReadyState: ${readyState}, HttpStatus: ${httpStatus}`)
       }
@@ -265,6 +274,13 @@ export default {
       
       // API CALL
       api("api/user/parameters/get", "GET", undefined, apiCallbackDone, apiCallbackError, xhrCallbackError)
+    },
+    errorHandler (err) {
+      const errorContainer = document.getElementById('error-handler_parameters')
+      document.querySelector('#error-handler_parameters p').innerHTML = err
+      errorContainer.style.display = "block"
+      
+      document.querySelector('.user-parameters__main').style.display = "none"
     },
     // USER PARAMETERS FORM VALIDATION
     userParametersFormSend() {
@@ -486,8 +502,8 @@ export default {
       
       // API CALLBACK ERROR
       function apiCallbackError (response, readyState, httpStatus) {
-        console.log(response)
         vm.infoHandler(response.sub_err, 'red')
+        console.error(response)
         console.error(`ReadyState: ${readyState}, HttpStatus: ${httpStatus}`)
       }
       
@@ -530,7 +546,7 @@ export default {
         infoContainer.textContent = infoValue
         infoContainer.style.display = "flex"
       }, timeoutTime);
-    }
+    },
   },
   components: {
     trends,
