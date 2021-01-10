@@ -302,7 +302,7 @@ exports.updateParameters = (req, res, next) => {
                 if(err) {
                     return res.status(500).json({ err })
                 }
-            }))
+              }))
             }
             return res.status(400).json({ sub_err: "La modification des paramètres utilisateur a échouée, veuillez réessayer dans quelques instants..", err })
           }
@@ -339,9 +339,16 @@ exports.deleteAccount = (req, res, next) => {
         return res.status(400).json({ sub_err: "La récupération de vos discussions et la suppression de votre compte a échouée, veuillez réessayer dans quelques instants.", err })
       }
       
-      // push forums id in array
+      // push forums id in array and delete forum image
       result.forEach(forum => {
         userForumsList.push(forum.id)
+        if(pic_url != "http://localhost:3000/images/user-icon.png") {
+          fs.unlink(`images/${forum.image_url.split('/images/')[1]}`, (err => {
+            if(err) {
+                return res.status(500).json({ err })
+            }
+          }))
+        }
       })
       
     // delete comments posted by the user + comments posted below forums
@@ -356,24 +363,41 @@ exports.deleteAccount = (req, res, next) => {
         return res.status(400).json({ sub_err: "La suppression de vos commentaires et de votre compte a échouée, veuillez réessayer dans quelques instants.", err })
       }
       
-        // delete forums posted by user
-        db.query(`DELETE FROM Forums WHERE user_id=${ userId }`, (err, result) => {
+      // delete forums posted by user
+      db.query(`DELETE FROM Forums WHERE user_id=${ userId }`, (err, result) => {
+        // error handler
+        if(err) {
+          return res.status(400).json({ sub_err: "La suppression de vos discussions et de votre compte a échouée, veuillez réessayer dans quelques instants.", err })
+        }
+          
+        // delete user pic
+        db.query(`SELECT * FROM Accounts WHERE id=${ userId }`, (err, result) => {
           // error handler
           if(err) {
-            return res.status(400).json({ sub_err: "La suppression de vos discussions et de votre compte a échouée, veuillez réessayer dans quelques instants.", err })
+            return res.status(400).json({ sub_err: "La suppression de votre photo de profil et de votre compte a échouée, veuillez réessayer dans quelques instants.", err })
+          }
+          
+          let userPic = result[0].pic_url
+          if(userPic != "http://localhost:3000/images/user-icon.png") {
+            fs.unlink(`images/${userPic.split('/images/')[1]}`, (err => {
+              if(err) {
+                  return res.status(500).json({ err })
+              }
+            }))
           }
         
-          // delete account of user
-          db.query(`DELETE FROM Accounts WHERE id=${ userId }`, (err, result) => {
-            // error handler
-            if(err) {
-              return res.status(400).json({ sub_err: "La suppression de votre compte a échouée, veuillez réessayer dans quelques instants.", err })
-            }
-            // account deleted
-            return res.status(200).json({
-              message: `Votre compte a été correctement supprimé.`,
-            })
-          }) 
+            // delete account of user
+            db.query(`DELETE FROM Accounts WHERE id=${ userId }`, (err, result) => {
+              // error handler
+              if(err) {
+                return res.status(400).json({ sub_err: "La suppression de votre compte a échouée, veuillez réessayer dans quelques instants.", err })
+              }
+              // account deleted
+              return res.status(200).json({
+                message: `Votre compte a été correctement supprimé.`,
+              })
+            }) 
+          })
         }) 
       }) 
     }) 
