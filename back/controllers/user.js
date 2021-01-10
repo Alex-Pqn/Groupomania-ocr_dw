@@ -234,8 +234,9 @@ exports.getParameters = (req, res, next) => {
 
 exports.updateParameters = (req, res, next) => {
   let userId = req.headers.userid
-  
   let userParameters = JSON.parse(req.body.userParameters)
+  let userPicWasUpdated = false
+  
   let firstname = userParameters.firstname
   let lastname = userParameters.lastname
   let email = userParameters.email
@@ -264,6 +265,7 @@ exports.updateParameters = (req, res, next) => {
     else{
       // if file in request, remove older user pic url / pic_url = older user pic url
       if(req.file) {
+        userPicWasUpdated = true
         if(pic_url != "http://localhost:3000/images/user-icon.png") {
           fs.unlink(`images/${pic_url.split('/images/')[1]}`, (err => {
             if(err) {
@@ -308,7 +310,7 @@ exports.updateParameters = (req, res, next) => {
           }
           // forum created
           return res.status(200).json({
-            message: `Les modifications ont été enregistrées.`,
+            message: `Les modifications ont été enregistrées.`, userPicWasUpdated
           })
         }) 
       } 
