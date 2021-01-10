@@ -1,224 +1,230 @@
 <template>
-  <!-- container page -->
-  <div class="parameters">
-    <!-- displayed beetween 0px > 1023px -->
-    <div class="mobile-container">
-      <!-- trends -->
-      <trends />
+  <main>
+    <!-- moderation panel -->
+    <moderationPanel v-if="user.modPanelAccess === true" />
+    
+    <!-- container page -->
+    <div class="parameters">
+      <!-- displayed beetween 0px > 1023px -->
+      <div class="mobile-container">
+        <!-- trends -->
+        <trends />
 
-      <!-- parameters -->
-      <section id="top" class="user-parameters">
-        <!-- header -->
-        <profileAndParametersHeader />
-        <!-- error handler -->
-        <div id="error-handler_parameters" class="error-handler">
-          <h3>
-            Erreur
-          </h3>
-          <p></p>
-        </div>
-        <!-- main -->
-        <div class="user-parameters__main">
-          <h3>
-            Mes paramètres
-          </h3>
-          <!-- form -->
-          <form v-on:submit="userParametersFormSend" name="parametersForm">
-            <!-- global -->
-            <h4>
-              Global
-            </h4>
-            <article class="user-parameters-global">
-              <div class="user-parameters-global__labels">
-                <label for="firstname">
-                  Prénom :
-                </label>
-                <label for="lastname">
-                  Nom :
-                </label>
-                <label for="email">
-                  E-mail :
-                </label>
-                <label for="description">
-                  Description :
-                </label>
-                <label for="password">
-                  Nouveau mot de passe :
-                </label>
-                <label for="re-password">
-                  Nouveau mot de passe :
-                </label>
-              </div>
-              <div class="user-parameters-global__inputs">
-                <input
-                  id="firstname"
-                  name="firstname"
-                  :value="user.firstname"
-                  type="text"
-                  minlength="3"
-                  maxlength="30"
-                  placeholder="Entrez votre prénom"
-                  required
-                />
-                <input
-                  id="lastname"
-                  name="lastname"
-                  :value="user.lastname"
-                  type="text"
-                  minlength="3"
-                  maxlength="30"
-                  placeholder="Entrez votre nom"
-                  required
-                />
-                <input
-                  id="email"
-                  name="email"
-                  :value="user.email"
-                  type="email"
-                  minlength="5"
-                  maxlength="55"
-                  placeholder="Entrez votre e-mail"
-                  required
-                />
-                <input
-                  id="description"
-                  name="description"
-                  :value="user.description"
-                  type="text"
-                  maxlength="255"
-                  placeholder="Entrez une description"
-                />
-                <input
-                  type="password"
-                  name="password"
-                  id="password"
-                  minlength="8"
-                  maxlength="50"
-                  placeholder="Nouveau mot de passe"
-                />
-                <input
-                  type="password"
-                  name="repassword"
-                  id="re-password"
-                  minlength="8"
-                  maxlength="50"
-                  placeholder="Confirmez le mot de passe"
-                />
-              </div>
-            </article>
-            <!-- notifications -->
-            <h4>
-              Notifications
-            </h4>
-            <article class="user-parameters-notifications">
-              <label for="newsletters">
-                Newsletters relatives à Groupomania par e-mail :
-              </label>
-              <input
-                id="newsletters"
-                name="newsletters"
-                type="checkbox"
-                value="false"
-              />
-            </article>
-            <!-- pic -->
-            <h4>
-              Photo de profil
-            </h4>
-            <article class="user-parameters-pic">
-              <div class="user-parameters-pic__img-input">
-                <label for="user-parameters-pic_upload-img">
-                  <img src="@/assets/cloud-upload-alt-solid.svg" alt="" />
-                  <p>
-                    Envoyer
-                  </p>
-                </label>
-                <input
-                  @change="userParamatersImgChange($event)"
-                  id="user-parameters-pic_upload-img"
-                  type="file"
-                  accept="image/*"
-                />
-              </div>
-              <div
-                id="user-parameters-pic_img-container"
-                class="user-parameters-pic__img-output"
-              >
-                <img
-                  id="user-parameters-pic_img-output"
-                  :src="user.pic_url"
-                  alt=""
-                />
-                <div>
-                  <img
-                    v-on:click="userParamatersImgClose"
-                    src="@/assets/times-solid.svg"
-                    alt=""
+        <!-- parameters -->
+        <section id="top" class="user-parameters">
+          <!-- header -->
+          <profileAndParametersHeader />
+          <!-- error handler -->
+          <div id="error-handler_parameters" class="error-handler">
+            <h3>
+              Erreur
+            </h3>
+            <p></p>
+          </div>
+          <!-- main -->
+          <div class="user-parameters__main">
+            <h3>
+              Mes paramètres
+            </h3>
+            <!-- form -->
+            <form v-on:submit="userParametersFormSend" name="parametersForm">
+              <!-- global -->
+              <h4>
+                Global
+              </h4>
+              <article class="user-parameters-global">
+                <div class="user-parameters-global__labels">
+                  <label for="firstname">
+                    Prénom :
+                  </label>
+                  <label for="lastname">
+                    Nom :
+                  </label>
+                  <label for="email">
+                    E-mail :
+                  </label>
+                  <label for="description">
+                    Description :
+                  </label>
+                  <label for="password">
+                    Nouveau mot de passe :
+                  </label>
+                  <label for="re-password">
+                    Nouveau mot de passe :
+                  </label>
+                </div>
+                <div class="user-parameters-global__inputs">
+                  <input
+                    id="firstname"
+                    name="firstname"
+                    :value="user.firstname"
+                    type="text"
+                    minlength="3"
+                    maxlength="30"
+                    placeholder="Entrez votre prénom"
+                    required
+                  />
+                  <input
+                    id="lastname"
+                    name="lastname"
+                    :value="user.lastname"
+                    type="text"
+                    minlength="3"
+                    maxlength="30"
+                    placeholder="Entrez votre nom"
+                    required
+                  />
+                  <input
+                    id="email"
+                    name="email"
+                    :value="user.email"
+                    type="email"
+                    minlength="5"
+                    maxlength="55"
+                    placeholder="Entrez votre e-mail"
+                    required
+                  />
+                  <input
+                    id="description"
+                    name="description"
+                    :value="user.description"
+                    type="text"
+                    maxlength="255"
+                    placeholder="Entrez une description"
+                  />
+                  <input
+                    type="password"
+                    name="password"
+                    id="password"
+                    minlength="8"
+                    maxlength="50"
+                    placeholder="Nouveau mot de passe"
+                  />
+                  <input
+                    type="password"
+                    name="repassword"
+                    id="re-password"
+                    minlength="8"
+                    maxlength="50"
+                    placeholder="Confirmez le mot de passe"
                   />
                 </div>
-              </div>
-            </article>
-            <!-- send -->
-            <div class="user-parameters-send">
-              <input type="submit" value="Sauvegarder" />
-            </div>
-            <p id="user-parameters_error-handler"></p>
-          </form>
-          <button id="delete-account_button" v-on:click="deleteAccountModal">
-            Supprimer mon compte
-          </button>
-          <div class="delete-account-modal" id="delete-account-container">
-            <div class="delete-account-modal__content">
+              </article>
+              <!-- notifications -->
               <h4>
-                Suppression de votre compte
+                Notifications
               </h4>
-              <p>
-                En supprimant votre compte Groupomania, les données suivantes
-                seront supprimées de nos services :
-              </p>
-              <ul>
-                <li>
-                  - Les discussions postées
-                </li>
-                <li>
-                  - Les commentaires postés
-                </li>
-                <li>
-                  - L'ensemble des données ratachées à votre compte, comprenant
-                  notamment votre e-mail et votre mot de passe.
-                </li>
-              </ul>
-              <p>
-                En cliquant sur <strong>supprimer mon compte</strong>, vous
-                acceptez perdre l'ensemble de ces données ainsi que l'accès à
-                votre compte de façon définitive.
-              </p>
-              <button id="delete-account" v-on:click="deleteAccount">
-                Supprimer mon compte
-              </button>
-              <button
-                id="quit-delete-account"
-                v-on:click="quitDeleteAccountModal"
-              >
-                Retour
-              </button>
-              <!-- info handler -->
-              <p id="handler-delete-account"></p>
+              <article class="user-parameters-notifications">
+                <label for="newsletters">
+                  Newsletters relatives à Groupomania par e-mail :
+                </label>
+                <input
+                  id="newsletters"
+                  name="newsletters"
+                  type="checkbox"
+                  value="false"
+                />
+              </article>
+              <!-- pic -->
+              <h4>
+                Photo de profil
+              </h4>
+              <article class="user-parameters-pic">
+                <div class="user-parameters-pic__img-input">
+                  <label for="user-parameters-pic_upload-img">
+                    <img src="@/assets/cloud-upload-alt-solid.svg" alt="" />
+                    <p>
+                      Envoyer
+                    </p>
+                  </label>
+                  <input
+                    @change="userParamatersImgChange($event)"
+                    id="user-parameters-pic_upload-img"
+                    type="file"
+                    accept="image/*"
+                  />
+                </div>
+                <div
+                  id="user-parameters-pic_img-container"
+                  class="user-parameters-pic__img-output"
+                >
+                  <img
+                    id="user-parameters-pic_img-output"
+                    :src="user.pic_url"
+                    alt=""
+                  />
+                  <div>
+                    <img
+                      v-on:click="userParamatersImgClose"
+                      src="@/assets/times-solid.svg"
+                      alt=""
+                    />
+                  </div>
+                </div>
+              </article>
+              <!-- send -->
+              <div class="user-parameters-send">
+                <input type="submit" value="Sauvegarder" />
+              </div>
+              <p id="user-parameters_error-handler"></p>
+            </form>
+            <button id="delete-account_button" v-on:click="deleteAccountModal">
+              Supprimer mon compte
+            </button>
+            <div class="delete-account-modal" id="delete-account-container">
+              <div class="delete-account-modal__content">
+                <h4>
+                  Suppression de votre compte
+                </h4>
+                <p>
+                  En supprimant votre compte Groupomania, les données suivantes
+                  seront supprimées de nos services :
+                </p>
+                <ul>
+                  <li>
+                    - Les discussions postées
+                  </li>
+                  <li>
+                    - Les commentaires postés
+                  </li>
+                  <li>
+                    - L'ensemble des données ratachées à votre compte, comprenant
+                    notamment votre e-mail et votre mot de passe.
+                  </li>
+                </ul>
+                <p>
+                  En cliquant sur <strong>supprimer mon compte</strong>, vous
+                  acceptez perdre l'ensemble de ces données ainsi que l'accès à
+                  votre compte de façon définitive.
+                </p>
+                <button id="delete-account" v-on:click="deleteAccount">
+                  Supprimer mon compte
+                </button>
+                <button
+                  id="quit-delete-account"
+                  v-on:click="quitDeleteAccountModal"
+                >
+                  Retour
+                </button>
+                <!-- info handler -->
+                <p id="handler-delete-account"></p>
+              </div>
             </div>
           </div>
-        </div>
-      </section>
+        </section>
 
-      <!-- main-nav -->
-      <mainNav />
+        <!-- main-nav -->
+        <mainNav />
+      </div>
     </div>
-  </div>
+  </main>
 </template>
 
 <script>
 import { api } from "@/utils/scripts";
 import trends from "@/components/trends/trends.vue";
 import mainNav from "@/components/nav/mainNav.vue";
+import moderationPanel from "@/components/moderation/panel.vue";
 import profileAndParametersHeader from "@/components/profileAndParameters/header.vue";
 
 export default {
@@ -231,7 +237,8 @@ export default {
         lastname: "",
         email: "",
         description: "",
-        newsletters: ""
+        newsletters: "",
+        modPanelAccess: false
       }
     };
   },
@@ -276,6 +283,10 @@ export default {
         vm.user.email = user.email;
         vm.user.description = user.description;
         vm.user.newsletters = user.newsletters;
+        
+        if (user.is_admin === 1 || user.is_mod === 1) {
+          vm.user.modPanelAccess = true
+        }
 
         if (user.newsletters === 1) {
           document.getElementById("newsletters").checked = true;
@@ -637,7 +648,8 @@ export default {
   components: {
     trends,
     mainNav,
-    profileAndParametersHeader
+    profileAndParametersHeader,
+    moderationPanel
   }
 };
 </script>

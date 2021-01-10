@@ -1,7 +1,7 @@
 <template>
   <main>
     <!-- moderation panel -->
-    <moderationPanel v-if="3 > 2" />
+    <moderationPanel v-if="user.modPanelAccess === true" />
 
     <!-- home -->
     <div class="home">
@@ -97,11 +97,15 @@ export default {
   name: "Home",
   data() {
     return {
+      user: {
+        modPanelAccess: false
+      },
       forums: []
     };
   },
   beforeMount: async function() {
     this.getForums();
+    this.modPanelAccess();
   },
   methods: {
     // GET FORUMS
@@ -235,6 +239,40 @@ export default {
       const errorContainer = document.getElementById("error-handler_home");
       document.querySelector("#error-handler_home p").innerHTML = err;
       errorContainer.style.display = "block";
+    },
+    
+    // MOD PANEL ACCESS
+    modPanelAccess () {
+      const vm = this
+
+      // XHR ERROR
+      function xhrCallbackError(response) {
+        console.error(response);
+      }
+
+      // API CALLBACK ERROR
+      function apiCallbackError(response, readyState, httpStatus) {
+        console.error(response);
+        console.error(`ReadyState: ${readyState}, HttpStatus: ${httpStatus}`);
+      }
+
+      // API CALLBACK DONE
+      function apiCallbackDone(response) {
+        let user = response.result[0];
+        if (user.is_admin === 1 || user.is_mod === 1) {
+          vm.user.modPanelAccess = true
+        }
+      }
+
+      // API CALL
+      api(
+        "api/user/account/primaryInfos",
+        "GET",
+        undefined,
+        apiCallbackDone,
+        apiCallbackError,
+        xhrCallbackError
+      );
     },
     displayProfilePopup
   },

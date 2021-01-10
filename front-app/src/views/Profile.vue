@@ -1,61 +1,67 @@
 <template>
-  <div class="profile">
-    <!-- displayed beetween 0px > 1023px -->
-    <div class="mobile-container">
-      <!-- trends -->
-      <trends />
+  <main>
+    <!-- moderation panel -->
+    <moderationPanel v-if="user.modPanelAccess === true" />
+    
+    <!-- profile -->
+    <div class="profile">
+      <!-- displayed beetween 0px > 1023px -->
+      <div class="mobile-container">
+        <!-- trends -->
+        <trends />
 
-      <!-- profile -->
-      <div class="user-profile" id="top">
-        <!-- header -->
-        <profileAndParametersHeader class="user-profile__header" />
-        <section class="user-profile__forums">
-          <userCreateForum />
-          <h3>
-            Mon fil de discussion
-          </h3>
-          <!-- error handler -->
-          <div id="error-handler_profile" class="error-handler">
+        <!-- profile -->
+        <div class="user-profile" id="top">
+          <!-- header -->
+          <profileAndParametersHeader class="user-profile__header" />
+          <section class="user-profile__forums">
+            <userCreateForum />
             <h3>
-              Erreur
+              Mon fil de discussion
             </h3>
-            <p></p>
-          </div>
-          <!-- forums list -->
-          <article v-for="item in forums" :key="item.id">
-            <displayUserForums
-              :id="item.id"
-              :user_id="item.user_id"
-              :published_date="item.published_date"
-              :pic_url="item.pic_url"
-              :image_url="item.image_url"
-              :firstname="item.firstname"
-              :lastname="item.lastname"
-              :text="item.text"
-              :total_comments="item.total_comments"
-              :mod_panel="false"
-            />
-            <!-- comments in forum -->
-            <div class="comments-list">
-              <div v-for="comment in item.comments" :key="comment.id">
-                <displayUserComments
-                  :published_date="comment.published_date"
-                  :pic_url="comment.pic_url"
-                  :firstname="comment.firstname"
-                  :lastname="comment.lastname"
-                  :text="comment.text"
-                  :mod_panel="false"
-                />
-              </div>
+            <!-- error handler -->
+            <div id="error-handler_profile" class="error-handler">
+              <h3>
+                Erreur
+              </h3>
+              <p></p>
             </div>
-          </article>
-        </section>
-      </div>
+            <!-- forums list -->
+            <article v-for="item in forums" :key="item.id">
+              <displayUserForums
+                :id="item.id"
+                :user_id="item.user_id"
+                :published_date="item.published_date"
+                :pic_url="item.pic_url"
+                :image_url="item.image_url"
+                :firstname="item.firstname"
+                :lastname="item.lastname"
+                :text="item.text"
+                :total_comments="item.total_comments"
+                :mod_panel="false"
+              />
+              <!-- comments in forum -->
+              <div class="comments-list">
+                <div v-for="comment in item.comments" :key="comment.id">
+                  <displayUserComments
+                    :published_date="comment.published_date"
+                    :pic_url="comment.pic_url"
+                    :firstname="comment.firstname"
+                    :lastname="comment.lastname"
+                    :text="comment.text"
+                    :mod_panel="false"
+                  />
+                </div>
+              </div>
+            </article>
+          </section>
+        </div>
 
-      <!-- main-nav -->
-      <mainNav />
+        <!-- main-nav -->
+        <mainNav />
+      </div>
     </div>
-  </div>
+  </main>
 </template>
 
 <script>
@@ -65,12 +71,16 @@ import userCreateForum from "@/components/forums/userCreateForum.vue";
 import trends from "@/components/trends/trends.vue";
 import mainNav from "@/components/nav/mainNav.vue";
 import profileAndParametersHeader from "@/components/profileAndParameters/header.vue";
+import moderationPanel from "@/components/moderation/panel.vue";
 import { api, dateFormatting } from "@/utils/scripts";
 
 export default {
   name: "Profile",
   data() {
     return {
+      user: {
+        modPanelAccess: false
+      },
       forums: []
     };
   },
@@ -80,10 +90,12 @@ export default {
     userCreateForum,
     trends,
     mainNav,
-    profileAndParametersHeader
+    profileAndParametersHeader,
+    moderationPanel
   },
   beforeMount: async function() {
     this.getForums();
+    this.modPanelAccess();
   },
   methods: {
     // GET FORUMS
@@ -211,11 +223,14 @@ export default {
         xhrCallbackError
       );
     },
+    
+    // ERROR HANDLER
     errorHandler(err) {
       const errorContainer = document.getElementById("error-handler_profile");
       document.querySelector("#error-handler_profile p").innerHTML = err;
       errorContainer.style.display = "block";
     },
+    
     // Generate local FileReader base64 for imported image
     forumCreateImgChange(event) {
       let reader = new FileReader();
@@ -225,11 +240,45 @@ export default {
       };
       reader.readAsDataURL(event.target.files[0]);
     },
+    
     // Close image in FileReader
     forumCreateImgClose() {
       document.getElementById("create-forum_img").style.display = "none";
       document.getElementById("create-forum_upload-img").value = "";
       document.getElementById("create-forum_img-output").src = "";
+    },
+    
+    modPanelAccess() {
+      const vm = this
+
+      // XHR ERROR
+      function xhrCallbackError(response) {
+        console.error(response);
+      }
+
+      // API CALLBACK ERROR
+      function apiCallbackError(response, readyState, httpStatus) {
+        console.error(response);
+        console.error(`ReadyState: ${readyState}, HttpStatus: ${httpStatus}`);
+      }
+
+      // API CALLBACK DONE
+      function apiCallbackDone(response) {
+        let user = response.result[0];
+        if (user.is_admin === 1 || user.is_mod === 1) {
+          vm.user.modPanelAccess = true
+        }
+      }
+
+      // API CALL
+      api(
+        "api/user/account/primaryInfos",
+        "GET",
+        undefined,
+        apiCallbackDone,
+        apiCallbackError,
+        xhrCallbackError
+      );
     }
   }
 };
