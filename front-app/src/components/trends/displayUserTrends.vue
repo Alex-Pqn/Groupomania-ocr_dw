@@ -1,35 +1,33 @@
 <template>
-  <main>
-    <!-- user-trends -->
-    <div class="user-trends user-trends--style">
-      <!-- icon -->
-      <div class="user-trends__icon">
-        <img :src="pic_url" alt="" />
-      </div>
-      <!-- main -->
-      <div class="user-trends__main">
-        <!-- top -->
-        <div class="user-trends__main__top">
-          <div class="user-trends__main__top__author">
-            <p>
-              <strong> {{ firstname }} {{ lastname }} </strong>
-            </p>
-          </div>
-          <div class="user-trends__main__top__date">
-            <p>
-              {{ published_date }}
-            </p>
-          </div>
-        </div>
-        <!-- bottom -->
-        <div class="user-trends__main__bottom">
+  <!-- user-trends -->
+  <div class="user-trends user-trends--style">
+    <!-- icon -->
+    <div class="user-trends__icon">
+      <img :src="pic_url" alt="" />
+    </div>
+    <!-- main -->
+    <div class="user-trends__main">
+      <!-- top -->
+      <div class="user-trends__main__top">
+        <div class="user-trends__main__top__author">
           <p>
-            {{ text }}
+            <strong> {{ firstname }} {{ lastname }} </strong>
+          </p>
+        </div>
+        <div class="user-trends__main__top__date">
+          <p>
+            {{ published_date }}
           </p>
         </div>
       </div>
+      <!-- bottom -->
+      <div class="user-trends__main__bottom">
+        <p>
+          {{ text }}
+        </p>
+      </div>
     </div>
-  </main>
+  </div>
 </template>
 
 <script>
