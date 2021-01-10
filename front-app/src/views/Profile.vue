@@ -8,7 +8,7 @@
       <!-- profile -->
       <div class="user-profile" id="top">
         <!-- header -->
-        <userHeader class="user-profile__header"/>
+        <profileAndParametersHeader class="user-profile__header"/>
         <section class="user-profile__forums">
           <userCreateForum />
           <h3>
@@ -33,6 +33,7 @@
               :lastname="item.lastname"
               :text="item.text"
               :total_comments="item.total_comments"
+              :mod_panel="false"
             />
             <!-- comments in forum -->
             <div class="comments-list">
@@ -43,6 +44,7 @@
                   :firstname="comment.firstname"
                   :lastname="comment.lastname"
                   :text="comment.text"
+                  :mod_panel="false"
                 />
               </div>
             </div>
@@ -62,7 +64,7 @@ import displayUserComments from "@/components/comments/displayUserComments.vue";
 import userCreateForum from "@/components/forums/userCreateForum.vue";
 import trends from "@/components/trends/trends.vue";
 import mainNav from "@/components/nav/mainNav.vue";
-import userHeader from "@/components/profileAndParameters/header.vue";
+import profileAndParametersHeader from "@/components/profileAndParameters/header.vue";
 import { api, dateFormatting } from "@/utils/scripts";
 
 export default {
@@ -79,11 +81,10 @@ export default {
     userCreateForum,
     trends,
     mainNav,
-    userHeader
+    profileAndParametersHeader
   },
   beforeMount: async function () {
-    const vm = this
-    vm.getForums()
+    this.getForums()
   },
   methods: {
     // GET FORUMS

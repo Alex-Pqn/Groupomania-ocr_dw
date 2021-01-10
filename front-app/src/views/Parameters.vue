@@ -9,7 +9,7 @@
       <!-- parameters -->
       <section id="top" class="user-parameters">
         <!-- header -->
-        <userHeader/>
+        <profileAndParametersHeader/>
         <!-- error handler -->
         <div id="error-handler_parameters" class="error-handler">
           <h3>
@@ -207,7 +207,7 @@
 import { api } from "@/utils/scripts";
 import trends from "@/components/trends/trends.vue";
 import mainNav from "@/components/nav/mainNav.vue";
-import userHeader from "@/components/profileAndParameters/header.vue";
+import profileAndParametersHeader from "@/components/profileAndParameters/header.vue";
 
 export default {
   name: "Parameters",
@@ -224,8 +224,7 @@ export default {
     };
   },
   beforeMount: async function () {
-    const vm = this
-    vm.getUserParameters()
+    this.getUserParameters()
   },
   mounted() {
     const newslettersCheckbox = document.getElementById("newsletters");
@@ -555,7 +554,7 @@ export default {
   components: {
     trends,
     mainNav,
-    userHeader
+    profileAndParametersHeader
   }
 };
 </script>
