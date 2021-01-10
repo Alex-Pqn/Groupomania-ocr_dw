@@ -48,8 +48,7 @@ export default {
     };
   },
   beforeMount: async function () {
-    const vm = this
-    vm.getForums()
+    this.getForums()
   },
   methods: {
     // GET FORUMS
@@ -137,7 +136,7 @@ export default {
     display: flex;
     justify-content: center;
     &__recents {
-      width: 90%;
+      width: 92%;
       padding: 5px 8px;
       &--style {
         border-radius: 1em;
@@ -148,6 +147,7 @@ export default {
       article {
         padding-top: 15px;
         border-top: 1px solid $small_black-border;
+        word-break: break-all;
       }
     }
   }
