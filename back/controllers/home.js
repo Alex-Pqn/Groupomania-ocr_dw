@@ -72,11 +72,13 @@ exports.createOneForum = (req, res, next) => {
             db.query(dbQuery, (err, result) => {
                 // error handler
                 if(err) {
-                    fs.unlink(`images/${forum_image_url.split('/images/')[1]}`, (err => {
-                        if(err) {
-                            res.status(500).json({ err })
-                        }
-                    }))
+                    if(forum_image_url) {
+                        fs.unlink(`images/${forum_image_url.split('/images/')[1]}`, (err => {
+                            if(err) {
+                                res.status(500).json({ err })
+                            }
+                        }))   
+                    }
                     return res.status(400).json({ sub_err: "La création du forum a échoué, veuillez réessayer dans quelques instants..", err })
                 }
                 // forum created
