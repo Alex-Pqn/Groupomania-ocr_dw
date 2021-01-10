@@ -31,13 +31,18 @@
         <div class="user-forums__main__bottom">
           <img v-if="image_url" :src="image_url" alt="" />
         </div>
+        <div v-if="mod_panel === true" class="user-forums__main__delete">
+          <button v-on:click="modPanelDeleteForum(id)">
+            Supprimer
+          </button>
+        </div>
       </div>
     </div>
 
     <!-- user-interacts -->
     <div class="user-interacts user-interacts--style">
       <!-- left -->
-      <div class="user-interacts__left">
+      <div v-if="mod_panel === false" class="user-interacts__left">
         <button v-on:click="displayCommentContainer(id, user_id)">
           Commenter
         </button>
@@ -50,7 +55,7 @@
       </div>
     </div>
     <!-- create-comment container -->
-    <div class="create-comment-display" :id="'create-comment_container-' + id + user_id">
+    <div v-if="mod_panel === false" class="create-comment-display" :id="'create-comment_container-' + id + user_id">
       <!-- create-comment -->
       <div class="create-comment create-comment--style">
         <!-- text -->
@@ -117,6 +122,10 @@ export default {
     },
     image_url: {
       type: String
+    },
+    mod_panel: {
+      type: Boolean,
+      required: true
     }
   },
   methods: {
@@ -188,6 +197,32 @@ export default {
         errorContainer.textContent = errValue
         errorContainer.style.display = "flex"
       }, 150);
+    },
+    modPanelDeleteForum(forum_id) {
+      // const vm = this
+      
+      // XHR ERROR
+      function xhrCallbackError (response) {
+        // vm.errorHandler(response, forum_id, user_id)
+        console.error(response)
+      }
+      
+      // API CALLBACK DONE
+      function apiCallbackDone () {
+      }
+      
+      // API CALLBACK ERROR
+      function apiCallbackError (response, readyState, httpStatus) {
+        // vm.errorHandler(response.sub_err, forum_id, user_id)
+        console.error(response)
+        console.error(`ReadyState: ${readyState}, HttpStatus: ${httpStatus}`)
+      }
+      
+      // API CALL
+      let forum = {
+        id: forum_id
+      }
+      api("api/mod/forum/delete", "DELETE", forum, apiCallbackDone, apiCallbackError, xhrCallbackError)
     }
   }
 };
@@ -218,6 +253,7 @@ export default {
   &__main {
     display: flex;
     flex-direction: column;
+    position: relative;
     width: 91.5%;
     // top
     &__top {
@@ -249,6 +285,16 @@ export default {
         max-height: 350px;
         border: 1px solid $smooth_black-border;
         padding: 1px;
+      }
+    }
+    &__delete {
+      position: absolute;
+      bottom: 0;
+      right: 0;
+      margin-bottom: -3px;
+      margin-right: -13px;
+      button {
+        @include mod-panel_delete-button;
       }
     }
   }
