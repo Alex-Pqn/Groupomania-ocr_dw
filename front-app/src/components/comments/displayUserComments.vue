@@ -77,7 +77,9 @@ export default {
       }
 
       // API CALLBACK DONE
-      function apiCallbackDone() {}
+      function apiCallbackDone() {
+        location.reload()
+      }
 
       // API CALLBACK ERROR
       function apiCallbackError(response, readyState, httpStatus) {

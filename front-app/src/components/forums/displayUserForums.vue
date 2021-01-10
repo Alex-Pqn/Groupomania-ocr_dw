@@ -219,6 +219,8 @@ export default {
         xhrCallbackError
       );
     },
+    
+    // ERROR HANDLER : CREATE COMMENT API REQUEST
     errorHandler(errValue, forum_id, user_id) {
       const errorContainer = document.getElementById(
         "create-comment_error-handler-" + forum_id + user_id
@@ -242,7 +244,9 @@ export default {
       }
 
       // API CALLBACK DONE
-      function apiCallbackDone() {}
+      function apiCallbackDone() {
+        location.reload()
+      }
 
       // API CALLBACK ERROR
       function apiCallbackError(response, readyState, httpStatus) {
