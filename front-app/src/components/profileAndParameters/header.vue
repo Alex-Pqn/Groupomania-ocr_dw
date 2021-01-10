@@ -33,7 +33,7 @@ import { displayProfilePopup, api } from "@/utils/scripts";
 import profilePopup from "@/components/nav/profilePopup.vue";
 
 export default {
-  name: "userHeader",
+  name: "profileAndParametersHeader",
   data () {
     return {
       user: {
@@ -45,8 +45,7 @@ export default {
     }
   },
   beforeMount: async function () {
-      const vm = this
-      vm.getPrimaryInfos()
+      this.getPrimaryInfos()
   },
   methods: {
     // GET PRIMARY INFOS
