@@ -695,11 +695,7 @@ export default {
     h4 {
       margin-bottom: 11px !important;
       padding-bottom: 10px;
-      font-size: 1.15em;
       border-bottom: 1px solid rgba(172, 172, 172, 0.6);
-    }
-    p {
-      font-size: 1.05em;
     }
     ul {
       margin: 13px 0;
@@ -735,6 +731,45 @@ export default {
     }
   }
 }
+@media screen and (max-width: 799px) {
+  .delete-account-modal {
+    &__content {
+      width: 60%;
+      h4 {
+        font-size: 1.25em;
+      }
+      p, li {
+        font-size: 1.15em;
+      }
+    }
+  }
+}
+@media screen and (min-width: 800px) {
+  .delete-account-modal {
+    &__content {
+      h4 {
+        font-size: 1.15em;
+      }
+      p, li {
+        font-size: 1.05em;
+      }
+    }
+  }
+}
+@media screen and (min-width: 800px) and (max-width: 1199px) {
+  .delete-account-modal {
+    &__content {
+      width: 35%;
+    }
+  }
+}
+@media screen and (min-width: 1200px) and (max-width: 1600px) {
+  .delete-account-modal {
+    &__content {
+      width: 27%;
+    }
+  }
+}
 
 // parameters
 .user-parameters {
@@ -755,25 +790,6 @@ export default {
   article {
     margin-bottom: 20px;
     padding-top: 2px;
-  }
-}
-@media screen and (max-width: 479px) {
-  .user-parameters {
-    &__main {
-      font-size: 0.8em;
-      h3 {
-        font-size: 1.25em;
-      }
-      h4 {
-        font-size: 1.15em;
-      }
-      input {
-        width: 85%;
-      }
-    }
-    article {
-      margin-bottom: 25px;
-    }
   }
 }
 

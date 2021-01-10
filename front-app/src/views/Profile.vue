@@ -272,10 +272,10 @@ export default {
   // user-profile
   .user-profile {
     &__header {
-      width: 58%;
+      width: 52%;
     }
     &__forums {
-      width: 50%;
+      width: 43%;
       article {
         margin-bottom: 25px;
       }

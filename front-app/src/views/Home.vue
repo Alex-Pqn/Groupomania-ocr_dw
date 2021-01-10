@@ -338,7 +338,7 @@ export default {
     &__header {
       margin-top: 5px;
       padding-top: 15px;
-      width: 58%;
+      width: 48%;
       &__left {
         img {
           width: 230px;
@@ -346,7 +346,7 @@ export default {
       }
     }
     &__main {
-      width: 50%;
+      width: 43%;
       h3 {
         margin: 10px 0 20px;
       }
