@@ -85,7 +85,7 @@ export default {
     // LOGIN SUBMIT
     loginSubmit: function(event) {
       event.preventDefault();
-      const vm = this
+      const vm = this;
 
       let emailInput = document.loginForm.email.value;
       let passwordInput = document.loginForm.password.value;
@@ -124,7 +124,7 @@ export default {
       // inputs validator
       formData.forEach(data => {
         document.getElementById(data.errorIdContainer).style.display = "none";
-        
+
         // length validation
         if (data.value.length < data.minLength) {
           return displayFormInputError(
@@ -137,7 +137,7 @@ export default {
             `Votre ${data.name} ne peut être composé que de ${data.maxLength} caractères au maximum.`
           );
         }
-        
+
         // regex validation
         if (data.regex.test(data.value) === false) {
           if (data.id === 1) {
@@ -152,7 +152,7 @@ export default {
             );
           }
         }
-        
+
         data.stepValidation = true;
         // if all inputs are valids, call api
         if (
@@ -163,47 +163,57 @@ export default {
         }
       });
     },
+
     // LOGIN API REQUEST
-    loginRequest (email, password) {
-      const vm = this
+    loginRequest(email, password) {
+      const vm = this;
       const submitButton = document.getElementById("submit");
-     
+
       // XHR ERROR
-      function xhrCallbackError () {
-        vm.displaySubmitInfoError(
+      function xhrCallbackError() {
+        vm.displaySubmitError(
           "Une erreur est survenue lors de la connexion à votre compte. Vérifiez l'état de vote connexion internet et réessayez."
         );
         submitButton.disabled = false;
-      };
-      
+      }
+
       // API CALLBACK DONE
-      function apiCallbackDone (response) {
+      function apiCallbackDone(response) {
         submitButton.disabled = true;
-        createUserCookie(response)
-        vm.displaySubmitInfoSuccess(`${response.message}`);
-        
+        createUserCookie(response);
+        vm.displaySubmitSuccess(`${response.message}`);
+
         setInterval(() => {
           window.location.replace("/");
         }, 1900);
-      };
-      
-      // API CALLBACK ERROR
-      function apiCallbackError (response, readyState, httpStatus) {
-        vm.displaySubmitInfoError(response.sub_err);
-        console.error(response)
-        console.error(`ReadyState: ${readyState}, HttpStatus: ${httpStatus}`)
       }
-      
+
+      // API CALLBACK ERROR
+      function apiCallbackError(response, readyState, httpStatus) {
+        vm.displaySubmitError(response.sub_err);
+        console.error(response);
+        console.error(`ReadyState: ${readyState}, HttpStatus: ${httpStatus}`);
+      }
+
       // API CALL
       let userParams = {
         email,
         password
       };
-      apiAuth("api/user/login", "POST", JSON.stringify(userParams), apiCallbackDone, apiCallbackError, xhrCallbackError);
+      apiAuth(
+        "api/user/login",
+        "POST",
+        JSON.stringify(userParams),
+        apiCallbackDone,
+        apiCallbackError,
+        xhrCallbackError
+      );
     },
-    displaySubmitInfoError(errorValue) {
+
+    // Display submit error on error
+    displaySubmitError(errorValue) {
       const submitInfo = document.getElementById("submit-info");
-      
+
       submitInfo.style.display = "none";
       setTimeout(() => {
         submitInfo.style.display = "flex";
@@ -211,13 +221,15 @@ export default {
         submitInfo.innerHTML = errorValue;
       }, 150);
     },
-    displaySubmitInfoSuccess (successValue) {
+
+    // Display submit info success on success
+    displaySubmitSuccess(successValue) {
       const submitInfo = document.getElementById("submit-info");
-      
+
       submitInfo.style.display = "flex";
       submitInfo.style.color = "green";
       submitInfo.innerHTML = successValue;
-    },
+    }
   }
 };
 </script>

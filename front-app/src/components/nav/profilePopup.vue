@@ -49,10 +49,11 @@ export default {
     }
   },
   methods: {
+    // SESSION DISCONNECT: clear cookies + redirect to login
     sessionDisconnect: () => {
-      window.location.href = "/login";
       document.cookie = `user_id=;expires=/;path=/`;
       document.cookie = `auth_token=;expires=/;path=/`;
+      window.location.href = "/login";
     }
   }
 };

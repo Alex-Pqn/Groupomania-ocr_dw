@@ -43,64 +43,70 @@ export default {
   name: "trends",
   data() {
     return {
-      recentsTrends: [
-      ]
+      recentsTrends: []
     };
   },
-  beforeMount: async function () {
-    this.getForums()
+  beforeMount: async function() {
+    this.getForums();
   },
   methods: {
     // GET FORUMS
-    getForums () {
-      const vm = this
-      let result
-      
+    getForums() {
+      const vm = this;
+      let result;
+
       // XHR ERROR
-      function xhrCallbackError (response) {
-        vm.errorHandler(response)
-        console.error(response)
+      function xhrCallbackError(response) {
+        vm.errorHandler(response);
+        console.error(response);
       }
-      
+
       // API CALLBACK ERROR
-      function apiCallbackError (response, readyState, httpStatus) {
-        vm.errorHandler(response.sub_err)
-        console.error(response)
-        console.error(`ReadyState: ${readyState}, HttpStatus: ${httpStatus}`)
+      function apiCallbackError(response, readyState, httpStatus) {
+        vm.errorHandler(response.sub_err);
+        console.error(response);
+        console.error(`ReadyState: ${readyState}, HttpStatus: ${httpStatus}`);
       }
-      
+
       // API CALLBACK DONE
-      function apiCallbackDone (response) {
-        result = response.result
-        
+      function apiCallbackDone(response) {
+        result = response.result;
+
         result.forEach(forum => {
           // data formatting
-          function formatedDate (date) {
-            forum.created_at = date
+          function formatedDate(date) {
+            forum.created_at = date;
           }
-          dateFormatting(forum, formatedDate)
-          
+          dateFormatting(forum, formatedDate);
+
           let userForum = {
             published_date: forum.created_at,
             pic_url: forum.pic_url,
             firstname: forum.firstname,
             lastname: forum.lastname,
             text: forum.text
-          }
+          };
 
           // push the forum in data
-          vm.recentsTrends.push(userForum)
+          vm.recentsTrends.push(userForum);
         });
       }
 
       // API CALL
-      api("api/trends/get", "GET", undefined, apiCallbackDone, apiCallbackError, xhrCallbackError)
+      api(
+        "api/trends/get",
+        "GET",
+        undefined,
+        apiCallbackDone,
+        apiCallbackError,
+        xhrCallbackError
+      );
     },
-    errorHandler (err) {
-      const errorContainer = document.getElementById('error-handler_trends')
-      document.querySelector('#error-handler_trends p').innerHTML = err
-      errorContainer.style.display = "block"
-    },
+    errorHandler(err) {
+      const errorContainer = document.getElementById("error-handler_trends");
+      document.querySelector("#error-handler_trends p").innerHTML = err;
+      errorContainer.style.display = "block";
+    }
   },
   components: {
     displayUserTrends
@@ -207,7 +213,7 @@ export default {
   .trends {
     height: 100%;
     position: relative;
-    
+
     &--style {
       border-radius: 0;
       background-color: rgb(245, 245, 245);

@@ -50,12 +50,18 @@
       <!-- right -->
       <div :id="'post=' + id + user_id" class="user-interacts__right">
         <p>
-          <a :href="'#post=' + id + user_id"> {{ total_comments }} commentaires </a>
+          <a :href="'#post=' + id + user_id">
+            {{ total_comments }} commentaires
+          </a>
         </p>
       </div>
     </div>
     <!-- create-comment container -->
-    <div v-if="mod_panel === false" class="create-comment-display" :id="'create-comment_container-' + id + user_id">
+    <div
+      v-if="mod_panel === false"
+      class="create-comment-display"
+      :id="'create-comment_container-' + id + user_id"
+    >
       <!-- create-comment -->
       <div class="create-comment create-comment--style">
         <!-- text -->
@@ -74,9 +80,11 @@
         </div>
       </div>
       <div>
-      <!-- error-handler -->
-      <div class="create-comment__error-handler" :id="'create-comment_error-handler-'+ id + user_id">
-      </div>
+        <!-- error-handler -->
+        <div
+          class="create-comment__error-handler"
+          :id="'create-comment_error-handler-' + id + user_id"
+        ></div>
       </div>
     </div>
   </div>
@@ -129,8 +137,11 @@ export default {
     }
   },
   methods: {
+    // Display the create comment container
     displayCommentContainer(forum_id, user_id) {
-      let commentContainer = document.getElementById("create-comment_container-" + forum_id + user_id);
+      let commentContainer = document.getElementById(
+        "create-comment_container-" + forum_id + user_id
+      );
 
       if (commentContainer.style.display == "initial") {
         commentContainer.style.display = "none";
@@ -138,91 +149,120 @@ export default {
         commentContainer.style.display = "initial";
       }
     },
+
     // CREATE COMMENT
-    createComment (forum_id, user_id) {
-      const vm = this
-      let commentTextOutput = document.getElementById("create-comment_text-" + forum_id + user_id).value;
-      
+    createComment(forum_id, user_id) {
+      const vm = this;
+      let commentTextOutput = document.getElementById(
+        "create-comment_text-" + forum_id + user_id
+      ).value;
+
       // comment validation
       const commentValidation = {
         minLength: 2,
         maxLength: 320
-      }
-      
-      if(commentTextOutput.length >= commentValidation.minLength) {
-        if(commentTextOutput.length <= commentValidation.maxLength) {
+      };
+
+      if (commentTextOutput.length >= commentValidation.minLength) {
+        if (commentTextOutput.length <= commentValidation.maxLength) {
           // if input valid, call api
-          vm.createCommentRequest(forum_id, commentTextOutput, user_id)
-        }else{
-          vm.errorHandler(`Votre message ne peut contenir qu'au maximum ${commentValidation.maxLength} caractères.`, forum_id, user_id)
+          vm.createCommentRequest(forum_id, commentTextOutput, user_id);
+        } else {
+          vm.errorHandler(
+            `Votre message ne peut contenir qu'au maximum ${commentValidation.maxLength} caractères.`,
+            forum_id,
+            user_id
+          );
         }
-      }else{
-        vm.errorHandler(`Votre message doit contenir au minimum ${commentValidation.minLength} caractère.`, forum_id, user_id)
+      } else {
+        vm.errorHandler(
+          `Votre message doit contenir au minimum ${commentValidation.minLength} caractère.`,
+          forum_id,
+          user_id
+        );
       }
     },
+
     // CREATE COMMENT API REQUEST
-    createCommentRequest (forum_id, comment_text, user_id) {
-      const vm = this
-      
+    createCommentRequest(forum_id, comment_text, user_id) {
+      const vm = this;
+
       // XHR ERROR
-      function xhrCallbackError (response) {
-        vm.errorHandler(response, forum_id, user_id)
-        console.error(response)
+      function xhrCallbackError(response) {
+        vm.errorHandler(response, forum_id, user_id);
+        console.error(response);
       }
-      
+
       // API CALLBACK DONE
-      function apiCallbackDone () {
+      function apiCallbackDone() {
         document.location.reload();
       }
-      
+
       // API CALLBACK ERROR
-      function apiCallbackError (response, readyState, httpStatus) {
-        vm.errorHandler(response.sub_err, forum_id, user_id)
-        console.error(response)
-        console.error(`ReadyState: ${readyState}, HttpStatus: ${httpStatus}`)
+      function apiCallbackError(response, readyState, httpStatus) {
+        vm.errorHandler(response.sub_err, forum_id, user_id);
+        console.error(response);
+        console.error(`ReadyState: ${readyState}, HttpStatus: ${httpStatus}`);
       }
-      
+
       // API CALL
       let comment = {
-          forum_id: forum_id,
-          text: comment_text
-      }
-      api("api/comments/create", "POST", comment, apiCallbackDone, apiCallbackError, xhrCallbackError) 
+        forum_id: forum_id,
+        text: comment_text
+      };
+      api(
+        "api/comments/create",
+        "POST",
+        comment,
+        apiCallbackDone,
+        apiCallbackError,
+        xhrCallbackError
+      );
     },
-    errorHandler (errValue, forum_id, user_id) {
-      const errorContainer = document.getElementById('create-comment_error-handler-' + forum_id + user_id)
-      
-      errorContainer.style.display = "none"
+    errorHandler(errValue, forum_id, user_id) {
+      const errorContainer = document.getElementById(
+        "create-comment_error-handler-" + forum_id + user_id
+      );
+
+      errorContainer.style.display = "none";
       setTimeout(() => {
-        errorContainer.textContent = errValue
-        errorContainer.style.display = "flex"
+        errorContainer.textContent = errValue;
+        errorContainer.style.display = "flex";
       }, 150);
     },
+
+    // MOD PANEL : DELETE FORUM
     modPanelDeleteForum(forum_id) {
       // const vm = this
-      
+
       // XHR ERROR
-      function xhrCallbackError (response) {
+      function xhrCallbackError(response) {
         // vm.errorHandler(response, forum_id, user_id)
-        console.error(response)
+        console.error(response);
       }
-      
+
       // API CALLBACK DONE
-      function apiCallbackDone () {
-      }
-      
+      function apiCallbackDone() {}
+
       // API CALLBACK ERROR
-      function apiCallbackError (response, readyState, httpStatus) {
+      function apiCallbackError(response, readyState, httpStatus) {
         // vm.errorHandler(response.sub_err, forum_id, user_id)
-        console.error(response)
-        console.error(`ReadyState: ${readyState}, HttpStatus: ${httpStatus}`)
+        console.error(response);
+        console.error(`ReadyState: ${readyState}, HttpStatus: ${httpStatus}`);
       }
-      
+
       // API CALL
       let forum = {
         id: forum_id
-      }
-      api("api/mod/forum/delete", "DELETE", forum, apiCallbackDone, apiCallbackError, xhrCallbackError)
+      };
+      api(
+        "api/mod/forum/delete",
+        "DELETE",
+        forum,
+        apiCallbackDone,
+        apiCallbackError,
+        xhrCallbackError
+      );
     }
   }
 };
@@ -472,7 +512,7 @@ export default {
     border-bottom: 1px solid rgba(109, 109, 109, 0.2);
   }
   // error-handler
-  &__error-handler{
+  &__error-handler {
     display: none;
     text-align: left;
     color: rgb(204, 0, 0);

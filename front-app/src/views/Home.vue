@@ -1,5 +1,8 @@
 <template>
   <main>
+    <!-- moderation panel -->
+    <moderationPanel v-if="3 > 2" />
+
     <!-- home -->
     <div class="home">
       <!-- displayed beetween 0px > 1023px -->
@@ -26,7 +29,7 @@
                 src="@/assets/ellipsis-v-solid.svg"
                 alt=""
               />
-              <profilePopup id="profile-popup_mobile-home"/>
+              <profilePopup id="profile-popup_mobile-home" />
             </div>
           </header>
           <!-- main -->
@@ -54,6 +57,7 @@
                 :lastname="item.lastname"
                 :text="item.text"
                 :total_comments="item.total_comments"
+                :mod_panel="false"
               />
               <!-- comments list in forum -->
               <div class="comments-list">
@@ -64,6 +68,7 @@
                     :firstname="comment.firstname"
                     :lastname="comment.lastname"
                     :text="comment.text"
+                    :mod_panel="false"
                   />
                 </div>
               </div>
@@ -72,7 +77,7 @@
         </section>
 
         <!-- main nav -->
-        <mainNav/>
+        <mainNav />
       </div>
     </div>
   </main>
@@ -85,51 +90,50 @@ import userCreateForum from "@/components/forums/userCreateForum.vue";
 import trends from "@/components/trends/trends.vue";
 import mainNav from "@/components/nav/mainNav.vue";
 import profilePopup from "@/components/nav/profilePopup.vue";
+import moderationPanel from "@/components/moderation/panel.vue";
 import { api, displayProfilePopup, dateFormatting } from "@/utils/scripts";
 
 export default {
   name: "Home",
   data() {
     return {
-      forums: [
-      ]
+      forums: []
     };
   },
-  beforeMount: async function () {
-    const vm = this
-    vm.getForums()
+  beforeMount: async function() {
+    this.getForums();
   },
   methods: {
     // GET FORUMS
-    getForums () {
-      const vm = this
-      let result
-      
+    getForums() {
+      const vm = this;
+      let result;
+
       // XHR ERROR
-      function xhrCallbackError (response) {
-        vm.errorHandler(response)
-        console.error(response)
+      function xhrCallbackError(response) {
+        vm.errorHandler(response);
+        console.error(response);
       }
-      
+
       // API CALLBACK ERROR
-      function apiCallbackError (response, readyState, httpStatus) {
-        vm.errorHandler(response.sub_err)
-        console.error(response)
-        console.error(`ReadyState: ${readyState}, HttpStatus: ${httpStatus}`)
+      function apiCallbackError(response, readyState, httpStatus) {
+        vm.errorHandler(response.sub_err);
+        console.error(response);
+        console.error(`ReadyState: ${readyState}, HttpStatus: ${httpStatus}`);
       }
-      
+
       // API CALLBACK DONE
-      function apiCallbackDone (response) {
-        result = response.result
-        let forums_list = []
-        
+      function apiCallbackDone(response) {
+        result = response.result;
+        let forums_list = [];
+
         result.forEach(forum => {
           // data formatting
-          function formatedDate (date) {
-            forum.created_at = date
+          function formatedDate(date) {
+            forum.created_at = date;
           }
-          dateFormatting(forum, formatedDate)
-          
+          dateFormatting(forum, formatedDate);
+
           let userForum = {
             id: forum.id,
             user_id: forum.user_id,
@@ -141,81 +145,96 @@ export default {
             total_comments: 0,
             image_url: forum.image_url,
             comments: []
-          }
+          };
 
           // add the forum in forums_list to get comments below
-          forums_list.push(forum.id)
+          forums_list.push(forum.id);
           // push the forum in data
-          vm.forums.push(userForum)
+          vm.forums.push(userForum);
         });
-        
+
         // call getComments method with forums list
-        if(forums_list.length >= 1) {
-          vm.getComments(forums_list)
+        if (forums_list.length >= 1) {
+          vm.getComments(forums_list);
         }
       }
 
       // API CALL
-      api("api/home/get", "GET", undefined, apiCallbackDone, apiCallbackError, xhrCallbackError)
+      api(
+        "api/home/get",
+        "GET",
+        undefined,
+        apiCallbackDone,
+        apiCallbackError,
+        xhrCallbackError
+      );
     },
+
     // GET COMMENTS
-    getComments (forums_list) {
-      const vm = this
-      
+    getComments(forums_list) {
+      const vm = this;
+
       // XHR ERROR
-      function xhrCallbackError (response) {
-        vm.errorHandler(response)
-        console.error(response)
+      function xhrCallbackError(response) {
+        vm.errorHandler(response);
+        console.error(response);
       }
-      
+
       // API CALLBACK ERROR
-      function apiCallbackError (response, readyState, httpStatus) {
-        vm.errorHandler(response.sub_err)
-        console.error(response)
-        console.error(`ReadyState: ${readyState}, HttpStatus: ${httpStatus}`)
+      function apiCallbackError(response, readyState, httpStatus) {
+        vm.errorHandler(response.sub_err);
+        console.error(response);
+        console.error(`ReadyState: ${readyState}, HttpStatus: ${httpStatus}`);
       }
-      
+
       // API CALLBACK DONE
-      function apiCallbackDone (response) {
-        let comments = response.result
-        let forums = vm.forums
-        let userComment
-        
+      function apiCallbackDone(response) {
+        let comments = response.result;
+        let forums = vm.forums;
+        let userComment;
+
         comments.forEach(comment => {
           // data formatting
-          function formatedDate (date) {
-            comment.created_at = date
+          function formatedDate(date) {
+            comment.created_at = date;
           }
-          dateFormatting(comment, formatedDate)
-          
+          dateFormatting(comment, formatedDate);
+
           userComment = {
             pic_url: comment.pic_url,
             firstname: comment.firstname,
             lastname: comment.lastname,
             published_date: comment.created_at,
             text: comment.text
-          }
-          
+          };
+
           forums.forEach(forum => {
-            if(comment.forum_id == forum.id) {
-              forum.comments.push(userComment)
+            if (comment.forum_id == forum.id) {
+              forum.comments.push(userComment);
             }
-            
-            forum.total_comments = forum.comments.length
-          })
+
+            forum.total_comments = forum.comments.length;
+          });
         });
       }
-      
+
       // API CALL
-      let data = [
-        forums_list
-      ]
-      api("api/comments/get", "POST", data, apiCallbackDone, apiCallbackError, xhrCallbackError)
+      let data = [forums_list];
+      api(
+        "api/comments/get",
+        "POST",
+        data,
+        apiCallbackDone,
+        apiCallbackError,
+        xhrCallbackError
+      );
     },
-    errorHandler (err) {
-      const errorContainer = document.getElementById('error-handler_home')
-      document.querySelector('#error-handler_home p').innerHTML = err
-      errorContainer.style.display = "block"
+
+    // ERROR HANDLER
+    errorHandler(err) {
+      const errorContainer = document.getElementById("error-handler_home");
+      document.querySelector("#error-handler_home p").innerHTML = err;
+      errorContainer.style.display = "block";
     },
     displayProfilePopup
   },
@@ -225,7 +244,8 @@ export default {
     userCreateForum,
     trends,
     mainNav,
-    profilePopup
+    profilePopup,
+    moderationPanel
   }
 };
 </script>
@@ -272,7 +292,7 @@ export default {
     margin-top: 5px;
     margin-left: 185px;
     width: 50%;
-    z-index: 999;
+    z-index: 27;
     &--style {
       border-bottom: 1px solid $default_smooth-border;
       background-color: $default_background;

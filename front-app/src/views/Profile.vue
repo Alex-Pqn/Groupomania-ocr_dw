@@ -8,7 +8,7 @@
       <!-- profile -->
       <div class="user-profile" id="top">
         <!-- header -->
-        <profileAndParametersHeader class="user-profile__header"/>
+        <profileAndParametersHeader class="user-profile__header" />
         <section class="user-profile__forums">
           <userCreateForum />
           <h3>
@@ -53,7 +53,7 @@
       </div>
 
       <!-- main-nav -->
-      <mainNav/>
+      <mainNav />
     </div>
   </div>
 </template>
@@ -71,8 +71,7 @@ export default {
   name: "Profile",
   data() {
     return {
-      forums: [
-      ]
+      forums: []
     };
   },
   components: {
@@ -83,40 +82,40 @@ export default {
     mainNav,
     profileAndParametersHeader
   },
-  beforeMount: async function () {
-    this.getForums()
+  beforeMount: async function() {
+    this.getForums();
   },
   methods: {
     // GET FORUMS
-    getForums () {
-      const vm = this
-      let result
-    
+    getForums() {
+      const vm = this;
+      let result;
+
       // XHR ERROR
-      function xhrCallbackError (response) {
-        vm.errorHandler(response)
-        console.error(response)
+      function xhrCallbackError(response) {
+        vm.errorHandler(response);
+        console.error(response);
       }
-      
+
       // API CALLBACK ERROR
-      function apiCallbackError (response, readyState, httpStatus) {
-        vm.errorHandler(response.sub_err)
-        console.error(response)
-        console.error(`ReadyState: ${readyState}, HttpStatus: ${httpStatus}`)
+      function apiCallbackError(response, readyState, httpStatus) {
+        vm.errorHandler(response.sub_err);
+        console.error(response);
+        console.error(`ReadyState: ${readyState}, HttpStatus: ${httpStatus}`);
       }
-      
+
       // API CALLBACK DONE
-      function apiCallbackDone (response) {
-        result = response.result
-        let forums_list = []
-        
+      function apiCallbackDone(response) {
+        result = response.result;
+        let forums_list = [];
+
         result.forEach(forum => {
           // data formatting
-          function formatedDate (date) {
-            forum.created_at = date
+          function formatedDate(date) {
+            forum.created_at = date;
           }
-          dateFormatting(forum, formatedDate)
-          
+          dateFormatting(forum, formatedDate);
+
           let userForum = {
             id: forum.id,
             user_id: forum.user_id,
@@ -128,81 +127,94 @@ export default {
             total_comments: 0,
             image_url: forum.image_url,
             comments: []
-          }
+          };
 
           // add the forum in forums_list to get comments below
-          forums_list.push(forum.id)
+          forums_list.push(forum.id);
           // push the forum in data
-          vm.forums.push(userForum)
+          vm.forums.push(userForum);
         });
-        
+
         // call getComments method with forums list
-        if(forums_list.length >= 1) {
-          vm.getComments(forums_list)
+        if (forums_list.length >= 1) {
+          vm.getComments(forums_list);
         }
       }
 
       // API CALL
-      api("api/profile/get", "GET", undefined, apiCallbackDone, apiCallbackError, xhrCallbackError)
+      api(
+        "api/profile/get",
+        "GET",
+        undefined,
+        apiCallbackDone,
+        apiCallbackError,
+        xhrCallbackError
+      );
     },
+
     // GET COMMENTS
-    getComments (forums_list) {
-      const vm = this
-      
+    getComments(forums_list) {
+      const vm = this;
+
       // XHR ERROR
-      function xhrCallbackError (response) {
-        console.error(response)
+      function xhrCallbackError(response) {
+        console.error(response);
       }
-      
+
       // API CALLBACK ERROR
-      function apiCallbackError (response, readyState, httpStatus) {
-        console.error(response)
-        console.error(`ReadyState: ${readyState}, HttpStatus: ${httpStatus}`)
+      function apiCallbackError(response, readyState, httpStatus) {
+        console.error(response);
+        console.error(`ReadyState: ${readyState}, HttpStatus: ${httpStatus}`);
       }
-      
+
       // API CALLBACK DONE
-      function apiCallbackDone (response) {
-        let comments = response.result
-        let forums = vm.forums
-        let userComment
-        
+      function apiCallbackDone(response) {
+        let comments = response.result;
+        let forums = vm.forums;
+        let userComment;
+
         comments.forEach(comment => {
           // data formatting
-          function formatedDate (date) {
-            comment.created_at = date
+          function formatedDate(date) {
+            comment.created_at = date;
           }
-          dateFormatting(comment, formatedDate)
-          
+          dateFormatting(comment, formatedDate);
+
           userComment = {
             pic_url: comment.pic_url,
             firstname: comment.firstname,
             lastname: comment.lastname,
             published_date: comment.created_at,
             text: comment.text
-          }
-          
+          };
+
           forums.forEach(forum => {
-            if(comment.forum_id == forum.id) {
+            if (comment.forum_id == forum.id) {
               // push comment in data
-              forum.comments.push(userComment)
+              forum.comments.push(userComment);
             }
-            
+
             // total comments
-            forum.total_comments = forum.comments.length
-          })
+            forum.total_comments = forum.comments.length;
+          });
         });
       }
-      
+
       // API CALL
-      let data = [
-        forums_list
-      ]
-      api("api/comments/get", "POST", data, apiCallbackDone, apiCallbackError, xhrCallbackError)
+      let data = [forums_list];
+      api(
+        "api/comments/get",
+        "POST",
+        data,
+        apiCallbackDone,
+        apiCallbackError,
+        xhrCallbackError
+      );
     },
-    errorHandler (err) {
-      const errorContainer = document.getElementById('error-handler_profile')
-      document.querySelector('#error-handler_profile p').innerHTML = err
-      errorContainer.style.display = "block"
+    errorHandler(err) {
+      const errorContainer = document.getElementById("error-handler_profile");
+      document.querySelector("#error-handler_profile p").innerHTML = err;
+      errorContainer.style.display = "block";
     },
     // Generate local FileReader base64 for imported image
     forumCreateImgChange(event) {
@@ -234,7 +246,7 @@ export default {
   flex-direction: column;
   align-items: center;
   width: 100%;
-  
+
   &__header {
     margin-left: 185px;
   }

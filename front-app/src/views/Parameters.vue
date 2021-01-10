@@ -9,7 +9,7 @@
       <!-- parameters -->
       <section id="top" class="user-parameters">
         <!-- header -->
-        <profileAndParametersHeader/>
+        <profileAndParametersHeader />
         <!-- error handler -->
         <div id="error-handler_parameters" class="error-handler">
           <h3>
@@ -114,7 +114,12 @@
               <label for="newsletters">
                 Newsletters relatives à Groupomania par e-mail :
               </label>
-              <input id="newsletters" name="newsletters" type="checkbox" value="false"/>
+              <input
+                id="newsletters"
+                name="newsletters"
+                type="checkbox"
+                value="false"
+              />
             </article>
             <!-- pic -->
             <h4>
@@ -168,7 +173,8 @@
                 Suppression de votre compte
               </h4>
               <p>
-                En supprimant votre compte Groupomania, les données suivantes seront supprimées de nos services :
+                En supprimant votre compte Groupomania, les données suivantes
+                seront supprimées de nos services :
               </p>
               <ul>
                 <li>
@@ -178,16 +184,22 @@
                   - Les commentaires postés
                 </li>
                 <li>
-                  - L'ensemble des données ratachées à votre compte, comprenant notamment votre e-mail et votre mot de passe.
+                  - L'ensemble des données ratachées à votre compte, comprenant
+                  notamment votre e-mail et votre mot de passe.
                 </li>
               </ul>
               <p>
-                En cliquant sur <strong>supprimer mon compte</strong>, vous acceptez perdre l'ensemble de ces données ainsi que l'accès à votre compte de façon définitive.
+                En cliquant sur <strong>supprimer mon compte</strong>, vous
+                acceptez perdre l'ensemble de ces données ainsi que l'accès à
+                votre compte de façon définitive.
               </p>
               <button id="delete-account" v-on:click="deleteAccount">
                 Supprimer mon compte
               </button>
-              <button id="quit-delete-account" v-on:click="quitDeleteAccountModal">
+              <button
+                id="quit-delete-account"
+                v-on:click="quitDeleteAccountModal"
+              >
                 Retour
               </button>
               <!-- info handler -->
@@ -198,7 +210,7 @@
       </section>
 
       <!-- main-nav -->
-      <mainNav/>
+      <mainNav />
     </div>
   </div>
 </template>
@@ -223,8 +235,8 @@ export default {
       }
     };
   },
-  beforeMount: async function () {
-    this.getUserParameters()
+  beforeMount: async function() {
+    this.getUserParameters();
   },
   mounted() {
     const newslettersCheckbox = document.getElementById("newsletters");
@@ -238,66 +250,78 @@ export default {
   },
   methods: {
     // GET USER PARAMETERS
-    getUserParameters () {
-      const vm = this
-    
+    getUserParameters() {
+      const vm = this;
+
       // XHR ERROR
-      function xhrCallbackError (response) {
-        vm.errorHandler(response)
-        console.error(response)
+      function xhrCallbackError(response) {
+        vm.errorHandler(response);
+        console.error(response);
       }
-      
+
       // API CALLBACK ERROR
-      function apiCallbackError (response, readyState, httpStatus) {
-        vm.errorHandler(response.sub_err)
-        console.error(response)
-        console.error(`ReadyState: ${readyState}, HttpStatus: ${httpStatus}`)
+      function apiCallbackError(response, readyState, httpStatus) {
+        vm.errorHandler(response.sub_err);
+        console.error(response);
+        console.error(`ReadyState: ${readyState}, HttpStatus: ${httpStatus}`);
       }
-      
+
       // API CALLBACK DONE
-      function apiCallbackDone (response) {
-        let user = response.result[0]
-        
-        vm.user.pic_url = user.pic_url
-        vm.user.firstname = user.firstname
-        vm.user.lastname = user.lastname
-        vm.user.email = user.email
-        vm.user.description = user.description
-        vm.user.newsletters = user.newsletters
-        
-        if(user.newsletters === 1) {
-          document.getElementById('newsletters').checked = true
-          document.getElementById('newsletters').value = true
+      function apiCallbackDone(response) {
+        let user = response.result[0];
+
+        vm.user.pic_url = user.pic_url;
+        vm.user.firstname = user.firstname;
+        vm.user.lastname = user.lastname;
+        vm.user.email = user.email;
+        vm.user.description = user.description;
+        vm.user.newsletters = user.newsletters;
+
+        if (user.newsletters === 1) {
+          document.getElementById("newsletters").checked = true;
+          document.getElementById("newsletters").value = true;
         }
       }
-      
+
       // API CALL
-      api("api/user/parameters/get", "GET", undefined, apiCallbackDone, apiCallbackError, xhrCallbackError)
+      api(
+        "api/user/parameters/get",
+        "GET",
+        undefined,
+        apiCallbackDone,
+        apiCallbackError,
+        xhrCallbackError
+      );
     },
-    errorHandler (err) {
-      const errorContainer = document.getElementById('error-handler_parameters')
-      document.querySelector('#error-handler_parameters p').innerHTML = err
-      errorContainer.style.display = "block"
-      
-      document.querySelector('.user-parameters__main').style.display = "none"
+
+    // ERROR HANDLER: GET USER PARAMETERS
+    errorHandler(err) {
+      const errorContainer = document.getElementById(
+        "error-handler_parameters"
+      );
+      document.querySelector("#error-handler_parameters p").innerHTML = err;
+      errorContainer.style.display = "block";
+
+      document.querySelector(".user-parameters__main").style.display = "none";
     },
+
     // USER PARAMETERS FORM VALIDATION
     userParametersFormSend() {
       event.preventDefault();
-      const vm = this
-      let formData
-      let passwordValidation
-      
-      document.getElementById('user-parameters_error-handler').innerHTML = ""
-      
-      let userFirstname = document.parametersForm.firstname.value
-      let userLastname = document.parametersForm.lastname.value
-      let userDescription = document.parametersForm.description.value
-      let userEmail = document.parametersForm.email.value
-      let userPassword = document.parametersForm.password.value
-      let userRePassword = document.parametersForm.repassword.value
-      let userNewsletters = document.parametersForm.newsletters.value
-      
+      const vm = this;
+      let formData;
+      let passwordValidation;
+
+      document.getElementById("user-parameters_error-handler").innerHTML = "";
+
+      let userFirstname = document.parametersForm.firstname.value;
+      let userLastname = document.parametersForm.lastname.value;
+      let userDescription = document.parametersForm.description.value;
+      let userEmail = document.parametersForm.email.value;
+      let userPassword = document.parametersForm.password.value;
+      let userRePassword = document.parametersForm.repassword.value;
+      let userNewsletters = document.parametersForm.newsletters.value;
+
       formData = [
         {
           id: 1,
@@ -336,10 +360,10 @@ export default {
           regex: /[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?/g,
           minLength: 5,
           maxLength: 55
-        },
+        }
       ];
-      
-      if(userPassword.length >= 1 || userRePassword.length >= 1) {
+
+      if (userPassword.length >= 1 || userRePassword.length >= 1) {
         passwordValidation = {
           id: 5,
           name: "mot de passe",
@@ -349,8 +373,8 @@ export default {
           regex: /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[a-zA-Z]).{8,}$/gm,
           minLength: 8,
           maxLength: 50
-        }
-        formData.push(passwordValidation)
+        };
+        formData.push(passwordValidation);
       }
 
       // inputs validator
@@ -358,30 +382,36 @@ export default {
         // length validation
         if (data.value.length < data.minLength) {
           return vm.displayFormInfo(
-            `Votre ${data.name} doit être composé de ${data.minLength} caractères au minimum.`, "red"
+            `Votre ${data.name} doit être composé de ${data.minLength} caractères au minimum.`,
+            "red"
           );
         } else if (data.value.length > data.maxLength) {
           return vm.displayFormInfo(
-            `Votre ${data.name} ne peut être composé que de ${data.maxLength} caractères au maximum.`, "red"
+            `Votre ${data.name} ne peut être composé que de ${data.maxLength} caractères au maximum.`,
+            "red"
           );
         }
         // regex validation
         if (data.regex && data.regex.test(data.value) === false) {
           if (data.id === 1 || data.id === 2) {
             return vm.displayFormInfo(
-              `Votre ${data.name} est composé de caractères spéciaux prohibés.`, "red"
+              `Votre ${data.name} est composé de caractères spéciaux prohibés.`,
+              "red"
             );
-          } else if(data.id === 3) {
+          } else if (data.id === 3) {
             return vm.displayFormInfo(
-              `La description est composée de caractères spéciaux prohibés.`, "red"
+              `La description est composée de caractères spéciaux prohibés.`,
+              "red"
             );
           } else if (data.id === 4) {
             return vm.displayFormInfo(
-              "L'e-mail que vous avez entré est invalide.", "red"
+              "L'e-mail que vous avez entré est invalide.",
+              "red"
             );
           } else {
             return vm.displayFormInfo(
-              "Votre mot de passe doit contenir au minimum une lettre majuscule, une lettre minuscule et un chiffre.", "red"
+              "Votre mot de passe doit contenir au minimum une lettre majuscule, une lettre minuscule et un chiffre.",
+              "red"
             );
           }
         }
@@ -389,7 +419,8 @@ export default {
         if (data.id === 5) {
           if (userRePassword !== data.value) {
             return vm.displayFormInfo(
-              "Les deux mots de passe entrés doivent correspondre.", "red"
+              "Les deux mots de passe entrés doivent correspondre.",
+              "red"
             );
           }
         }
@@ -401,27 +432,48 @@ export default {
           formData[2].stepValidation === true &&
           formData[3].stepValidation === true
         ) {
-          if(formData[4]) {
-            if(formData[4].stepValidation === true) {
-              vm.userParametersRequest(userFirstname, userLastname, userDescription, userEmail, userNewsletters, userPassword)
+          if (formData[4]) {
+            if (formData[4].stepValidation === true) {
+              vm.userParametersRequest(
+                userFirstname,
+                userLastname,
+                userDescription,
+                userEmail,
+                userNewsletters,
+                userPassword
+              );
             }
-          }else{
-            vm.userParametersRequest(userFirstname, userLastname, userDescription, userEmail, userNewsletters)
+          } else {
+            vm.userParametersRequest(
+              userFirstname,
+              userLastname,
+              userDescription,
+              userEmail,
+              userNewsletters
+            );
           }
         }
       });
     },
+
     // USER PARAMETERS UPDATE
-    userParametersRequest(firstname, lastname, description, email, newsletters, password) {
-      const vm = this
+    userParametersRequest(
+      firstname,
+      lastname,
+      description,
+      email,
+      newsletters,
+      password
+    ) {
+      const vm = this;
       let formData = new FormData();
-      
+
       // formdata attach image
       let userImage = document.querySelector("input[type=file]").files[0];
       if (userImage) {
         formData.append("image", userImage, userImage.name);
       }
-      
+
       // formdata attach user parameters
       let userParameters = {
         pic_url: vm.user.pic_url,
@@ -431,41 +483,53 @@ export default {
         email: email,
         password: password,
         newsletters: newsletters
-      }
+      };
       formData.append("userParameters", JSON.stringify(userParameters));
-      
+
       // XHR ERROR
-      function xhrCallbackError (response) {
-        vm.displayFormInfo(response, "red")
-        console.error(response)
+      function xhrCallbackError(response) {
+        vm.displayFormInfo(response, "red");
+        console.error(response);
       }
-      
+
       // API CALLBACK DONE
-      function apiCallbackDone (response) {
-        if(response.userPicWasUpdated) {
-          location.reload()
-        }else{
-          vm.displayFormInfo(response.message, "green")
+      function apiCallbackDone(response) {
+        if (response.userPicWasUpdated) {
+          location.reload();
+        } else {
+          vm.displayFormInfo(response.message, "green");
         }
       }
-      
+
       // API CALLBACK ERROR
-      function apiCallbackError (response, readyState, httpStatus) {
-        vm.displayFormInfo(response.sub_err, "red")
-        console.error(response)
-        console.error(`ReadyState: ${readyState}, HttpStatus: ${httpStatus}`)
+      function apiCallbackError(response, readyState, httpStatus) {
+        vm.displayFormInfo(response.sub_err, "red");
+        console.error(response);
+        console.error(`ReadyState: ${readyState}, HttpStatus: ${httpStatus}`);
       }
-      
+
       // API CALL
-      api("api/user/parameters/update", "PATCH", formData, apiCallbackDone, apiCallbackError, xhrCallbackError);
+      api(
+        "api/user/parameters/update",
+        "PATCH",
+        formData,
+        apiCallbackDone,
+        apiCallbackError,
+        xhrCallbackError
+      );
     },
+
+    // Display form info's : USER PARAMETERS UPDATE
     displayFormInfo(errorValue, color) {
       setTimeout(() => {
-        const errorContainer = document.getElementById('user-parameters_error-handler')
+        const errorContainer = document.getElementById(
+          "user-parameters_error-handler"
+        );
         errorContainer.innerHTML = errorValue;
-        errorContainer.style.color = color
+        errorContainer.style.color = color;
       }, 150);
     },
+
     // Generate local FileReader base64 for imported image
     userParamatersImgChange(event) {
       let reader = new FileReader();
@@ -478,6 +542,7 @@ export default {
       };
       reader.readAsDataURL(event.target.files[0]);
     },
+
     // Close image in FileReader
     userParamatersImgClose() {
       document.getElementById(
@@ -488,33 +553,41 @@ export default {
       document.getElementById("user-parameters-pic_upload-img").value = "";
       document.getElementById("user-parameters-pic_img-output").src = "";
     },
-    deleteAccountModal () {
-      document.getElementById('delete-account-container').style.display = "flex"
+
+    // Open delete account modal on click
+    deleteAccountModal() {
+      document.getElementById("delete-account-container").style.display =
+        "flex";
     },
-    quitDeleteAccountModal () {
-      document.getElementById('delete-account-container').style.display = "none"
+
+    // Quit delete account modal on click
+    quitDeleteAccountModal() {
+      document.getElementById("delete-account-container").style.display =
+        "none";
     },
-    deleteAccount () {
-      const vm = this
-      
+
+    // DELETE ACCOUNT
+    deleteAccount() {
+      const vm = this;
+
       // XHR ERROR
-      function xhrCallbackError (response) {
-        vm.infoHandler(response, 'red')
-        console.error(response)
+      function xhrCallbackError(response) {
+        vm.infoHandler(response, "red");
+        console.error(response);
       }
-      
+
       // API CALLBACK ERROR
-      function apiCallbackError (response, readyState, httpStatus) {
-        vm.infoHandler(response.sub_err, 'red')
-        console.error(response)
-        console.error(`ReadyState: ${readyState}, HttpStatus: ${httpStatus}`)
+      function apiCallbackError(response, readyState, httpStatus) {
+        vm.infoHandler(response.sub_err, "red");
+        console.error(response);
+        console.error(`ReadyState: ${readyState}, HttpStatus: ${httpStatus}`);
       }
-      
+
       // API CALLBACK DONE
-      function apiCallbackDone (response) {
+      function apiCallbackDone(response) {
         document.cookie = `user_id=;expires=/;path=/`;
         document.cookie = `auth_token=;expires=/;path=/`;
-        
+
         let redirectionTime = 6;
         let redirectionInterval = setInterval(() => {
           if (redirectionTime === 0) {
@@ -523,33 +596,43 @@ export default {
           } else {
             redirectionTime--;
             vm.infoHandler(
-              `${response.message} Redirection vers la page de connexion dans ${redirectionTime} secondes.`, 'green'
+              `${response.message} Redirection vers la page de connexion dans ${redirectionTime} secondes.`,
+              "green"
             );
           }
         }, 1000);
       }
 
       // API CALL
-      api("api/user/account/delete", "DELETE", undefined, apiCallbackDone, apiCallbackError, xhrCallbackError)
+      api(
+        "api/user/account/delete",
+        "DELETE",
+        undefined,
+        apiCallbackDone,
+        apiCallbackError,
+        xhrCallbackError
+      );
     },
+
+    // INFO HANDLER : DELETE ACCOUNT
     infoHandler(infoValue, infoColor) {
-      const infoContainer = document.getElementById('handler-delete-account')
-      
-      let timeoutTime
-      
-      if(infoColor == "green") {
-        timeoutTime = 0
-      }else{
-        timeoutTime = 150
+      const infoContainer = document.getElementById("handler-delete-account");
+
+      let timeoutTime;
+
+      if (infoColor == "green") {
+        timeoutTime = 0;
+      } else {
+        timeoutTime = 150;
       }
-      
-      infoContainer.style.color = infoColor
-      infoContainer.style.display = "none"
+
+      infoContainer.style.color = infoColor;
+      infoContainer.style.display = "none";
       setTimeout(() => {
-        infoContainer.textContent = infoValue
-        infoContainer.style.display = "flex"
+        infoContainer.textContent = infoValue;
+        infoContainer.style.display = "flex";
       }, timeoutTime);
-    },
+    }
   },
   components: {
     trends,
@@ -569,8 +652,8 @@ export default {
 #delete-account_button {
   margin: 15px 0;
   padding: 5px;
-  font-size: .9em;
-  border-radius: .1em;
+  font-size: 0.9em;
+  border-radius: 0.1em;
   background-color: rgba(255, 52, 52, 0.459);
   border: 1px solid rgb(156, 1, 1);
   &:hover {
@@ -599,18 +682,18 @@ export default {
   width: 100%;
   height: 100%;
   overflow: auto;
-  background-color: rgba(0,0,0,0.5);
+  background-color: rgba(0, 0, 0, 0.5);
   animation-name: opacity;
-  animation-duration: .3s;
+  animation-duration: 0.3s;
   &__content {
     margin-bottom: 125px;
     background-color: white;
     padding: 17px 20px;
-    border-radius: .5em;
-    animation: opacity .5s;
+    border-radius: 0.5em;
+    animation: opacity 0.5s;
     width: 18%;
     h4 {
-      margin-bottom: 11px!important;
+      margin-bottom: 11px !important;
       padding-bottom: 10px;
       font-size: 1.15em;
       border-bottom: 1px solid rgba(172, 172, 172, 0.6);
@@ -626,7 +709,7 @@ export default {
     }
     button {
       padding: 7px 10px;
-      border-radius: .1em;
+      border-radius: 0.1em;
       margin: 13px 3px 0;
     }
     #handler-delete-account {
@@ -646,7 +729,7 @@ export default {
     #quit-delete-account {
       border: 1px solid black;
       &:hover {
-        opacity: .9;
+        opacity: 0.9;
         border: 1px solid rgba(0, 0, 0, 0.63);
       }
     }

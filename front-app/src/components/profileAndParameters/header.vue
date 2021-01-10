@@ -34,7 +34,7 @@ import profilePopup from "@/components/nav/profilePopup.vue";
 
 export default {
   name: "profileAndParametersHeader",
-  data () {
+  data() {
     return {
       user: {
         pic_url: "",
@@ -42,39 +42,46 @@ export default {
         lastname: "",
         description: ""
       }
-    }
+    };
   },
-  beforeMount: async function () {
-      this.getPrimaryInfos()
+  beforeMount: async function() {
+    this.getPrimaryInfos();
   },
   methods: {
     // GET PRIMARY INFOS
-    getPrimaryInfos () {
-      const vm = this
-      
+    getPrimaryInfos() {
+      const vm = this;
+
       // XHR ERROR
-      function xhrCallbackError (response) {
-        console.error(response)
+      function xhrCallbackError(response) {
+        console.error(response);
       }
-      
+
       // API CALLBACK ERROR
-      function apiCallbackError (response, readyState, httpStatus) {
-        console.error(response)
-        console.error(`ReadyState: ${readyState}, HttpStatus: ${httpStatus}`)
+      function apiCallbackError(response, readyState, httpStatus) {
+        console.error(response);
+        console.error(`ReadyState: ${readyState}, HttpStatus: ${httpStatus}`);
       }
-      
+
       // API CALLBACK DONE
-      function apiCallbackDone (response) {
-        let user = response.result[0]
-        
-        vm.user.pic_url = user.pic_url
-        vm.user.firstname = user.firstname
-        vm.user.lastname = user.lastname
-        vm.user.description = user.description
+      function apiCallbackDone(response) {
+        let user = response.result[0];
+
+        vm.user.pic_url = user.pic_url;
+        vm.user.firstname = user.firstname;
+        vm.user.lastname = user.lastname;
+        vm.user.description = user.description;
       }
-      
+
       // API CALL
-      api("api/user/primaryInfos", "GET", undefined, apiCallbackDone, apiCallbackError, xhrCallbackError)
+      api(
+        "api/user/primaryInfos",
+        "GET",
+        undefined,
+        apiCallbackDone,
+        apiCallbackError,
+        xhrCallbackError
+      );
     },
     displayProfilePopup
   },

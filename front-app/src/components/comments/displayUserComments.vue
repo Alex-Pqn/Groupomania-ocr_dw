@@ -66,31 +66,38 @@ export default {
     }
   },
   methods: {
-    modPanelDeleteComment (comment_id) {
+    // MOD PANEL : DELETE COMMENT
+    modPanelDeleteComment(comment_id) {
       // const vm = this
-      
+
       // XHR ERROR
-      function xhrCallbackError (response) {
+      function xhrCallbackError(response) {
         // vm.errorHandler(response, forum_id, user_id)
-        console.error(response)
+        console.error(response);
       }
-      
+
       // API CALLBACK DONE
-      function apiCallbackDone () {
-      }
-      
+      function apiCallbackDone() {}
+
       // API CALLBACK ERROR
-      function apiCallbackError (response, readyState, httpStatus) {
+      function apiCallbackError(response, readyState, httpStatus) {
         // vm.errorHandler(response.sub_err, forum_id, user_id)
-        console.error(response)
-        console.error(`ReadyState: ${readyState}, HttpStatus: ${httpStatus}`)
+        console.error(response);
+        console.error(`ReadyState: ${readyState}, HttpStatus: ${httpStatus}`);
       }
-      
+
       // API CALL
       let comment = {
-          id: comment_id
-      }
-      api("api/mod/comment/delete", "DELETE", comment, apiCallbackDone, apiCallbackError, xhrCallbackError)
+        id: comment_id
+      };
+      api(
+        "api/mod/comment/delete",
+        "DELETE",
+        comment,
+        apiCallbackDone,
+        apiCallbackError,
+        xhrCallbackError
+      );
     }
   }
 };
@@ -144,7 +151,7 @@ export default {
       right: 0;
       margin-bottom: -12px;
       margin-right: -12px;
-      
+
       button {
         @include mod-panel_delete-button;
       }

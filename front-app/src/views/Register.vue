@@ -148,7 +148,7 @@ export default {
   methods: {
     // REGISTER SUBMIT VALIDATION
     registerSubmit: function(event) {
-      const vm = this
+      const vm = this;
       event.preventDefault();
 
       let firstnameInput = document.registerForm.firstname.value;
@@ -208,7 +208,7 @@ export default {
       // inputs validator
       formData.forEach(data => {
         document.getElementById(data.errorIdContainer).style.display = "none";
-        
+
         // length validation
         if (data.value.length < data.minLength) {
           return vm.displayFormError(
@@ -221,7 +221,7 @@ export default {
             `Votre ${data.name} ne peut être composé que de ${data.maxLength} caractères au maximum.`
           );
         }
-        
+
         // regex validation
         if (data.regex.test(data.value) === false) {
           if (data.id === 1 || data.id === 2) {
@@ -241,7 +241,7 @@ export default {
             );
           }
         }
-        
+
         // passwords corresponds validation
         if (data.id === 4) {
           if (repasswordInput !== data.value) {
@@ -251,7 +251,7 @@ export default {
             );
           }
         }
-        
+
         data.stepValidation = true;
         // if all inputs are valids, call api
         if (
@@ -260,35 +260,42 @@ export default {
           formData[2].stepValidation === true &&
           formData[3].stepValidation === true
         ) {
-          vm.registerRequest(firstnameInput, lastnameInput, emailInput, passwordInput, newslettersInput);
+          vm.registerRequest(
+            firstnameInput,
+            lastnameInput,
+            emailInput,
+            passwordInput,
+            newslettersInput
+          );
         }
       });
     },
+
     // REGISTER API REQUEST
     registerRequest(firstname, lastname, email, password, newsletters) {
-      const vm = this
+      const vm = this;
       const submitButton = document.getElementById("submit");
-      
+
       // XHR ERROR
-      function xhrCallbackError () {
-        vm.displaySubmitInfoError(
+      function xhrCallbackError() {
+        vm.displaySubmitError(
           "Une erreur est survenue lors de la création de votre compte. Vérifiez l'état de vote connexion internet et réessayez."
         );
         submitButton.disabled = false;
-      };
-      
-      // API CALLBACK ERROR
-      function apiCallbackError (response, readyState, httpStatus) {
-        vm.displaySubmitInfoError(response.sub_err);
-        console.error(response)
-        console.error(`ReadyState: ${readyState}, HttpStatus: ${httpStatus}`)
       }
-      
+
+      // API CALLBACK ERROR
+      function apiCallbackError(response, readyState, httpStatus) {
+        vm.displaySubmitError(response.sub_err);
+        console.error(response);
+        console.error(`ReadyState: ${readyState}, HttpStatus: ${httpStatus}`);
+      }
+
       // API CALLBACK DONE
-      function apiCallbackDone (response) {
+      function apiCallbackDone(response) {
         submitButton.disabled = true;
-        createUserCookie(response)
-        
+        createUserCookie(response);
+
         // redirect to home
         let redirectionTime = 6;
         let redirectionInterval = setInterval(() => {
@@ -297,26 +304,35 @@ export default {
             window.location.replace("/");
           } else {
             redirectionTime--;
-            vm.displaySubmitInfoSuccess(
+            vm.displaySubmitSuccess(
               `${response.message} Redirection vers l'accueil dans ${redirectionTime} secondes.`
             );
           }
         }, 1000);
       }
-      
+
       // API CALL
       let userParams = {
         firstname,
         lastname,
         email,
         password,
-        newsletters,
+        newsletters
       };
-      apiAuth("api/user/register", "POST", JSON.stringify(userParams), apiCallbackDone, apiCallbackError, xhrCallbackError);
+      apiAuth(
+        "api/user/register",
+        "POST",
+        JSON.stringify(userParams),
+        apiCallbackDone,
+        apiCallbackError,
+        xhrCallbackError
+      );
     },
-    displaySubmitInfoError(infoValue) {
+
+    // Display submit error on error
+    displaySubmitError(infoValue) {
       const submitInfo = document.getElementById("submit-info");
-      
+
       submitInfo.style.display = "none";
       setTimeout(() => {
         submitInfo.style.display = "flex";
@@ -324,13 +340,17 @@ export default {
         submitInfo.innerHTML = infoValue;
       }, 150);
     },
-    displaySubmitInfoSuccess(successValue) {
+
+    // Display submit info success on success
+    displaySubmitSuccess(successValue) {
       const submitInfo = document.getElementById("submit-info");
-      
+
       submitInfo.style.display = "flex";
       submitInfo.style.color = "green";
       submitInfo.innerHTML = successValue;
     },
+
+    // Display custom form errors
     displayFormError(errorIdContainer, errorValue) {
       document.getElementById(errorIdContainer).innerHTML = errorValue;
       document.getElementById(errorIdContainer).style.display = "flex";

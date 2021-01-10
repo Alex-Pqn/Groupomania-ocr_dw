@@ -70,9 +70,9 @@ body {
   display: none;
   background-color: rgba(226, 0, 0, 0.2);
   padding: 0 10px 10px 10px;
-  border-top-left-radius: .7em;
-  border-top-right-radius: .7em;
-  border-bottom: 4px solid rgba(128, 0, 0, 0.7)!important;
+  border-top-left-radius: 0.7em;
+  border-top-right-radius: 0.7em;
+  border-bottom: 4px solid rgba(128, 0, 0, 0.7) !important;
   border: 1px solid rgba(128, 0, 0, 0.7);
   h3 {
     margin: 7px 0 !important;

@@ -40,12 +40,12 @@ const routes = [
   {
     path: "/register",
     name: "Register",
-    component: Register,
+    component: Register
   },
   {
     path: "/login",
     name: "Login",
-    component: Login,
+    component: Login
   },
   {
     path: "/:pathMatch(.*)",
@@ -53,7 +53,7 @@ const routes = [
     meta: {
       requiresAuth: true
     }
-  },
+  }
 ];
 
 // route level code-splitting
@@ -68,40 +68,46 @@ const router = new VueRouter({
 });
 
 router.beforeEach((to, from, next) => {
-  
   // xhr request error
-  function xhrCallbackError () {
+  function xhrCallbackError() {
     if (to.matched.some(route => route.meta.requiresAuth)) {
       next("/login");
-    }else{
+    } else {
       next();
     }
   }
-  
+
   // token invalid or api error
-  function apiCallbackError () {
+  function apiCallbackError() {
     if (to.matched.some(route => route.meta.requiresAuth)) {
       next("/login");
-    }else{
+    } else {
       next();
     }
   }
-  
+
   // token valid
-  function apiCallbackDone () {
+  function apiCallbackDone() {
     // page requires auth, redirect to this
     if (to.matched.some(route => route.meta.requiresAuth)) {
       next();
     }
     // redirect to home page, user is already connected and cannot acces to /login or /register
-    else{
+    else {
       next("/");
     }
   }
 
-  // api request
-  api("api/user/page/auth", "GET", undefined, apiCallbackDone, apiCallbackError, xhrCallbackError); 
-  
+  // Get page: auth api request
+  api(
+    "api/user/page/auth",
+    "GET",
+    undefined,
+    apiCallbackDone,
+    apiCallbackError,
+    xhrCallbackError
+  );
+
   next();
 });
 
