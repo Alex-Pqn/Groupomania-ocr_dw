@@ -344,7 +344,7 @@ exports.deleteAccount = (req, res, next) => {
       // push forums id in array and delete forum image
       result.forEach(forum => {
         userForumsList.push(forum.id)
-        if(pic_url != "http://localhost:3000/images/user-icon.png") {
+        if(forum.image_url) {
           fs.unlink(`images/${forum.image_url.split('/images/')[1]}`, (err => {
             if(err) {
                 return res.status(500).json({ err })
@@ -380,7 +380,7 @@ exports.deleteAccount = (req, res, next) => {
           }
           
           let userPic = result[0].pic_url
-          if(userPic != "http://localhost:3000/images/user-icon.png") {
+          if(userPic && userPic != "http://localhost:3000/images/user-icon.png") {
             fs.unlink(`images/${userPic.split('/images/')[1]}`, (err => {
               if(err) {
                   return res.status(500).json({ err })
