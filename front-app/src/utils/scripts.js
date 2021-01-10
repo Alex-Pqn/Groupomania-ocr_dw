@@ -113,7 +113,7 @@ export function api(
       urlAPI == "api/comments/create" ||
       urlAPI == "api/comments/get" ||
       urlAPI == "api/profile/get" ||
-      urlAPI == "api/user/primaryInfos" ||
+      urlAPI == "api/user/account/primaryInfos" ||
       urlAPI == "api/user/parameters/get" ||
       urlAPI == "api/mod/comment/delete" ||
       urlAPI == "api/mod/forum/delete"

@@ -67,7 +67,7 @@ export default {
 
     // API CALL
     api(
-      "api/user/primaryInfos",
+      "api/user/account/primaryInfos",
       "GET",
       undefined,
       apiCallbackDone,
