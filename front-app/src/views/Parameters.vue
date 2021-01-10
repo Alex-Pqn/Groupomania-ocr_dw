@@ -443,7 +443,11 @@ export default {
       
       // API CALLBACK DONE
       function apiCallbackDone (response) {
-        vm.displayFormInfo(response.message, "green")
+        if(response.userPicWasUpdated) {
+          location.reload()
+        }else{
+          vm.displayFormInfo(response.message, "green")
+        }
       }
       
       // API CALLBACK ERROR
