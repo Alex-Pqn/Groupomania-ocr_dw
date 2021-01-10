@@ -13,12 +13,14 @@
         <h4>
           Discussion récentes
         </h4>
-        <div id="error-handler">
+        <!-- error handler -->
+        <div id="error-handler_trends" class="error-handler">
           <h3>
             Erreur
           </h3>
           <p></p>
         </div>
+        <!-- forums -->
         <article v-for="item in recentsTrends" :key="item.id">
           <displayUserTrends
             :published_date="item.published_date"
@@ -96,8 +98,8 @@ export default {
       api("api/forums/trends/get", "GET", undefined, apiCallbackDone, apiCallbackError, xhrCallbackError)
     },
     errorHandler (err) {
-      const errorContainer = document.getElementById('error-handler')
-      document.querySelector('#error-handler p').innerHTML = err
+      const errorContainer = document.getElementById('error-handler_trends')
+      document.querySelector('#error-handler_trends p').innerHTML = err
       errorContainer.style.display = "block"
     },
   },
