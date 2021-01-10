@@ -166,7 +166,9 @@ exports.getPrimaryInfos = (req, res, next) => {
       `SELECT pic_url,
               firstname,
               lastname,
-              description
+              description,
+              is_mod,
+              is_admin
       FROM Accounts
       WHERE id = ${userId}`, 
       (err, result) => {
@@ -205,7 +207,9 @@ exports.getParameters = (req, res, next) => {
               lastname,
               description,
               email,
-              newsletters
+              newsletters,
+              is_mod,
+              is_admin
       FROM Accounts
       WHERE id = ${userId}`, 
       (err, result) => {
