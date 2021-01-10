@@ -10,6 +10,7 @@ const homeRoute = require('./routes/home')
 const profileRoute = require('./routes/profile')
 const trendsRoute = require('./routes/trends')
 const userRoute = require('./routes/user');
+const modRoute = require('./routes/mod')
 
 // initialize express in app
 const app = express();
@@ -35,5 +36,6 @@ app.use('/api/home', homeRoute);
 app.use('/api/profile', profileRoute);
 app.use('/api/trends', trendsRoute);
 app.use('/api/comments', commentsRoute);
+app.use('/api/mod', modRoute);
 
 module.exports = app;
