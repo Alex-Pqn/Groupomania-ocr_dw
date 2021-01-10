@@ -15,7 +15,8 @@ exports.getAllComments = (req, res, next) => {
     // returns comments (+ user informations) attached to forum id
     db.query(
       `
-      SELECT  c.created_at,
+      SELECT  c.id,
+              c.created_at,
               c.text,
               c.forum_id,
               a.firstname,
