@@ -35,7 +35,8 @@
             <h3>
               Fil de discussion
             </h3>
-            <div id="error-handler">
+            <!-- error handler -->
+            <div id="error-handler_home" class="error-handler">
               <h3>
                 Erreur
               </h3>
@@ -163,11 +164,13 @@ export default {
       
       // XHR ERROR
       function xhrCallbackError (response) {
+        vm.errorHandler(response)
         console.error(response)
       }
       
       // API CALLBACK ERROR
       function apiCallbackError (response, readyState, httpStatus) {
+        vm.errorHandler(response.sub_err)
         console.error(response)
         console.error(`ReadyState: ${readyState}, HttpStatus: ${httpStatus}`)
       }
@@ -210,8 +213,8 @@ export default {
       api("api/comments/get", "POST", data, apiCallbackDone, apiCallbackError, xhrCallbackError)
     },
     errorHandler (err) {
-      const errorContainer = document.getElementById('error-handler')
-      document.querySelector('#error-handler p').innerHTML = err
+      const errorContainer = document.getElementById('error-handler_home')
+      document.querySelector('#error-handler_home p').innerHTML = err
       errorContainer.style.display = "block"
     },
     displayProfilePopup
@@ -269,7 +272,6 @@ export default {
     margin-top: 5px;
     margin-left: 185px;
     width: 50%;
-    height: 7%;
     z-index: 999;
     &--style {
       border-bottom: 1px solid $default_smooth-border;
