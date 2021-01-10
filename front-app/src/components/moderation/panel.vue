@@ -1,17 +1,25 @@
 <template>
+  <!-- mod panel -->
   <div class="mod-panel">
+    <!-- icon -->
     <img
       class="mod-panel__icon"
       v-on:click="modPanelModal"
       src="@/assets/moderator-panel-icon.png"
       alt=""
     />
+    
+    <!-- mod panel modal -->
     <div id="modPanelModal" class="mod-panel-modal">
+      
+      <!-- header -->
       <div class="mod-panel-modal__header">
         <p>
           Panel de modération
         </p>
       </div>
+      
+      <!-- content -->
       <div class="mod-panel-modal__content">
         <!-- forums list -->
         <article v-for="item in forums" :key="item.id">
@@ -43,6 +51,8 @@
           </div>
         </article>
       </div>
+      
+      <!-- footer -->
       <div v-on:click="modPanelModal" class="mod-panel-modal__footer">
         <button>
           Fermer
@@ -214,28 +224,23 @@ export default {
 </script>
 
 <style lang="scss">
+// mod panel
 .mod-panel {
-  position: absolute;
+  position: fixed;
   z-index: 28;
-  top: 0;
-  right: 0;
-  margin-right: 220px;
-  margin-top: 15px;
   &__icon {
     width: 45px;
     cursor: pointer;
   }
 }
 
+// mod panel modal
 .mod-panel-modal {
   display: none;
   flex-direction: column;
   position: absolute;
-  right: 0;
-  margin-right: 40px;
-  width: 500px;
-  height: 750px !important;
 
+  // header
   &__header {
     border-top-left-radius: 0.5em;
     padding: 7px;
@@ -248,12 +253,16 @@ export default {
       }
     }
   }
+  
+  // content
   &__content {
     padding: 10px;
     word-break: break-all;
     background-color: rgb(207, 207, 207);
     overflow-y: auto;
   }
+  
+  // footer
   &__footer {
     border-bottom-left-radius: 0.2em;
     border-bottom-right-radius: 0.2em;
@@ -263,7 +272,8 @@ export default {
       padding: 2px 5px;
     }
   }
-
+  
+  // forums
   .user-forums {
     margin-top: 15px;
     &__icon {
@@ -272,6 +282,83 @@ export default {
     &__main {
       width: 84%;
     }
+  }
+}
+@media screen and (max-width: 599px) {
+  // mod panel
+  .mod-panel {
+    top: 0;
+    right: 0;
+    margin-right: 20px;
+    margin-top: 15px;
+  }
+  // mod panel modal
+  .mod-panel-modal {
+    right: 0;
+    width: 280px;
+    height: 750px;
+    margin-top: 10px;
+    &__header {
+      border-top-right-radius: 0.5em;
+    }
+  }
+}
+@media screen and (min-width: 600px) and (max-width: 1023px) {
+  // mod panel
+  .mod-panel {
+    top: 0;
+    right: 0;
+    margin-right: 20px;
+    margin-top: 15px;
+  }
+  // mod panel modal
+  .mod-panel-modal {
+    right: 0;
+    margin-right: 40px;
+    width: 500px;
+    height: 750px;
+  }
+}
+@media screen and (min-width: 1024px) and (max-width: 1600px) {
+  // mod panel
+  .mod-panel {
+    bottom: 0;
+    right: 0;
+    margin-right: 170px;
+    margin-bottom: 7px;
+  }
+  // mod panel modal
+  .mod-panel-modal {
+    bottom: 0;
+    right: 0;
+    width: 500px;
+    height: 750px !important;
+    margin-bottom: 50px;
+    margin-right: 45px;
+    // header
+    &__header {
+      border-top-right-radius: 0.5em;
+    }
+    // footer
+    &__footer {
+      border-bottom-right-radius: 0;
+    }
+  }
+}
+@media screen and (min-width: 1601px) {
+  // mod panel
+  .mod-panel {
+    top: 0;
+    right: 0;
+    margin-right: 220px;
+    margin-top: 15px;
+  }
+  // mod panel modal
+  .mod-panel-modal {
+    right: 0;
+    margin-right: 40px;
+    width: 500px;
+    height: 750px;
   }
 }
 </style>
