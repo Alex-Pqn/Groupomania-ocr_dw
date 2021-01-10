@@ -14,7 +14,8 @@
           <h3>
             Mon fil de discussion
           </h3>
-          <div id="error-handler">
+          <!-- error handler -->
+          <div id="error-handler_profile" class="error-handler">
             <h3>
               Erreur
             </h3>
@@ -198,8 +199,8 @@ export default {
       api("api/comments/get", "POST", data, apiCallbackDone, apiCallbackError, xhrCallbackError)
     },
     errorHandler (err) {
-      const errorContainer = document.getElementById('error-handler')
-      document.querySelector('#error-handler p').innerHTML = err
+      const errorContainer = document.getElementById('error-handler_profile')
+      document.querySelector('#error-handler_profile p').innerHTML = err
       errorContainer.style.display = "block"
     },
     // Generate local FileReader base64 for imported image
