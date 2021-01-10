@@ -22,14 +22,24 @@
           {{ published_date }}
         </p>
       </div>
+      <div v-if="mod_panel === true" class="user-comments__main__delete">
+        <button v-on:click="modPanelDeleteComment(id)">
+          Supprimer
+        </button>
+      </div>
     </div>
   </div>
 </template>
 
 <script>
+import { api } from "@/utils/scripts";
+
 export default {
   name: "displayUserComments",
   props: {
+    id: {
+      type: Number
+    },
     pic_url: {
       type: String,
       required: true
@@ -49,6 +59,38 @@ export default {
     text: {
       type: String,
       required: true
+    },
+    mod_panel: {
+      type: Boolean,
+      required: true
+    }
+  },
+  methods: {
+    modPanelDeleteComment (comment_id) {
+      // const vm = this
+      
+      // XHR ERROR
+      function xhrCallbackError (response) {
+        // vm.errorHandler(response, forum_id, user_id)
+        console.error(response)
+      }
+      
+      // API CALLBACK DONE
+      function apiCallbackDone () {
+      }
+      
+      // API CALLBACK ERROR
+      function apiCallbackError (response, readyState, httpStatus) {
+        // vm.errorHandler(response.sub_err, forum_id, user_id)
+        console.error(response)
+        console.error(`ReadyState: ${readyState}, HttpStatus: ${httpStatus}`)
+      }
+      
+      // API CALL
+      let comment = {
+          id: comment_id
+      }
+      api("api/mod/comment/delete", "DELETE", comment, apiCallbackDone, apiCallbackError, xhrCallbackError)
     }
   }
 };
@@ -80,6 +122,7 @@ export default {
   &__main {
     display: flex;
     flex-direction: column;
+    position: relative;
     width: 93.2%;
     &__author {
       display: flex;
@@ -94,6 +137,17 @@ export default {
       text-align: left;
       font-size: 0.9em;
       opacity: 0.92;
+    }
+    &__delete {
+      position: absolute;
+      bottom: 0;
+      right: 0;
+      margin-bottom: -12px;
+      margin-right: -12px;
+      
+      button {
+        @include mod-panel_delete-button;
+      }
     }
   }
 }
