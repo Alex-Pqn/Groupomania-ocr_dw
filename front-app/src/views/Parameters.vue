@@ -207,7 +207,7 @@
 import { api } from "@/utils/scripts";
 import trends from "@/components/trends/trends.vue";
 import mainNav from "@/components/nav/mainNav.vue";
-import userHeader from "@/components/userHeader.vue";
+import userHeader from "@/components/profileAndParameters/header.vue";
 
 export default {
   name: "Parameters",

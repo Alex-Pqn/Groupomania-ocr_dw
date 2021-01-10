@@ -127,7 +127,7 @@
 </template>
 
 <script>
-import connection from "@/components/connection/connection.vue";
+import connection from "@/components/connection/styles.vue";
 import { apiAuth, createUserCookie } from "@/utils/scripts";
 
 export default {

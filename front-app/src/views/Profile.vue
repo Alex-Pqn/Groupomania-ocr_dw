@@ -58,11 +58,11 @@
 
 <script>
 import displayUserForums from "@/components/forums/displayUserForums.vue";
-import displayUserComments from "@/components/forums/displayUserComments.vue";
+import displayUserComments from "@/components/comments/displayUserComments.vue";
 import userCreateForum from "@/components/forums/userCreateForum.vue";
 import trends from "@/components/trends/trends.vue";
 import mainNav from "@/components/nav/mainNav.vue";
-import userHeader from "@/components/userHeader.vue";
+import userHeader from "@/components/profileAndParameters/header.vue";
 import { api, dateFormatting } from "@/utils/scripts";
 
 export default {
