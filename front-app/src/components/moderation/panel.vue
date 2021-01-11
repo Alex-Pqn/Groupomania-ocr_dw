@@ -244,7 +244,7 @@ export default {
   &__header {
     border-top-left-radius: 0.5em;
     padding: 7px;
-    background-color: rgb(156, 156, 156);
+    background-color: rgb(167, 167, 167);
     display: flex;
     ul {
       display: flex;

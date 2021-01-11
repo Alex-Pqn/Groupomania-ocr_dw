@@ -95,7 +95,7 @@ export default {
     padding-top: 7px;
     a {
       text-decoration: none;
-      color: rgb(43, 13, 211);
+      color: rgb(23, 0, 152);
       &:hover {
         opacity: 0.8;
       }

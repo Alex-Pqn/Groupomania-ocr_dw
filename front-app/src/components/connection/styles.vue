@@ -92,13 +92,13 @@ export default {
         transition-property: all;
         transition-duration: 500ms;
         border: 1px solid rgba(143, 143, 143, 0.5);
-        background-color: rgb(243, 242, 242);
+        background-color: #f3f2f2;
         margin-bottom: 11px;
         &:hover {
           border: 1px solid rgb(131, 131, 131);
         }
         &:focus {
-          background-color: rgb(247, 247, 247);
+          background-color: #f7f7f7;
           border: none;
         }
       }
@@ -122,7 +122,7 @@ export default {
         margin-top: -6px;
         margin-bottom: 12px;
         font-size: 0.955em;
-        color: rgba(202, 0, 0, 0.78);
+        color: #B40000;
         padding-left: 2px;
       }
     }
@@ -130,7 +130,7 @@ export default {
       transition-property: all;
       transition-duration: 500ms;
       border: 1px solid rgba(143, 143, 143, 0.75);
-      background-color: rgb(236, 236, 236);
+      background-color: #ececec;
       padding: 7px;
       font-size: 1em;
       margin-top: 5px;
@@ -138,7 +138,7 @@ export default {
       &:hover {
         border-top-left-radius: 0.6em;
         border-bottom-right-radius: 0.4em;
-        background-color: rgb(223, 223, 223);
+        background-color: #dfdfdf;
         border: 1px solid rgb(128, 128, 128);
       }
     }

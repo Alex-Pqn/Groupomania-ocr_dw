@@ -169,7 +169,7 @@ export default {
     top: 25px;
     &--style {
       border-radius: 0;
-      background-color: rgb(245, 245, 245);
+      background-color: #f5f5f5;
     }
     &__header {
       h1 {
@@ -216,7 +216,7 @@ export default {
 
     &--style {
       border-radius: 0;
-      background-color: rgb(245, 245, 245);
+      background-color: #f5f5f5;
     }
     &__main {
       &__recents {

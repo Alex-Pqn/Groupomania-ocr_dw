@@ -666,10 +666,10 @@ export default {
   padding: 5px;
   font-size: 0.9em;
   border-radius: 0.1em;
-  background-color: rgba(255, 52, 52, 0.459);
+  background-color: rgb(255, 148, 148);
   border: 1px solid rgb(156, 1, 1);
   &:hover {
-    background-color: rgba(255, 52, 52, 0.3);
+    background-color: rgb(255, 172, 172);
     border: 1px solid rgba(197, 0, 0, 0.5);
   }
 }
@@ -694,7 +694,7 @@ export default {
   width: 100%;
   height: 100%;
   overflow: auto;
-  background-color: rgba(0, 0, 0, 0.5);
+  background-color: rgba(0, 0, 0, 0.502);
   animation-name: opacity;
   animation-duration: 0.3s;
   &__content {
@@ -725,13 +725,12 @@ export default {
       margin-top: 13px;
     }
     #delete-account {
-      color: rgb(156, 1, 1);
-      background-color: rgba(255, 52, 52, 0.459);
+      color: rgb(253, 116, 116);
+      background-color: rgb(255, 224, 224);
       border: 1px solid rgb(156, 1, 1);
       &:hover {
-        color: rgb(104, 0, 0);
-        background-color: rgba(119, 0, 0, 0.247);
-        border: 1px solid rgba(107, 0, 0, 0.904);
+        background-color: rgb(255, 238, 238);
+        border: 1px solid rgba(197, 0, 0, 0.5);
       }
     }
     #quit-delete-account {
@@ -834,7 +833,7 @@ export default {
       margin-top: 5px;
       &:hover {
         background-color: rgb(223, 223, 223);
-        border: 1px solid rgb(128, 128, 128);
+        border: 1px solid rgb(169, 169, 169);
       }
     }
   }

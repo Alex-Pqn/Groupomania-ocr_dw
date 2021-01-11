@@ -204,8 +204,8 @@ export default {
   &__error-handler {
     display: none;
     text-align: left;
-    color: rgb(204, 0, 0);
-    background-color: rgba(255, 118, 118, 0.12);
+    color: rgb(155, 0, 0);
+    background-color: rgb(255, 198, 204);
     margin-top: 5px;
     padding: 3px 5px 3px 6px;
   }

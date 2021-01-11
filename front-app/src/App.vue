@@ -68,12 +68,12 @@ body {
 // error handler
 .error-handler {
   display: none;
-  background-color: rgba(226, 0, 0, 0.2);
+  background-color: rgb(255, 135, 125);
   padding: 0 10px 10px 10px;
   border-top-left-radius: 0.7em;
   border-top-right-radius: 0.7em;
-  border-bottom: 4px solid rgba(128, 0, 0, 0.7) !important;
-  border: 1px solid rgba(128, 0, 0, 0.7);
+  border-bottom: 4px solid rgb(211, 158, 151) !important;
+  border: 1px solid rgb(209, 196, 194);
   h3 {
     margin: 7px 0 !important;
   }

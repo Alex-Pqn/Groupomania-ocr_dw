@@ -424,7 +424,7 @@ export default {
   display: flex;
   padding: 11px;
   &--style {
-    background-color: rgb(235, 235, 235);
+    background-color: #ebebeb;
   }
   // left
   &__left {
@@ -519,8 +519,8 @@ export default {
   &__error-handler {
     display: none;
     text-align: left;
-    color: rgb(204, 0, 0);
-    background-color: rgba(255, 118, 118, 0.12);
+    color: #500000;
+    background-color: #FFA8A8;
     margin: 5px 0;
     padding: 3px 5px 3px 6px;
   }
@@ -550,7 +550,7 @@ export default {
         filter: invert(0.5) sepia(1) saturate(5) hue-rotate(175deg);
       }
       &:hover {
-        background-color: rgb(235, 235, 235);
+        background-color: #ebebeb;
       }
     }
   }
