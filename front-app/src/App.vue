@@ -68,7 +68,7 @@ body {
 // error handler
 .error-handler {
   display: none;
-  background-color: rgb(255, 135, 125);
+  background-color: #ff877d;
   padding: 0 10px 10px 10px;
   border-top-left-radius: 0.7em;
   border-top-right-radius: 0.7em;

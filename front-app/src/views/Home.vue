@@ -97,6 +97,7 @@ export default {
   name: "Home",
   data() {
     return {
+      forums: [],
       user: {
         modPanelAccess: false
       },
@@ -107,6 +108,7 @@ export default {
     this.getForums();
     this.modPanelAccess();
   },
+  
   methods: {
     // GET FORUMS
     getForums() {
