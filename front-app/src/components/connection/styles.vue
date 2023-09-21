@@ -7,7 +7,7 @@
 
 <script>
 export default {
-  name: "connection"
+  name: 'connection',
 };
 </script>
 
@@ -86,11 +86,9 @@ export default {
     }
     div {
       position: relative;
-      input[type="text"],
-      input[type="email"],
-      input[type="password"] {
-        transition-property: all;
-        transition-duration: 500ms;
+      input[type='text'],
+      input[type='email'],
+      input[type='password'] {
         border: 1px solid rgba(143, 143, 143, 0.5);
         background-color: #f3f2f2;
         margin-bottom: 11px;
@@ -102,16 +100,16 @@ export default {
           border: none;
         }
       }
-      input[name="email"] {
+      input[name='email'] {
         padding-left: 69px;
         width: 261px;
       }
-      input[name="password"] {
+      input[name='password'] {
         padding-left: 120px;
         width: 210px;
       }
-      label[for="password"],
-      label[for="email"] {
+      label[for='password'],
+      label[for='email'] {
         position: absolute;
         left: 10px;
         top: 8px;
@@ -122,11 +120,11 @@ export default {
         margin-top: -6px;
         margin-bottom: 12px;
         font-size: 0.955em;
-        color: #B40000;
+        color: #b40000;
         padding-left: 2px;
       }
     }
-    input[type="submit"] {
+    input[type='submit'] {
       transition-property: all;
       transition-duration: 500ms;
       border: 1px solid rgba(143, 143, 143, 0.75);
@@ -186,15 +184,15 @@ export default {
         font-size: 1em;
       }
       div {
-        input[type="text"],
-        input[type="email"],
-        input[type="password"] {
+        input[type='text'],
+        input[type='email'],
+        input[type='password'] {
           margin-bottom: 9px;
         }
-        input[name="email"] {
+        input[name='email'] {
           width: 201px;
         }
-        input[name="password"] {
+        input[name='password'] {
           width: 150px;
         }
       }

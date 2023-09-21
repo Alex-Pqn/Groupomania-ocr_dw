@@ -127,17 +127,17 @@
 </template>
 
 <script>
-import connection from "@/components/connection/styles.vue";
-import { apiAuth, createUserCookie } from "@/utils/scripts";
+import connection from '@/components/connection/styles.vue';
+import { apiAuth, createUserCookie } from '@/utils/scripts';
 
 export default {
-  name: "Register",
+  name: 'Register',
   components: {
-    connection
+    connection,
   },
   mounted() {
-    const newslettersCheckbox = document.getElementById("checkbox");
-    newslettersCheckbox.addEventListener("change", function() {
+    const newslettersCheckbox = document.getElementById('checkbox');
+    newslettersCheckbox.addEventListener('change', function() {
       if (this.checked) {
         newslettersCheckbox.value = true;
       } else {
@@ -161,53 +161,53 @@ export default {
       const formData = [
         {
           id: 1,
-          name: "prénom",
+          name: 'prénom',
           value: firstnameInput,
           stepValidation: false,
-          errorIdContainer: "firstname-error",
+          errorIdContainer: 'firstname-error',
           //eslint-disable-next-line
           regex: /[^0-9\.\,\"\?\!\;\:\#\$\%\&\(\)\*\+\-\/\<\>\=\@\[\]\\\^\_\{\}\|\~]+/,
           minLength: 3,
-          maxLength: 30
+          maxLength: 30,
         },
         {
           id: 2,
-          name: "nom",
+          name: 'nom',
           value: lastnameInput,
           stepValidation: false,
-          errorIdContainer: "lastname-error",
+          errorIdContainer: 'lastname-error',
           //eslint-disable-next-line
           regex: /[^0-9\.\,\"\?\!\;\:\#\$\%\&\(\)\*\+\-\/\<\>\=\@\[\]\\\^\_\{\}\|\~]+/,
           minLength: 3,
-          maxLength: 30
+          maxLength: 30,
         },
         {
           id: 3,
-          name: "e-mail",
+          name: 'e-mail',
           value: emailInput,
           stepValidation: false,
-          errorIdContainer: "email-error",
+          errorIdContainer: 'email-error',
           //eslint-disable-next-line
           regex: /[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?/g,
           minLength: 5,
-          maxLength: 55
+          maxLength: 55,
         },
         {
           id: 4,
-          name: "mot de passe",
+          name: 'mot de passe',
           value: passwordInput,
           stepValidation: false,
-          errorIdContainer: "password-error",
+          errorIdContainer: 'password-error',
           //eslint-disable-next-line
           regex: /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[a-zA-Z]).{8,}$/gm,
           minLength: 8,
-          maxLength: 50
-        }
+          maxLength: 50,
+        },
       ];
 
       // inputs validator
-      formData.forEach(data => {
-        document.getElementById(data.errorIdContainer).style.display = "none";
+      formData.forEach((data) => {
+        document.getElementById(data.errorIdContainer).style.display = 'none';
 
         // length validation
         if (data.value.length < data.minLength) {
@@ -237,7 +237,7 @@ export default {
           } else {
             return vm.displayFormError(
               data.errorIdContainer,
-              "Votre mot de passe doit contenir au minimum une lettre majuscule, une lettre minuscule et un chiffre."
+              'Votre mot de passe doit contenir au minimum une lettre majuscule, une lettre minuscule et un chiffre.'
             );
           }
         }
@@ -247,7 +247,7 @@ export default {
           if (repasswordInput !== data.value) {
             return vm.displayFormError(
               data.errorIdContainer,
-              "Les deux mots de passe entrés doivent correspondre."
+              'Les deux mots de passe entrés doivent correspondre.'
             );
           }
         }
@@ -274,7 +274,7 @@ export default {
     // REGISTER API REQUEST
     registerRequest(firstname, lastname, email, password, newsletters) {
       const vm = this;
-      const submitButton = document.getElementById("submit");
+      const submitButton = document.getElementById('submit');
 
       // XHR ERROR
       function xhrCallbackError() {
@@ -297,11 +297,11 @@ export default {
         createUserCookie(response);
 
         // redirect to home
-        let redirectionTime = 6;
+        let redirectionTime = 4;
         let redirectionInterval = setInterval(() => {
           if (redirectionTime === 0) {
             clearInterval(redirectionInterval);
-            window.location.replace("/");
+            window.location.replace('/');
           } else {
             redirectionTime--;
             vm.displaySubmitSuccess(
@@ -317,11 +317,11 @@ export default {
         lastname,
         email,
         password,
-        newsletters
+        newsletters,
       };
       apiAuth(
-        "api/user/register",
-        "POST",
+        'api/user/register',
+        'POST',
         JSON.stringify(userParams),
         apiCallbackDone,
         apiCallbackError,
@@ -331,31 +331,31 @@ export default {
 
     // Display submit error on error
     displaySubmitError(infoValue) {
-      const submitInfo = document.getElementById("submit-info");
+      const submitInfo = document.getElementById('submit-info');
 
-      submitInfo.style.display = "none";
+      submitInfo.style.display = 'none';
       setTimeout(() => {
-        submitInfo.style.display = "flex";
-        submitInfo.style.color = "rgba(197, 0, 0, 0.85)";
+        submitInfo.style.display = 'flex';
+        submitInfo.style.color = 'rgba(197, 0, 0, 0.85)';
         submitInfo.innerHTML = infoValue;
       }, 150);
     },
 
     // Display submit info success on success
     displaySubmitSuccess(successValue) {
-      const submitInfo = document.getElementById("submit-info");
+      const submitInfo = document.getElementById('submit-info');
 
-      submitInfo.style.display = "flex";
-      submitInfo.style.color = "green";
+      submitInfo.style.display = 'flex';
+      submitInfo.style.color = 'green';
       submitInfo.innerHTML = successValue;
     },
 
     // Display custom form errors
     displayFormError(errorIdContainer, errorValue) {
       document.getElementById(errorIdContainer).innerHTML = errorValue;
-      document.getElementById(errorIdContainer).style.display = "flex";
-    }
-  }
+      document.getElementById(errorIdContainer).style.display = 'flex';
+    },
+  },
 };
 </script>
 
@@ -367,22 +367,22 @@ export default {
     // register page
     &--register {
       div {
-        label[for="firstname"],
-        label[for="lastname"],
-        label[for="repassword"] {
+        label[for='firstname'],
+        label[for='lastname'],
+        label[for='repassword'] {
           position: absolute;
           left: 10px;
           top: 8px;
         }
-        input[name="firstname"] {
+        input[name='firstname'] {
           padding-left: 80px;
           width: 250px;
         }
-        input[name="lastname"] {
+        input[name='lastname'] {
           padding-left: 58px;
           width: 272px;
         }
-        input[name="repassword"] {
+        input[name='repassword'] {
           padding-left: 120px;
           width: 210px;
         }
@@ -404,13 +404,13 @@ export default {
     &__form {
       &--register {
         div {
-          input[name="firstname"] {
+          input[name='firstname'] {
             width: 190px;
           }
-          input[name="lastname"] {
+          input[name='lastname'] {
             width: 212px;
           }
-          input[name="repassword"] {
+          input[name='repassword'] {
             width: 150px;
           }
         }

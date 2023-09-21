@@ -39,22 +39,22 @@
 </template>
 
 <script>
-import { api } from "@/utils/scripts";
+import { api } from '@/utils/scripts';
 
 export default {
-  name: "userCreateForum",
+  name: 'userCreateForum',
   props: {},
   methods: {
     // CREATE FORUM
     createForum() {
       const vm = this;
-      let forumImgOutput = document.querySelector("input[type=file]").files[0];
-      let forumTextOutput = document.getElementById("create-forum_text").value;
+      let forumImgOutput = document.querySelector('input[type=file]').files[0];
+      let forumTextOutput = document.getElementById('create-forum_text').value;
 
       // forum validation
       const forumValidation = {
         minLength: 2,
-        maxLength: 320
+        maxLength: 320,
       };
       if (forumTextOutput.length >= forumValidation.minLength) {
         if (forumTextOutput.length <= forumValidation.maxLength) {
@@ -79,14 +79,14 @@ export default {
 
       // formdata attach image
       if (forumImage) {
-        formData.append("image", forumImage, forumImage.name);
+        formData.append('image', forumImage, forumImage.name);
       }
 
       // formdata attach forum
       let forum = {
-        text: forumText
+        text: forumText,
       };
-      formData.append("forum", JSON.stringify(forum));
+      formData.append('forum', JSON.stringify(forum));
 
       // XHR ERROR
       function xhrCallbackError(response) {
@@ -108,8 +108,8 @@ export default {
 
       // API CALL
       api(
-        "api/home/create",
-        "POST",
+        'api/home/create',
+        'POST',
         formData,
         apiCallbackDone,
         apiCallbackError,
@@ -120,13 +120,13 @@ export default {
     // ERROR HANDLER
     errorHandler(errValue) {
       const errorContainer = document.getElementById(
-        "create-forum_error-handler"
+        'create-forum_error-handler'
       );
 
-      errorContainer.style.display = "none";
+      errorContainer.style.display = 'none';
       setTimeout(() => {
         errorContainer.textContent = errValue;
-        errorContainer.style.display = "flex";
+        errorContainer.style.display = 'flex';
       }, 150);
     },
 
@@ -134,19 +134,19 @@ export default {
     imgChange(event) {
       let reader = new FileReader();
       reader.onload = function() {
-        document.getElementById("create-forum_img-output").src = reader.result;
-        document.getElementById("create-forum_img").style.display = "flex";
+        document.getElementById('create-forum_img-output').src = reader.result;
+        document.getElementById('create-forum_img').style.display = 'flex';
       };
       reader.readAsDataURL(event.target.files[0]);
     },
 
     // Close image in FileReader
     imgClose() {
-      document.getElementById("create-forum_img").style.display = "none";
-      document.getElementById("create-forum_upload-img").value = "";
-      document.getElementById("create-forum_img-output").src = "";
-    }
-  }
+      document.getElementById('create-forum_img').style.display = 'none';
+      document.getElementById('create-forum_upload-img').value = '';
+      document.getElementById('create-forum_img-output').src = '';
+    },
+  },
 };
 </script>
 
@@ -196,8 +196,7 @@ export default {
       }
     }
     input {
-      opacity: 0;
-      position: absolute;
+      display: none;
     }
   }
   // error-handler

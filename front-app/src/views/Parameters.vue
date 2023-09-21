@@ -2,7 +2,7 @@
   <main>
     <!-- moderation panel -->
     <moderationPanel v-if="user.modPanelAccess === true" />
-    
+
     <!-- container page -->
     <div class="parameters">
       <!-- displayed beetween 0px > 1023px -->
@@ -188,8 +188,8 @@
                     - Les commentaires postés
                   </li>
                   <li>
-                    - L'ensemble des données ratachées à votre compte, comprenant
-                    notamment votre e-mail et votre mot de passe.
+                    - L'ensemble des données ratachées à votre compte,
+                    comprenant notamment votre e-mail et votre mot de passe.
                   </li>
                 </ul>
                 <p>
@@ -221,33 +221,33 @@
 </template>
 
 <script>
-import { api } from "@/utils/scripts";
-import trends from "@/components/trends/trends.vue";
-import mainNav from "@/components/nav/mainNav.vue";
-import moderationPanel from "@/components/moderation/panel.vue";
-import profileAndParametersHeader from "@/components/profileAndParameters/header.vue";
+import { api } from '@/utils/scripts';
+import trends from '@/components/trends/trends.vue';
+import mainNav from '@/components/nav/mainNav.vue';
+import moderationPanel from '@/components/moderation/panel.vue';
+import profileAndParametersHeader from '@/components/profileAndParameters/header.vue';
 
 export default {
-  name: "Parameters",
+  name: 'Parameters',
   data() {
     return {
       user: {
-        pic_url: "",
-        firstname: "",
-        lastname: "",
-        email: "",
-        description: "",
-        newsletters: "",
-        modPanelAccess: false
-      }
+        pic_url: '',
+        firstname: '',
+        lastname: '',
+        email: '',
+        description: '',
+        newsletters: '',
+        modPanelAccess: false,
+      },
     };
   },
   beforeMount: async function() {
     this.getUserParameters();
   },
   mounted() {
-    const newslettersCheckbox = document.getElementById("newsletters");
-    newslettersCheckbox.addEventListener("change", function() {
+    const newslettersCheckbox = document.getElementById('newsletters');
+    newslettersCheckbox.addEventListener('change', function() {
       if (this.checked) {
         newslettersCheckbox.value = true;
       } else {
@@ -283,21 +283,21 @@ export default {
         vm.user.email = user.email;
         vm.user.description = user.description;
         vm.user.newsletters = user.newsletters;
-        
+
         if (user.is_admin === 1 || user.is_mod === 1) {
-          vm.user.modPanelAccess = true
+          vm.user.modPanelAccess = true;
         }
 
         if (user.newsletters === 1) {
-          document.getElementById("newsletters").checked = true;
-          document.getElementById("newsletters").value = true;
+          document.getElementById('newsletters').checked = true;
+          document.getElementById('newsletters').value = true;
         }
       }
 
       // API CALL
       api(
-        "api/user/parameters/get",
-        "GET",
+        'api/user/parameters/get',
+        'GET',
         undefined,
         apiCallbackDone,
         apiCallbackError,
@@ -308,12 +308,12 @@ export default {
     // ERROR HANDLER: GET USER PARAMETERS
     errorHandler(err) {
       const errorContainer = document.getElementById(
-        "error-handler_parameters"
+        'error-handler_parameters'
       );
-      document.querySelector("#error-handler_parameters p").innerHTML = err;
-      errorContainer.style.display = "block";
+      document.querySelector('#error-handler_parameters p').innerHTML = err;
+      errorContainer.style.display = 'block';
 
-      document.querySelector(".user-parameters__main").style.display = "none";
+      document.querySelector('.user-parameters__main').style.display = 'none';
     },
 
     // USER PARAMETERS FORM VALIDATION
@@ -323,7 +323,7 @@ export default {
       let formData;
       let passwordValidation;
 
-      document.getElementById("user-parameters_error-handler").innerHTML = "";
+      document.getElementById('user-parameters_error-handler').innerHTML = '';
 
       let userFirstname = document.parametersForm.firstname.value;
       let userLastname = document.parametersForm.lastname.value;
@@ -336,70 +336,70 @@ export default {
       formData = [
         {
           id: 1,
-          name: "prénom",
+          name: 'prénom',
           value: userFirstname,
           stepValidation: false,
           //eslint-disable-next-line
           regex: /[^0-9\.\,\"\?\!\;\:\#\$\%\&\(\)\*\+\-\/\<\>\=\@\[\]\\\^\_\{\}\|\~]+/,
           minLength: 3,
-          maxLength: 30
+          maxLength: 30,
         },
         {
           id: 2,
-          name: "nom",
+          name: 'nom',
           value: userLastname,
           stepValidation: false,
           //eslint-disable-next-line
           regex: /[^0-9\.\,\"\?\!\;\:\#\$\%\&\(\)\*\+\-\/\<\>\=\@\[\]\\\^\_\{\}\|\~]+/,
           minLength: 3,
-          maxLength: 30
+          maxLength: 30,
         },
         {
           id: 3,
-          name: "description",
+          name: 'description',
           value: userDescription,
           stepValidation: false,
           minLength: 0,
-          maxLength: 255
+          maxLength: 255,
         },
         {
           id: 4,
-          name: "e-mail",
+          name: 'e-mail',
           value: userEmail,
           stepValidation: false,
           //eslint-disable-next-line
           regex: /[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?/g,
           minLength: 5,
-          maxLength: 55
-        }
+          maxLength: 55,
+        },
       ];
 
       if (userPassword.length >= 1 || userRePassword.length >= 1) {
         passwordValidation = {
           id: 5,
-          name: "mot de passe",
+          name: 'mot de passe',
           value: userPassword,
           stepValidation: false,
           //eslint-disable-next-line
           regex: /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[a-zA-Z]).{8,}$/gm,
           minLength: 8,
-          maxLength: 50
+          maxLength: 50,
         };
         formData.push(passwordValidation);
       }
 
       // inputs validator
-      formData.forEach(data => {
+      formData.forEach((data) => {
         // length validation
         if (data.value.length < data.minLength) {
           return vm.displayFormInfo(
             `Votre ${data.name} doit être composé de ${data.minLength} caractères au minimum.`,
-            "red"
+            'red'
           );
         } else if (data.value.length > data.maxLength) {
           return vm.displayFormInfo(
             `Votre ${data.name} ne peut être composé que de ${data.maxLength} caractères au maximum.`,
-            "red"
+            'red'
           );
         }
         // regex validation
@@ -407,22 +407,22 @@ export default {
           if (data.id === 1 || data.id === 2) {
             return vm.displayFormInfo(
               `Votre ${data.name} est composé de caractères spéciaux prohibés.`,
-              "red"
+              'red'
             );
           } else if (data.id === 3) {
             return vm.displayFormInfo(
               `La description est composée de caractères spéciaux prohibés.`,
-              "red"
+              'red'
             );
           } else if (data.id === 4) {
             return vm.displayFormInfo(
               "L'e-mail que vous avez entré est invalide.",
-              "red"
+              'red'
             );
           } else {
             return vm.displayFormInfo(
-              "Votre mot de passe doit contenir au minimum une lettre majuscule, une lettre minuscule et un chiffre.",
-              "red"
+              'Votre mot de passe doit contenir au minimum une lettre majuscule, une lettre minuscule et un chiffre.',
+              'red'
             );
           }
         }
@@ -430,8 +430,8 @@ export default {
         if (data.id === 5) {
           if (userRePassword !== data.value) {
             return vm.displayFormInfo(
-              "Les deux mots de passe entrés doivent correspondre.",
-              "red"
+              'Les deux mots de passe entrés doivent correspondre.',
+              'red'
             );
           }
         }
@@ -480,9 +480,9 @@ export default {
       let formData = new FormData();
 
       // formdata attach image
-      let userImage = document.querySelector("input[type=file]").files[0];
+      let userImage = document.querySelector('input[type=file]').files[0];
       if (userImage) {
-        formData.append("image", userImage, userImage.name);
+        formData.append('image', userImage, userImage.name);
       }
 
       // formdata attach user parameters
@@ -493,13 +493,13 @@ export default {
         description: description,
         email: email,
         password: password,
-        newsletters: newsletters
+        newsletters: newsletters,
       };
-      formData.append("userParameters", JSON.stringify(userParameters));
+      formData.append('userParameters', JSON.stringify(userParameters));
 
       // XHR ERROR
       function xhrCallbackError(response) {
-        vm.displayFormInfo(response, "red");
+        vm.displayFormInfo(response, 'red');
         console.error(response);
       }
 
@@ -508,21 +508,21 @@ export default {
         if (response.userPicWasUpdated) {
           location.reload();
         } else {
-          vm.displayFormInfo(response.message, "green");
+          vm.displayFormInfo(response.message, 'green');
         }
       }
 
       // API CALLBACK ERROR
       function apiCallbackError(response, readyState, httpStatus) {
-        vm.displayFormInfo(response.sub_err, "red");
+        vm.displayFormInfo(response.sub_err, 'red');
         console.error(response);
         console.error(`ReadyState: ${readyState}, HttpStatus: ${httpStatus}`);
       }
 
       // API CALL
       api(
-        "api/user/parameters/update",
-        "PATCH",
+        'api/user/parameters/update',
+        'PATCH',
         formData,
         apiCallbackDone,
         apiCallbackError,
@@ -534,7 +534,7 @@ export default {
     displayFormInfo(errorValue, color) {
       setTimeout(() => {
         const errorContainer = document.getElementById(
-          "user-parameters_error-handler"
+          'user-parameters_error-handler'
         );
         errorContainer.innerHTML = errorValue;
         errorContainer.style.color = color;
@@ -545,11 +545,11 @@ export default {
     userParamatersImgChange(event) {
       let reader = new FileReader();
       reader.onload = function() {
-        document.getElementById("user-parameters-pic_img-output").src =
+        document.getElementById('user-parameters-pic_img-output').src =
           reader.result;
         document.getElementById(
-          "user-parameters-pic_img-container"
-        ).style.display = "flex";
+          'user-parameters-pic_img-container'
+        ).style.display = 'flex';
       };
       reader.readAsDataURL(event.target.files[0]);
     },
@@ -557,24 +557,24 @@ export default {
     // Close image in FileReader
     userParamatersImgClose() {
       document.getElementById(
-        "user-parameters-pic_img-container"
-      ).style.display = "none";
-      document.getElementById("user-parameters-pic_upload-img").style.display =
-        "none";
-      document.getElementById("user-parameters-pic_upload-img").value = "";
-      document.getElementById("user-parameters-pic_img-output").src = "";
+        'user-parameters-pic_img-container'
+      ).style.display = 'none';
+      document.getElementById('user-parameters-pic_upload-img').style.display =
+        'none';
+      document.getElementById('user-parameters-pic_upload-img').value = '';
+      document.getElementById('user-parameters-pic_img-output').src = '';
     },
 
     // Open delete account modal on click
     deleteAccountModal() {
-      document.getElementById("delete-account-container").style.display =
-        "flex";
+      document.getElementById('delete-account-container').style.display =
+        'flex';
     },
 
     // Quit delete account modal on click
     quitDeleteAccountModal() {
-      document.getElementById("delete-account-container").style.display =
-        "none";
+      document.getElementById('delete-account-container').style.display =
+        'none';
     },
 
     // DELETE ACCOUNT
@@ -583,13 +583,13 @@ export default {
 
       // XHR ERROR
       function xhrCallbackError(response) {
-        vm.infoHandler(response, "red");
+        vm.infoHandler(response, 'red');
         console.error(response);
       }
 
       // API CALLBACK ERROR
       function apiCallbackError(response, readyState, httpStatus) {
-        vm.infoHandler(response.sub_err, "red");
+        vm.infoHandler(response.sub_err, 'red');
         console.error(response);
         console.error(`ReadyState: ${readyState}, HttpStatus: ${httpStatus}`);
       }
@@ -603,12 +603,12 @@ export default {
         let redirectionInterval = setInterval(() => {
           if (redirectionTime === 0) {
             clearInterval(redirectionInterval);
-            window.location.replace("/login");
+            window.location.replace('/login');
           } else {
             redirectionTime--;
             vm.infoHandler(
               `${response.message} Redirection vers la page de connexion dans ${redirectionTime} secondes.`,
-              "green"
+              'green'
             );
           }
         }, 1000);
@@ -616,8 +616,8 @@ export default {
 
       // API CALL
       api(
-        "api/user/account/delete",
-        "DELETE",
+        'api/user/account/delete',
+        'DELETE',
         undefined,
         apiCallbackDone,
         apiCallbackError,
@@ -627,30 +627,30 @@ export default {
 
     // INFO HANDLER : DELETE ACCOUNT
     infoHandler(infoValue, infoColor) {
-      const infoContainer = document.getElementById("handler-delete-account");
+      const infoContainer = document.getElementById('handler-delete-account');
 
       let timeoutTime;
 
-      if (infoColor == "green") {
+      if (infoColor == 'green') {
         timeoutTime = 0;
       } else {
         timeoutTime = 150;
       }
 
       infoContainer.style.color = infoColor;
-      infoContainer.style.display = "none";
+      infoContainer.style.display = 'none';
       setTimeout(() => {
         infoContainer.textContent = infoValue;
-        infoContainer.style.display = "flex";
+        infoContainer.style.display = 'flex';
       }, timeoutTime);
-    }
+    },
   },
   components: {
     trends,
     mainNav,
     profileAndParametersHeader,
-    moderationPanel
-  }
+    moderationPanel,
+  },
 };
 </script>
 
@@ -749,7 +749,8 @@ export default {
       h4 {
         font-size: 1.25em;
       }
-      p, li {
+      p,
+      li {
         font-size: 1.15em;
       }
     }
@@ -761,7 +762,8 @@ export default {
       h4 {
         font-size: 1.15em;
       }
-      p, li {
+      p,
+      li {
         font-size: 1.05em;
       }
     }
@@ -824,8 +826,6 @@ export default {
     flex-direction: column;
     input {
       outline: none;
-      transition-property: all;
-      transition-duration: 500ms;
       border: 1px solid rgba(143, 143, 143, 0.75);
       background-color: rgb(236, 236, 236);
       padding: 7px;
@@ -872,8 +872,7 @@ export default {
       }
     }
     input {
-      opacity: 0;
-      position: absolute;
+      display: none;
     }
   }
   &__img-output {

@@ -84,31 +84,30 @@
 </template>
 
 <script>
-import displayUserForums from "@/components/forums/displayUserForums.vue";
-import displayUserComments from "@/components/comments/displayUserComments.vue";
-import userCreateForum from "@/components/forums/userCreateForum.vue";
-import trends from "@/components/trends/trends.vue";
-import mainNav from "@/components/nav/mainNav.vue";
-import profilePopup from "@/components/nav/profilePopup.vue";
-import moderationPanel from "@/components/moderation/panel.vue";
-import { api, displayProfilePopup, dateFormatting } from "@/utils/scripts";
+import displayUserForums from '@/components/forums/displayUserForums.vue';
+import displayUserComments from '@/components/comments/displayUserComments.vue';
+import userCreateForum from '@/components/forums/userCreateForum.vue';
+import trends from '@/components/trends/trends.vue';
+import mainNav from '@/components/nav/mainNav.vue';
+import profilePopup from '@/components/nav/profilePopup.vue';
+import moderationPanel from '@/components/moderation/panel.vue';
+import { api, displayProfilePopup, dateFormatting } from '@/utils/scripts';
 
 export default {
-  name: "Home",
+  name: 'Home',
   data() {
     return {
       forums: [],
       user: {
-        modPanelAccess: false
+        modPanelAccess: false,
       },
-      forums: []
     };
   },
   beforeMount: async function() {
     this.getForums();
     this.modPanelAccess();
   },
-  
+
   methods: {
     // GET FORUMS
     getForums() {
@@ -133,7 +132,7 @@ export default {
         result = response.result;
         let forums_list = [];
 
-        result.forEach(forum => {
+        result.forEach((forum) => {
           // data formatting
           function formatedDate(date) {
             forum.created_at = date;
@@ -150,7 +149,7 @@ export default {
             text: forum.text,
             total_comments: 0,
             image_url: forum.image_url,
-            comments: []
+            comments: [],
           };
 
           // add the forum in forums_list to get comments below
@@ -167,8 +166,8 @@ export default {
 
       // API CALL
       api(
-        "api/home/get",
-        "GET",
+        'api/home/get',
+        'GET',
         undefined,
         apiCallbackDone,
         apiCallbackError,
@@ -199,7 +198,7 @@ export default {
         let forums = vm.forums;
         let userComment;
 
-        comments.forEach(comment => {
+        comments.forEach((comment) => {
           // data formatting
           function formatedDate(date) {
             comment.created_at = date;
@@ -211,10 +210,10 @@ export default {
             firstname: comment.firstname,
             lastname: comment.lastname,
             published_date: comment.created_at,
-            text: comment.text
+            text: comment.text,
           };
 
-          forums.forEach(forum => {
+          forums.forEach((forum) => {
             if (comment.forum_id == forum.id) {
               forum.comments.push(userComment);
             }
@@ -227,8 +226,8 @@ export default {
       // API CALL
       let data = [forums_list];
       api(
-        "api/comments/get",
-        "POST",
+        'api/comments/get',
+        'POST',
         data,
         apiCallbackDone,
         apiCallbackError,
@@ -238,14 +237,14 @@ export default {
 
     // ERROR HANDLER
     errorHandler(err) {
-      const errorContainer = document.getElementById("error-handler_home");
-      document.querySelector("#error-handler_home p").innerHTML = err;
-      errorContainer.style.display = "block";
+      const errorContainer = document.getElementById('error-handler_home');
+      document.querySelector('#error-handler_home p').innerHTML = err;
+      errorContainer.style.display = 'block';
     },
-    
+
     // MOD PANEL ACCESS
-    modPanelAccess () {
-      const vm = this
+    modPanelAccess() {
+      const vm = this;
 
       // XHR ERROR
       function xhrCallbackError(response) {
@@ -262,21 +261,21 @@ export default {
       function apiCallbackDone(response) {
         let user = response.result[0];
         if (user.is_admin === 1 || user.is_mod === 1) {
-          vm.user.modPanelAccess = true
+          vm.user.modPanelAccess = true;
         }
       }
 
       // API CALL
       api(
-        "api/user/account/primaryInfos",
-        "GET",
+        'api/user/account/primaryInfos',
+        'GET',
         undefined,
         apiCallbackDone,
         apiCallbackError,
         xhrCallbackError
       );
     },
-    displayProfilePopup
+    displayProfilePopup,
   },
   components: {
     displayUserForums,
@@ -285,8 +284,8 @@ export default {
     trends,
     mainNav,
     profilePopup,
-    moderationPanel
-  }
+    moderationPanel,
+  },
 };
 </script>
 
