@@ -50,9 +50,7 @@ Le projet consiste à construire un réseau social interne pour les employés de
 <br/>
 <br/>
 <br/>
-<br/>
 ![Page d'accueil](/assets/Groupomania%20P7%20OCR%20DW.png)
-<br/>
 <br/>
 <br/>
 <br/>
@@ -60,14 +58,11 @@ Le projet consiste à construire un réseau social interne pour les employés de
 <br/>
 <br/>
 <br/>
-<br/>
 ![Mes paramètres](/assets/Groupomania%203%20P7%20OCR%20DW.png)
 <br/>
 <br/>
 <br/>
-<br/>
 ![Panel de modération](/assets/Groupomania%206%20P7%20OCR%20DW.png)
-<br/>
 <br/>
 <br/>
 <br/>
