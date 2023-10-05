@@ -22,7 +22,7 @@ Le projet consiste à construire un réseau social interne pour les employés de
 
 #### Les [spécifications fonctionnelles](/assets/Groupomania_Specs.pdf)
 
-Les détails des objectifs réalisés se trouvent dans les README des dossiers [front-app](/front-app) et [back](/back).
+Les détails des objectifs réalisés se trouvent dans les README des dossiers [front-app](./front-app) et [back](./back).
 
 ---
 
