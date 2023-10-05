@@ -22,14 +22,14 @@ Le projet consiste à construire un réseau social interne pour les employés de
 
 #### Les [spécifications fonctionnelles](/assets/Groupomania_Specs.pdf)
 
-Les détails des objectifs réalisés se trouvent dans les README des dossiers [front-app](./front-app) et [back](./back).
+Les détails des objectifs réalisés se trouvent dans les README des dossiers [front-app](https://github.com/Alex-Pqn/Groupomania-ocr_dw/tree/main/front-app) et [back](https://github.com/Alex-Pqn/Groupomania-ocr_dw/tree/main/back).
 
 ---
 
 ### Project setup
 
 > [!NOTE]  
-> Please refer to the [front-app](./front-app) and [back](./back) folders to install the project.
+> Please refer to the [front-app](https://github.com/Alex-Pqn/Groupomania-ocr_dw/tree/main/front-app) and [back](https://github.com/Alex-Pqn/Groupomania-ocr_dw/tree/main/back) folders to install the project.
 
 ---
 
