@@ -24,18 +24,17 @@
 ### Prerequisites
   
 - You will need to have Node and `npm` installed locally on your machine.
-
+- You will need to have a MySQL database environment like Wamp to connect the app.
+  - Create a database named `groupomania`
+  - Import data into the database using the file [groupomania.sql](../database/groupomania.sql)
+  - Don't forget to rename the [.env.dist](../back/.env.dist) file to `.env` and check the connection information inside
+ 
 | Node Version | Supported          |
 | ------------ | ------------------ |
 | 15.x & >     | :x:                |
 | 14.x         | :white_check_mark: |
 | 13.x         | :white_check_mark: |
 | 12.x         | :white_check_mark: |
-
-- You will need to have a MySQL database environment like Wamp to connect the app.
-  - Create a database named `groupomania`
-  - Import data into the database using the file [groupomania.sql](../database/groupomania.sql)
-  - Don't forget to rename the [.env.dist](../back/.env.dist) file to `.env` and check the connection information inside
 
 ---
 
