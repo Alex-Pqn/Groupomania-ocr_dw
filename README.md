@@ -29,13 +29,6 @@ Les détails des objectifs réalisés se trouvent dans les README des dossiers [
 > [!IMPORTANT]  
 > Please refer to the [front-app](https://github.com/Alex-Pqn/Groupomania-ocr_dw/tree/main/front-app) and [back](https://github.com/Alex-Pqn/Groupomania-ocr_dw/tree/main/back) folders to install the project.
 
-## Accounts / Login
-
-| Email                      | Password          | Is Admin |
-| -------------------------- | ----------------- | -------- |
-| alain.terieur@fakemail.com | Alainterieur1993  | Yes      |
-| alex.terieur@fakemail.com  | Alexterieur1985   | No       |
-
 ## Preview
 
 ![Page d'inscription](/assets/Groupomania%205%20P7%20OCR%20DW.png)
