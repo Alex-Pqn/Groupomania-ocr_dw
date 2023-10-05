@@ -17,7 +17,9 @@
 
 ### Prerequisites
 
-You will need to have Node and `npm` installed locally on your machine.
+- You will need to have Node and `npm` installed locally on your machine.
+
+### The Groupomania API can be installed [here](../back)
 
 | Node Version    | Supported          |
 | --------------- | ------------------ |
