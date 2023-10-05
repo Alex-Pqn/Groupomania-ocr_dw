@@ -28,6 +28,7 @@ Les détails des objectifs réalisés se trouvent dans les README des dossiers [
 
 ### Project setup
 
+> [!NOTE]  
 > Please refer to the [front-app](/front-app) and [back](/back) folders to install the project.
 
 ---
