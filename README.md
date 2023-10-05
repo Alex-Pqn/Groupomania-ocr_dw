@@ -24,25 +24,19 @@ Le projet consiste à construire un réseau social interne pour les employés de
 
 Les détails des objectifs réalisés se trouvent dans les README des dossiers [front-app](https://github.com/Alex-Pqn/Groupomania-ocr_dw/tree/main/front-app) et [back](https://github.com/Alex-Pqn/Groupomania-ocr_dw/tree/main/back).
 
----
+## Project setup
 
-### Project setup
-
-> [!NOTE]  
+> [!IMPORTANT]  
 > Please refer to the [front-app](https://github.com/Alex-Pqn/Groupomania-ocr_dw/tree/main/front-app) and [back](https://github.com/Alex-Pqn/Groupomania-ocr_dw/tree/main/back) folders to install the project.
 
----
-
-### Accounts / Login
+## Accounts / Login
 
 | Email                      | Password          | Is Admin |
 | -------------------------- | ----------------- | -------- |
 | alain.terieur@fakemail.com | Alainterieur1993  | Yes      |
 | alex.terieur@fakemail.com  | Alexterieur1985   | No       |
 
----
-
-### Preview
+## Preview
 
 ![Page d'inscription](/assets/Groupomania%205%20P7%20OCR%20DW.png)
 <br/>
