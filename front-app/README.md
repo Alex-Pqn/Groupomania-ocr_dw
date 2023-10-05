@@ -20,7 +20,7 @@
 - You will need to have Node and `npm` installed locally on your machine.
 
 > [!WARNING]  
-> The [Groupomania API](../back) must also be installed in order to launch this project.
+> The [Groupomania API](./../back) must also be installed in order to launch this project.
 
 | Node Version    | Supported          |
 | --------------- | ------------------ |
