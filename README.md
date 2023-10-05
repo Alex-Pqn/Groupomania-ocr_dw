@@ -26,12 +26,9 @@ Le projet consiste à construire un réseau social interne pour les employés de
 
 ---
 
-### Prerequisites
+### Project setup
 
-- You will need to have Node and `npm` installed locally on your machine.
-- You will need to have a MySQL database environment to connect the app. [More informations](/back/README.md)
-
-#### Please refer to the [front-app](/front-app) and [back](/back) folders to install the project.
+> Please refer to the [front-app](/front-app) and [back](/back) folders to install the project.
 
 ---
 
