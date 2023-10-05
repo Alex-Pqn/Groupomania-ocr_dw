@@ -29,6 +29,9 @@
   - Import data into the database using the file [groupomania.sql](../database/groupomania.sql)
   - Don't forget to rename the [.env.dist](../back/.env.dist) file to `.env` and check the connection information inside
  
+> [!WARNING]  
+> The [frontend](https://github.com/Alex-Pqn/Groupomania-ocr_dw/tree/main/front-end) must also be installed in order to launch this project.
+ 
 | Node Version | Supported          |
 | ------------ | ------------------ |
 | 15.x & >     | :x:                |
