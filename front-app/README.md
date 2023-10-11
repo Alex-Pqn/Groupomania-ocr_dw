@@ -28,6 +28,7 @@
 | 12.x            | :white_check_mark: |
 
 ## Project setup
+### Install
 ```
 npm install
 ```
