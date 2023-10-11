@@ -19,9 +19,7 @@
 - Architecture des dossiers et fichiers respectée (middlewares, controllers, models, routes)
 - Standards OWASP appliqués
 
----
-
-### Prerequisites
+## Prerequisites
   
 - You will need to have Node and `npm` installed locally on your machine.
 - You will need to have a MySQL database environment like Wamp to connect the app.
@@ -39,19 +37,8 @@
 | 13.x         | :white_check_mark: |
 | 12.x         | :white_check_mark: |
 
----
-
-### Accounts / Login
-
-| Email                      | Password         | Is Admin |
-| -------------------------- | ---------------- | -------- |
-| alain.terieur@fakemail.com | Alainterieur1993 | Yes      |
-| alex.terieur@fakemail.com  | Alexterieur1985  | No       |
-
----
-
 ## Project setup
-
+### Install
 ```
 npm install
 ```
@@ -61,3 +48,10 @@ npm install
 ```
 npm start
 ```
+
+## Accounts / Login
+
+| Email                      | Password         | Is Admin |
+| -------------------------- | ---------------- | -------- |
+| alain.terieur@fakemail.com | Alainterieur1993 | Yes      |
+| alex.terieur@fakemail.com  | Alexterieur1985  | No       |
