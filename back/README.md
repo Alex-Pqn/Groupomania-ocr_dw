@@ -4,7 +4,7 @@
 
 ### P7 - OpenClassrooms "Développeur Web"
 
-#### Objectifs
+#### Objectifs réalisés
 
 - Création d'une API REST avec le framework Express sous Node.js
 - Création d'une base de données relationnelle SQL sous MySQL
