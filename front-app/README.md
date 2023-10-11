@@ -3,7 +3,7 @@
 ## Créez un réseau social d’entreprise - Groupomania
 ### P7 - OpenClassrooms "Développeur Web"
 
-#### Objectifs
+#### Objectifs réalisés
 - Site web créé sous Vue 2
 - Utilisation de composants réutilisables et validation des données grâce aux props Vue
 - Communication avec une API REST conçue sur mesure
