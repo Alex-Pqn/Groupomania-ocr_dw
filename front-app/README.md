@@ -13,9 +13,7 @@
 - Responsive
 - Accessibilité et standards WCAG appliqués
 
----
-
-### Prerequisites
+## Prerequisites
 
 - You will need to have Node and `npm` installed locally on your machine.
 
@@ -28,17 +26,6 @@
 | 14.x            | :white_check_mark: |
 | 13.x            | :white_check_mark: |
 | 12.x            | :white_check_mark: |
-
----
-
-### Accounts / Login
-
-| Email                      | Password          | Is Admin |
-| -------------------------- | ----------------- | -------- |
-| alain.terieur@fakemail.com | Alainterieur1993  | Yes      |
-| alex.terieur@fakemail.com  | Alexterieur1985   | No       |
-
----
 
 ## Project setup
 ```
@@ -67,3 +54,10 @@ npm run lint
 
 ### Customize configuration
 See [Configuration Reference](https://cli.vuejs.org/config/).
+
+## Accounts / Login
+
+| Email                      | Password          | Is Admin |
+| -------------------------- | ----------------- | -------- |
+| alain.terieur@fakemail.com | Alainterieur1993  | Yes      |
+| alex.terieur@fakemail.com  | Alexterieur1985   | No       |
